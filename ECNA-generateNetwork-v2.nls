@@ -1,0 +1,513 @@
+;;ECNA NETWORK GENERATION MODULE
+;SOurce: 2021 Singh*, S., France, A. M., Chen, Y-H, Farnham, P. G., Oster, A. M., Gopalappa, C., Progression and Transmission of HIV (PATH4.0): A new agent-based evolving network simulation for modeling HIV transmission clusters; Mathematical Biosciences and Engineering, 18 (3), 2021
+extensions[
+  nw
+  csv
+  matrix
+]
+
+breed [non-agent-susceptibles NAsusceptible]
+
+undirected-link-breed [ECNA-links ECNA-link]
+
+links-own[
+  ; partner-month
+  active?
+  partnership-type ;1 is main, 2 is casual
+  time_active-start ;time at which link will be activated
+  time_active-end 
+  infection_distance
+]
+
+turtles-own [
+  degree ;Degree or number of contacts, num-IDU-partner
+  time-in-simulation ;Time turtles has been in the simulation
+  desired-degree
+  stage ;will get rid of the need for turtles with different breeds
+  time-of-infection
+  time-of-diagnosis
+  source-of-infection
+  ID
+  locationID
+  
+  ;behavior characteristic
+  partner-type ;0 - unassigned, 1 - main, 2 - casual, 3 - both
+               ;exposures-per-year
+               ;prop-acts-condom-protected
+  
+  ;link activation
+  num-of-contacts ;1xA
+  age-link-active ;1xA
+  link-list
+  link-weight
+]
+
+globals [
+  ;;tracking for testing code
+  ;jurisdiction-mixing-within
+  ;;num-jurisdictions
+  eligible-agents-count
+  eligible-nonagents-count
+  track-num-receivers
+  count-error-age
+  number-links
+  selected-agents
+  selected-nonagents
+  
+  miminum_degree
+  trans-year-threshold
+  num-nodes
+  ;initial-infected
+  termination-node
+  lambda
+  initial-prop-infected
+  TimeToDiagnosis
+  ;;scale-free distribution parameters
+  degree-dist
+  degree-dist-Bin
+  degree-dist-all
+  degree-dist-Bin-all
+  ;;track susceptibles not agents in an array of degree distribution
+  susceptible-degree-dist
+  susceptible-degree-dist-mat
+  susceptible-degree-dist-mat-HETM
+  susceptible-degree-dist-mat-HETF
+  susceptible-degree-dist-mat-MSM
+  ;;track negatve birth cohorts (if future partners age is not in current cohort draw from this 
+  birth-cohort-HETF
+  birth-cohort-HETM
+  birth-cohort-MSM
+  
+  ;num-exposed-sus ;Does not influence results, Maximum number of agents that could get infected at a timestep
+  num-new-contacts ;Could be modified, Number of contacts needed to evolve an agent's network
+  desired-neighbor-degree ;Could be modified, The number of contacts a neighbor of a newly infected agent should have
+  SF-Distribution ;Scale-free degree-degree distribution
+  avg-inf-degree ;Does not influence results, Average degree of newly infected agents
+  newly-infected-degree-list ;For DD correlation data collection, could be deleted
+  susceptible-contacts-degree-list ;For DD correlation data collection, could be deleted
+  conditional-degree-dist-list ;For DD correlation data collection, could be deleted
+  w  ;For NN
+  xNN  ;For NN
+  b1 ;For NN
+  b2 ;For NN
+  min_scale ;For NN
+  max_scale ;For NN
+  hidden_layer
+  input
+  max_degree
+  avg_degree
+  proportion_infected
+  check_output
+  
+  ;termination-ticks
+]
+
+to determine-node-neighbors
+  
+  let numAges length(matrix:get-column cumulative-age-mixing-matrix-MSM 0) ;only using for size so doesnt matter which risk group we use, all the same size
+  ask people with [time-infected = -1 and desired-degree > 0 and desired-degree - count (my-links) > 0] [ ;Susceptibles of the infected contacts of the newly infected agents are not eligible contacts
+    set num-new-contacts 0
+    let age-of-infected-node age
+    let sex-of-infected-node sex
+    let myLocID locationID
+    let infected-node-who who
+    
+    ;pull from prob distribution (CDF) to determine degree
+    let degree-of-newly-infected desired-degree
+    let my_output calculate-dist-NN degree-of-newly-infected max_degree item (sex-of-infected-node - 1) lambda item (sex - 1) avg_degree proportion_infected max_scale min_scale ;global_clustering_coefficient
+    set check_output my_output
+    let low-bound 0
+    let high-bound matrix:get my_output 0 0
+    
+    set num-new-contacts desired-degree - count (my-links) ;The desired degree minus the current degree to determine number of links needed
+                                                           ;print num-new-contacts
+     create-sexual-network my_output low-bound high-bound myLocID numAges sex-of-infected-node infected-node-who 
+  ]
+end
+
+to create-sexual-network [my_output low-bound high-bound myLocID numAges sex-of-infected-node infected-node-who]
+  ;print "start"
+  let num-new-contacts-who [] ;keeps track of which node corresponds to which column in the optimization
+    let Nmatrix matrix:make-constant num-new-contacts numAges -1 ;Nmatrix initialization for optimization
+    
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;DETERMINE NEIGHBORS' DEGREE;;;
+    let j 0
+    let desired-neighbor-degree-list [] 
+    while [j < num-new-contacts]
+    [
+      let desired-neighbor-degree1 desired-neighbor-degree-calc my_output low-bound high-bound
+      if desired-neighbor-degree1 <= 1 [set desired-neighbor-degree1 2]
+      set desired-neighbor-degree-list lput desired-neighbor-degree1 desired-neighbor-degree-list
+      set j j + 1
+    ]
+    
+    set neighbor-sex-list []
+    ;;;CALL FUNCTION IN contact-activation.nls to create a binary matrix with each row correpsonding one ne nieghbor of infected person; value 1 if neighbor in column i has a new contact in age-group (row) j
+    set Nmatrix initialize-contacts-neighbors sort (desired-neighbor-degree-list) sex-of-infected-node ; in contact-activation.nls
+
+    ;;CALL FUNCTION IN contact-activation.nls to create a matrix of number of contacts this newly infected node had at age row with person in age column
+    let Vmatrix return-Vmatrix sex-of-infected-node
+    let Vmatrix-Dist return-Vmatrix-Dist sex-of-infected-node
+    
+    ;call optimization problem here pass Nmatrix and Vmatrix as argument
+    ;;M is solution from optimizer
+    let M return-Mmatrix Vmatrix Nmatrix
+    
+    link-activation-details M Vmatrix-Dist sex-of-infected-node;in contact-activation.nls
+    
+    ;;;;;;;;;;;;;;;;;;;;;;
+    ;;;CREATE NEIGHBORS;;;
+    set j 0
+    while [j < num-new-contacts][
+     if item j time-link-active-end > ticks[; create only those links that will be active in the future (to reduce computaional time)
+      let new-contacts nobody
+      ;let chosen-bin return-chosen-Bin desired-neighbor-degree1
+      let desired-neighbor-degree1 item j desired-neighbor-degree-list
+      let age-of-neighbor item j age-of-neighbors;let age-of-neighbor return-age-of-contact age-of-infected-node
+
+                                                 ;let age-index-of-neighbor return-age-index age-of-neighbor
+      let sex-of-neighbor item j neighbor-sex-list
+      ;let age-hold-of-neighbor item j age-hold
+      let chosen-bin return-chosen-Bin2 desired-neighbor-degree1 age-of-neighbor (item j neighbors-link-active-age) sex-of-neighbor;in age-funcstions.nls
+      
+      ;;DETERMINE ELIGIBLE SUSCEPTIBLES : AGENTS and NONAGENTS
+      if chosen-bin > 0[
+        ;let eligible-agents count-susceptible-agents chosen-bin 
+        ;let eligible-agents count-susceptible-agents2 chosen-bin (item j age-of-neighbors) (item j neighbors-link-active-age) 
+        ;let eligible-agents susceptible-agents-location chosen-bin (item j age-of-neighbors) (item j neighbors-link-active-age) locationID
+        let eligible-agents susceptible-agents-sex chosen-bin (item j age-of-neighbors) (item j neighbors-link-active-age) locationID sex-of-neighbor
+        
+         let location-mixing HF_juri_mix
+        if sex = 1 or sex = 4 [ set location-mixing HF_juri_mix]
+        if sex = 2 or sex = 5 [ set location-mixing HM_juri_mix]
+        if sex = 3 or sex = 6 [ set location-mixing MSM_juri_mix]
+     
+        let sum-eligible-agents sum [matrix:get location-mixing myLocID locationID ] of eligible-agents
+
+        set eligible-agents-count eligible-agents-count + sum-eligible-agents ;NOT USED FOR SELECTION ALGO; INFORMATIONAL USE TO UNDERSTAND SIZE  COMPARED WITH NON_AGENTS
+      
+        
+        let index-of-age-group return-age-index age-of-neighbor ;;calls return-age-index in age-functions.nls
+        let eligible-nonagents 0
+
+        ;;ASSUME ENDLESS SUPPLY OF NON_AGENTS IN EACH JURI- WORKS AS HIV IS LOW PREVALENCE AND JURIS ARE PSEUDO IN PATH 4-2021 PUBLICATION. FUTURE VERSIONS HAVE COMPARTMENTAL MODEL ALSO SPLIT BY JURIS  
+        ;let eligible-nonagents matrix:get susceptible-degree-dist-mat index-of-age-group chosen-bin 
+        ifelse index-of-age-group >= 0 [
+        if sex-of-neighbor  = 1 or sex-of-neighbor = 4 [set eligible-nonagents (matrix:get susceptible-degree-dist-mat-HETF index-of-age-group chosen-bin) / num-jurisdictions ] ; HETF
+        if sex-of-neighbor  = 2 or sex-of-neighbor = 5 [set eligible-nonagents (matrix:get susceptible-degree-dist-mat-HETM index-of-age-group chosen-bin) / num-jurisdictions] ;HETM
+        if sex-of-neighbor  = 3 or sex-of-neighbor = 6 [set eligible-nonagents (matrix:get susceptible-degree-dist-mat-MSM index-of-age-group chosen-bin) / num-jurisdictions]  ;MSM
+        ]
+        [  
+        if sex-of-neighbor  = 1 or sex-of-neighbor = 4 [set eligible-nonagents (matrix:get birth-cohort-HETF (100 + index-of-age-group) chosen-bin) / num-jurisdictions ] ; HETF
+        if sex-of-neighbor  = 2 or sex-of-neighbor = 5 [set eligible-nonagents (matrix:get birth-cohort-HETM (100 + index-of-age-group) chosen-bin) / num-jurisdictions] ;HETM
+        if sex-of-neighbor  = 3 or sex-of-neighbor = 6 [set eligible-nonagents (matrix:get birth-cohort-MSM (100 + index-of-age-group) chosen-bin) / num-jurisdictions]  ;MSM
+  
+        ]
+      
+
+        set eligible-nonagents-count eligible-nonagents-count + eligible-nonagents ;NOT USED FOR SELECTION ALGO; INFORMATIONAL USE TO UNDERSTAND SIZE  COMPARED WITH AGENTS
+
+        ;;DETERMINE IF NEW PARTNER IS SELECTED FROM AGENT OR NON_AGENT
+        if sum-eligible-agents + eligible-nonagents > 0[ 
+          ;ifelse random (sum-eligible-agents + eligible-nonagents) > eligible-nonagents  ;equal prob of choosing eligible agents and non-agents
+          let cluster_prop1 0;0.7 ;probability of clustering within broader social group
+          ifelse random (sum-eligible-agents + eligible-nonagents) > eligible-nonagents or (sum-eligible-agents > 0 and  ticks > termination-ticks - (simulation-years - (first-year - 2006))   * time-unit
+            and random-float 1 < cluster_prop1) ;prob of choosing among agents weighted according to additional network features;; USEFUL FOR SENSITIVITY TEST OF CLUSTERS
+           [                                                                                                                                                                            
+            set selected-agents selected-agents + 1
+           let dist_cluster 0;0.7 
+            ifelse random-float 1 < dist_cluster and ticks > termination-ticks - (simulation-years - (first-year - 2006)) * time-unit ;;chance of clustering within immediate social group
+            [set new-contacts rnd:weighted-one-of eligible-agents [matrix:get location-mixing myLocID locationID + 1 / (1 + min (list nw:distance-to turtle infected-node-who 100000))]] ;; randomly pick a susceptible agent weighted by their locationID using location-mixing matrix only or additionally weighted by distance to node
+            [set new-contacts rnd:weighted-one-of eligible-agents [matrix:get location-mixing myLocID locationID ]]                                                                                                     
+            ;set new-contacts rnd:weighted-one-of eligible-agents [matrix:get location-mixing myLocID locationID]
+          ]
+          [
+            set selected-nonagents selected-nonagents + 1
+            ;;decrement value in compartment - indicating persons moved from compartment to network 
+            ifelse index-of-age-group >= 0 [
+              if sex-of-neighbor  = 1 or sex-of-neighbor = 4 [matrix:set susceptible-degree-dist-mat-HETF index-of-age-group chosen-bin ((matrix:get susceptible-degree-dist-mat-HETF index-of-age-group chosen-bin) - 1)] ;HETF
+              if sex-of-neighbor  = 2 or sex-of-neighbor = 5 [matrix:set susceptible-degree-dist-mat-HETM index-of-age-group chosen-bin ((matrix:get susceptible-degree-dist-mat-HETM index-of-age-group chosen-bin) - 1)] ;HETM
+              if sex-of-neighbor  = 3 or sex-of-neighbor = 6 [matrix:set susceptible-degree-dist-mat-MSM index-of-age-group chosen-bin ((matrix:get susceptible-degree-dist-mat-MSM index-of-age-group chosen-bin) - 1)] ;MSM
+            ]
+            [
+              if sex-of-neighbor  = 1 or sex-of-neighbor = 4 [matrix:set  birth-cohort-HETF (100 + index-of-age-group)  chosen-bin ((matrix:get  birth-cohort-HETF (100 + index-of-age-group)  chosen-bin) - 1)] ;HETF
+              if sex-of-neighbor  = 2 or sex-of-neighbor = 5 [matrix:set  birth-cohort-HETM (100 + index-of-age-group)  chosen-bin ((matrix:get  birth-cohort-HETM (100 + index-of-age-group)  chosen-bin) - 1)] ;HETM
+              if sex-of-neighbor  = 3 or sex-of-neighbor = 6 [matrix:set  birth-cohort-MSM (100 + index-of-age-group)  chosen-bin ((matrix:get  birth-cohort-MSM (100 + index-of-age-group)  chosen-bin) - 1)] ;MSM
+            ]
+
+            set new-contacts one-of non-agent-susceptibles ;non-agent-susceptibles are dummy nodes- to move a person  from compartment to network, instead of 'create' nodes every time, computaonally more efficient to create dummy nodes and pick from there when needed
+            ask new-contacts[
+              initialize-susceptible j desired-neighbor-degree-list myLocID age-of-neighbor sex-of-neighbor ;found in breed-susceptibles.nls
+            ]
+          ]
+            
+          ;;;UPDATE LINKS AND NUMBER CONTACTS FOR EACH NEIGHBOR
+          ask new-contacts[ 
+            ; update the nuuber of contacts yet to add and binary matrix showing ages for contacts yet to add  
+            update-contacts return-age-index (item j neighbors-link-active-age) 
+          ]
+        ]
+          
+        ;;SET VAUES TO ZEROS TO DENOTE THAT ALL CONTACTS ARE ADDED FOR THE NELY INFECTED NODE
+        set age-link-active matrix:make-constant 1 numAges 0
+        set num-of-contacts matrix:make-constant 1 numAges 0
+      ]
+
+      let id1 who ;;create link with newly generated partner
+      if (new-contacts != nobody) [
+          let id2 0
+          ask new-contacts [ 
+            set id2 who 
+          ]
+        create-ECNA-link-with new-contacts
+        ask ecna-link id1 id2 [ 
+          set time_active-start item j time-link-active-begin;time at which link will be activated
+          set time_active-end item j time-link-active-end
+          ]
+      ]
+      ]
+      set j j + 1
+    ]
+    
+  ;]
+ ; print "end"
+end
+
+
+to calc-prop-infected
+  let num-inf count people
+  set proportion_infected (num-inf / sum(num-nodes)) * 100 ;input for neural network, so we multiply by 100
+end
+
+
+to-report desired-neighbor-degree-calc [output_vector lb hb]
+  let i 0
+  let val random-float 1
+  set desired-neighbor-degree 0
+  while [ i < max_degree - 1] [ ;Draw from the theoretical distribution to determine the degree of the newly infected agent
+    ifelse (val > lb) and (val <= hb) [
+      set desired-neighbor-degree i + 1
+      set i i + 1
+      set lb matrix:get output_vector (i - 1) (0)
+      set hb matrix:get output_vector i (0)]
+    
+    [set i i + 1
+      set lb matrix:get output_vector (i - 1) (0)
+      set hb matrix:get output_vector i (0)]
+  ]
+  report desired-neighbor-degree
+end
+
+;basic ECNA algorithm
+;2021 Eden, M., Castonguay, R., Munkbat*, B., Balasubramanian, H., Gopalappa, C., Agent-based evolving network modeling: a new simulation method for modeling low prevalence infectious diseases, Health Care Management Science, 24, 623–639 (2021). https://doi.org/10.1007/s10729-021-09558-0 LINK 
+to-report calculate-dist-NN [node_degree maximum_degree network_lambda network_degree prop_inf maximum_scale minimum_scale] ; cluster_coef; 
+  let output matrix:make-constant 1 max_degree matrix:get b2 0 0
+  
+  let j 0
+  while [j < maximum_degree][       ;run for every neighbor degree (jth col)
+    let h 0
+    let mu (list node_degree (j + 1) network_lambda network_degree prop_inf) ;cluster_coef
+                                                                             ;scale mu using (Input-min)/(max-min)
+    let k 0
+    while [k < length(mu)][
+      set mu replace-item k mu ((item k mu - matrix:get minimum_scale 0 k) / (matrix:get maximum_scale 0 k - matrix:get minimum_scale 0 k))
+      set k k + 1
+    ]
+    
+    let v*h matrix:copy b1
+    
+    let v_h matrix:make-constant 1 hidden_layer 0
+    
+    while [h < hidden_layer][ ;run for every hidden network node (h=1:8)
+                              ;summation of w(i,h)*mu(i) for every input (i=1:6) and add bias b1(h) [v*h]
+                              ;mu(i) is the variable inpt corresponding to hidden layer node i
+                              ;bias 1, b1(h) corresponds to every hidden layer node
+      let i 0
+      while [i < input][
+        matrix:set v*h h 0 (matrix:get v*h h 0 + matrix:get w i h * item i mu)
+        set i i + 1
+      ]
+      
+      ;Apply activation function [v(h)]
+      ;1/(1+e^-v*h)
+      if matrix:get v*h h 0 <= 0[
+        carefully [matrix:set v_h 0 h (1 / (1 + e ^ (- matrix:get v*h h 0)))] [matrix:set v_h 0 h 0]]
+      if matrix:get v*h h 0 > 0[
+        carefully [matrix:set v_h 0 h (1 / (1 + e ^ (- matrix:get v*h h 0)))] [matrix:set v_h 0 h 1]]
+      ;summation of x(h)v(h) for every value of h (h=1:8) and add bias b2 [o]
+      ;bias 2, b2, corresponds to the output
+      ;store output in the jth col of vecotr
+      
+      matrix:set output 0 j  matrix:get output 0 j + matrix:get xNN h 0 * matrix:get v_h 0 h
+      
+      set h h + 1
+    ]
+    
+    set j j + 1
+  ]
+  
+  ;unscale output using output*(max-min)+min
+  
+  let k 0
+  while [k < maximum_degree][
+    matrix:set output 0 k (matrix:get output 0 k * (matrix:get maximum_scale 0 5 - matrix:get minimum_scale 0 5) + matrix:get minimum_scale 0 5)
+    set k k + 1
+  ]
+  
+   
+  ; (normalize probabilities)
+  let d 0
+  let stopper 0
+  let entry 0
+  while [d < miminum_degree][
+    matrix:set output 0 d 0
+  set d d + 1]
+  while [d < maximum_degree][
+    set entry matrix:get output 0 d
+    if entry < 0 [
+      matrix:set output 0 d 0.00001]
+    set d d + 1
+  ]
+  
+  
+  let row_sum 0
+  let c 0
+  while [c < maximum_degree][
+    set row_sum row_sum + matrix:get output 0 c
+    ;matrix:set output 0 c matrix:get output 0 c / sum item 0 matrix:to-row-list output
+    set c c + 1
+  ]
+  set output output matrix:* (1 / row_sum)
+  
+  
+  let m 0
+  let mat_sum 0
+  let output_cdf matrix:make-constant 1 max_degree 0
+  
+  while [m < maximum_degree][
+    set mat_sum mat_sum + matrix:get output 0 m
+    matrix:set output_cdf 0 m mat_sum
+    set m m + 1
+  ]
+  
+  
+  set output_cdf matrix:transpose output_cdf
+  report output_cdf
+
+end
+
+to-report return-random-degree
+  let numAgents sum matrix:get-row susceptible-degree-dist 0
+  let rand-degree random numAgents + 1
+  let i 1
+  let found false
+  let cumulative 0
+  while [i < (length degree-dist-Bin ) and found = false][
+    set cumulative cumulative + matrix:get susceptible-degree-dist 0 i
+    if rand-degree <= cumulative [
+      report item (i - 1) degree-dist-Bin + 1 + random (item (i) degree-dist-Bin - item (i - 1) degree-dist-Bin)
+      set found true
+      matrix:set susceptible-degree-dist 0 i ((matrix:get susceptible-degree-dist 0 i) - 1)
+    ]
+    set i i + 1
+  ]
+end
+
+to-report count-susceptible-agents3 [bin my-age active-age sex-of-neighbor]
+;return number of persons who match age and bin-degree
+  let value 0
+  set value count susceptibles with [desired-degree > item (bin - 1) degree-dist-Bin and desired-degree <= item bin degree-dist-Bin and (desired-degree - count my-links) > 0 
+    and  return-age-index susceptible-age = return-age-index my-age and matrix:get age-link-active 0 return-age-index(active-age) >= 1 and sex = sex-of-neighbor];;non-agents in degree-bin, age-group, and unassigned link in link-active-age-group ar eligible
+  report value
+end
+
+to-report susceptible-agents-sex [bin my-age active-age loc-ID sex-of-neighbor]
+  ;return person who match age and bin-degree
+  let value 0
+  let eligible-list susceptibles with [desired-degree > item (bin - 1) degree-dist-Bin and desired-degree <= item bin degree-dist-Bin and (desired-degree - count my-links) > 0 
+    and  return-age-index susceptible-age = return-age-index my-age and matrix:get age-link-active 0 return-age-index(active-age) >= 1 and sex = sex-of-neighbor];;non-agents in degree-bin, age-group, and unassigned link in link-active-age-group ar eligible
+  report eligible-list
+end
+
+
+to calc-avg-inf-degree ;Calculates the average newly infected degree, does not influence model results
+  set avg-inf-degree 0
+  let total-links 0
+  ask people with [time-infected = -1][
+    set total-links total-links + degree
+  ]
+  if (count people with [time-infected = -1]) = 0 [stop]
+  set avg-inf-degree (total-links / (count people with [time-infected = -1]))
+end
+
+to kill-not-needed-links ;Kills links attached to agents with no infected contacts
+  ask susceptibles[
+    let my-contacts link-neighbors
+    let my-contacts-links my-links
+    if all? my-contacts [breed = susceptibles] [
+      ask my-contacts-links [
+        die
+      ]
+    ]
+  ]
+  
+end
+
+to reset ;Reset turtle-own varibales
+  ask people [
+    set time-infected time-infected + 1
+    ;set time-in-simulation time-in-simulation + 1
+
+  ]
+  ask susceptibles [
+    ; set time-in-simulation time-in-simulation + 1
+  ] 
+end
+
+to layout-ECNA [breed-links]
+  ;; the number 3 here is arbitrary; more repetitions slows down the
+  ;; model, but too few gives poor layouts
+  let agentset (turtle-set people susceptibles)
+  repeat 3 [
+    ;; the more turtles we have to fit into the same amount of space,
+    ;; the smaller the inputs to layout-spring we'll need to use
+    let factor1 sqrt count agentset
+    ;; numbers here are arbitrarily chosen for pleasing appearance
+    layout-spring agentset breed-links (1 / factor1) (7 / factor1) (1 / factor1)
+    display  ;; for smooth animation
+  ]
+  ;; don't bump the edges of the world
+  let x-offset max [xcor] of agentset + min [xcor] of agentset
+  let y-offset max [ycor] of agentset + min [ycor] of agentset
+  ;; big jumps look funny, so only adjust a little each time
+  set x-offset limit-magnitude1 x-offset 0.1
+  set y-offset limit-magnitude1 y-offset 0.1
+  ask agentset [ setxy (xcor - x-offset / 2) (ycor - y-offset / 2) ]
+  if count Ptree-links > 0 [ ask Ttree-links [set thickness 0.5]]
+  ;  if breed-links = Ptree-links [ ask Ptree-links [set thickness 0.2] ask Ttree-links [set thickness 1]]
+end
+to-report limit-magnitude1 [number limit]
+  
+  if number > limit [ report limit ]
+  if number < (- limit) [ report (- limit) ]
+  report number
+  
+end
+to stageColor
+  ask people[
+    if stage = 1 [set shape "die 1" ]
+    if stage = 2 [set shape "die 2"]
+    if stage = 3 [set shape "die 3"]
+    if stage = 4 [set shape "die 4"]
+    if stage = 5 [set shape "die 5"]
+    if stage = 6 [set shape "die 6"]
+    if stage > 2 [set color blue]
+    
+    let l []
+    set l lput time-at-infection l 
+    set l lput time-at-diagnosis l 
+    set label l
+  ]
+  
+end

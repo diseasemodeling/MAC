@@ -1,0 +1,36 @@
+to visualizeCluster
+  ask turtles[
+    setxy 0 0
+  ]
+  ask links [set color black]
+  let people-2006 people with [trans-year >= trans-year-threshold]
+  
+  if count people-2006 with [worthy-start? = true and cluster-size = 2] > 0
+  [
+    ask one-of people-2006 with [worthy-start? = true and cluster-size = 2][
+      let agentset link-neighbors with [infected? = true]
+    
+    
+    
+      ask my-links [set color red]
+      ;   layout-circle sort-by [[a b] [time-at-infection] of a < [time-at-infection] of b] agentset 20
+      layout-circle sort-on [time-at-infection]  agentset 5
+      ask link-neighbors [
+        set label time-at-infection
+       
+        set agentset link-neighbors with [infected? = true]
+        ask my-links [set color blue]
+        ;   layout-circle sort-by [[a b] [time-at-infection] of a < [time-at-infection] of b] agentset 20
+        layout-circle sort-on [time-at-infection]  agentset 10
+        ask link-neighbors [
+          set label time-at-infection
+          
+        ]
+      ]
+    ]
+  ]
+  
+ ; layout-spring turtle-set link-set spring-constant spring-length repulsion-constant
+  
+end
+

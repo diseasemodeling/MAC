@@ -1,0 +1,51 @@
+breed [susceptibles susceptible]  
+
+susceptibles-own [
+  susceptible-age
+  sex
+  desired-degree
+  degree ;Degree or number of contacts, num-IDU-partner
+         ;  time-in-simulation ;Time turtles has been in the simulation
+  partners-per-month
+    
+  ;multi-disease
+  D2
+]
+
+to initialize-susceptible [new-contact-ind desired-neighbor-degree-list myLocID age-of-neighbor sex-of-neighbor]
+  set breed susceptibles
+  ;  set desired-degree item (chosen-bin - 1) degree-dist-Bin + 1 + random (item (chosen-bin) degree-dist-Bin - item (chosen-bin - 1) degree-dist-Bin)
+  set desired-degree item new-contact-ind desired-neighbor-degree-list;item (chosen-bin - 1) degree-dist-Bin + 1 + random (item (chosen-bin) degree-dist-Bin - item (chosen-bin - 1) degree-dist-Bin)
+
+  set susceptible-age age-of-neighbor
+  ;set sex get-sex-mixing sex-of-infected-node
+  set sex sex-of-neighbor
+  ;set age-hold-value age-hold-of-neighbor
+  
+ 
+  ; set locationID rnd:weighted-one-of-list location-list [ [p] -> item p (matrix:get-row location-mixing myLocID)];; random assign locationID of new susceptible agent weighted by mixing matrix
+  if sex = 1 or sex = 4 [ set locationID rnd:weighted-one-of-list location-list [ [p] -> item p (matrix:get-row HF_juri_mix myLocID)]];; random assign locationID of new susceptible agent weighted by mixing matrix
+  if sex = 2 or sex = 5 [ set locationID rnd:weighted-one-of-list location-list [ [p] -> item p (matrix:get-row HM_juri_mix myLocID)]];; random assign locationID of new susceptible agent weighted by mixing matrix
+  if sex = 3 or sex = 6 [ set locationID rnd:weighted-one-of-list location-list [ [p] -> item p (matrix:get-row MSM_juri_mix myLocID)]];; random assign locationID of new susceptible agent weighted by mixing matrix
+ 
+  
+ 
+  initialize-contacts ;in contact-activation.nls
+  ;              let templist matrix:get-row age-link-active 0
+  ;              ;print templist
+  ;              matrix:set-row Nmatrix j templist
+  ;              ;print Nmatrix
+  ;            ;  set num-new-contacts-who lput who num-new-contacts-who
+  
+  set partners-per-month round (desired-degree / 12)
+  if partners-per-month < 1 [set partners-per-month 1]
+  
+  set color green
+  
+  ; for multi-disease.nls
+  set time-in-simulation 0
+  set multi-disease-state [0 -1]
+  set prev-multi-disease-state multi-disease-state
+end
+
+

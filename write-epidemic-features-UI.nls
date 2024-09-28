@@ -1,0 +1,2521 @@
+to write-EpidemicFeatures-Header
+  
+  file-open "EpidemicFeatures.csv"
+  ;;;;;;;;;;;;;;;;;;;;
+  ;HEADER 1
+  ;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  file-write "Risk group"
+  
+  file-write "Current-Month (Ticks)"
+  file-write "Total infected (index and non-index)"
+  file-write "Total infected (non-index)"
+  file-write "Total infected and alive (index and non-index)"
+  file-write "Total infected and alive (non-index)"
+  
+  ;proportion by stage
+  file-write ""
+  file-write "";Care continuum stage"
+  file-write "Care continuum stage"
+  file-write "Care continuum stage"
+  file-write "Care continuum stage"
+  file-write "Care continuum stage"
+  file-write "Care continuum stage"
+  file-write "Care continuum stage"
+  
+  ;transmisison rate
+  file-write ""
+  file-write "Annual incidence / total prevalence"
+  
+  file-write ""
+  file-write "Annual diagnosis / diagnosed prevalence"
+  file-write ""
+  file-write "Number new infections"
+  file-write ""
+  ;distribution of infections by age
+  file-write ""
+  ;file-write ""
+  file-write "Annual incidence by age group"
+  file-write "Annual incidence by age group"
+  file-write "Annual incidence by age group"
+  file-write "Annual incidence by age group"
+  file-write "Annual incidence by age group"
+  
+  ;;CD4 at diagnosis distribution
+  file-write ""
+  file-write "number newly diagnosed"
+  file-write "CD4 at diagnosis distribution"
+  file-write ">500"
+  file-write "350 - 500"
+  file-write "200 - 350"
+  file-write "<200"
+  
+  ;distribution of age at diagnosis
+  file-write ""
+  file-write ""
+  file-write "Annual diagnosis by age group"
+  file-write "Annual diagnosis by age group"
+  file-write "Annual diagnosis by age group"
+  file-write "Annual diagnosis by age group"
+  file-write "Annual diagnosis by age group"
+  
+  ;;New incidence  divided by people living with HIV by age
+  file-write ""
+  file-write ""
+  file-write "Annual incidence / total prevalence in age group"
+  file-write "Annual incidence / total prevalence in age group"
+  file-write "Annual incidence / total prevalence in age group"
+  file-write "Annual incidence / total prevalence in age group"
+  file-write "Annual incidence / total prevalence in age group"
+  ;New diagnosis divided by peopleliving with diagnosed infection by age
+  file-write ""
+  file-write ""
+  file-write "Annual diagnosis / diagnosed prevalence in age group"
+  file-write "Annual diagnosis / diagnosed prevalence in age group"
+  file-write "Annual diagnosis / diagnosed prevalence in age group"
+  file-write "Annual diagnosis / diagnosed prevalence in age group"
+  file-write "Annual diagnosis / diagnosed prevalence in age group"
+  
+  
+  ;Number of people living with HIV by age
+  file-write ""
+  file-write ""
+  file-write "Total prevalence by age group"
+  file-write "Total prevalence by age group"
+  file-write "Total prevalence by age group"
+  file-write "Total prevalence by age group"
+  file-write "Total prevalence by age group"
+  
+  ;Number of diagnsoed people living with HIV by age
+  file-write ""
+  file-write ""
+  file-write "Diagnosed prevalence by age group"
+  file-write "Diagnosed prevalence by age group"
+  file-write "Diagnosed prevalence by age group"
+  file-write "Diagnosed prevalence by age group"
+  file-write "Diagnosed prevalence by age group"
+  
+  ;  ;Number of people living with HIV by stage
+  ;  file-write ""
+  ;  file-write "Care continuum stage"
+  ;  file-write "Acute"
+  ;  file-write "Non-acute unaware"
+  ;  file-write "Aware not in care"
+  ;  file-write "Care no ART"
+  ;  file-write "ART no VLS"
+  ;  file-write "ART with VLS"
+  
+  
+;  ;time from infection to diagnosis
+;  file-write ""
+;  file-write "time from infection to diagnosis"
+;  file-write "min"
+;  file-write "25th percentile"
+;  file-write "50th percentile"
+;  file-write "75th percentile"
+;  file-write "maximum"
+;  
+;  ; New infections by stage of infected partner / Number of people in stage
+;  file-write ""
+;  file-write ""
+;  file-write "New infections by stage of infected partner / Number of people in stage"
+;  file-write "New infections by stage of infected partner / Number of people in stage"
+;  file-write "New infections by stage of infected partner / Number of people in stage"
+;  file-write "New infections by stage of infected partner / Number of people in stage"
+;  file-write "New infections by stage of infected partner / Number of people in stage"
+;  file-write "New infections by stage of infected partner / Number of people in stage"
+;  
+;  ;  ;Number of new infetcions by stage or primary infected partner
+;  file-write ""
+;  file-write ""
+;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;  file-write "Distribution of new infetcions by stage of primary infected partner"
+  file-print ""
+  ;#################################
+  ;#HEADER 2
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  
+  
+  file-write "Risk group"
+  
+  file-write "Current-Month (Ticks)"
+  file-write "Total infected (index and non-index)"
+  file-write "Total infected (non-index)"
+  file-write "Total infected and alive (index and non-index)"
+  file-write "Total infected and alive (non-index)"
+  
+  ;proportion by stage
+  file-write ""
+  file-write "";Care continuum stage"
+  file-write "Acute"
+  file-write "Non-acute unaware"
+  file-write "Aware not in care"
+  file-write "Care no ART"
+  file-write "ART no VLS"
+  file-write "ART with VLS"
+  
+  ;transmisison rate
+  file-write ""
+  file-write "Annual incidence / total prevalence"
+  
+  file-write ""
+  file-write "Annual diagnosis / diagnosed prevalence"
+  file-write ""
+  file-write "Number new infections"
+  file-write ""
+  ;distribution of infections by age
+  file-write "";Annual incidence by age group"
+               ;file-write ""
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  ;;CD4 at diagnosis distribution
+  file-write ""
+  file-write "number newly diagnosed"
+  file-write "CD4 at diagnosis distribution"
+  file-write ">500"
+  file-write "350 - 500"
+  file-write "200 - 350"
+  file-write "<200"
+  
+  ;distribution of age at diagnosis
+  file-write ""
+  file-write "";Annual diagnosis by age group"
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  ;;New incidence  divided by people living with HIV by age
+  file-write ""
+  file-write "";Annual incidence / total prevalence in age group"
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  ;New diagnosis divided by peopleliving with diagnosed infection by age
+  file-write ""
+  file-write "";Annual diagnosis / diagnosed prevalence in age group"
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  
+  ;Number of people living with HIV by age
+  file-write ""
+  file-write "";Total prevalence by age group"
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  ;Number of diagnsoed people living with HIV by age
+  file-write ""
+  file-write "";Diagnosed prevalence by age group"
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  ;  ;Number of people living with HIV by stage
+  ;  file-write ""
+  ;  file-write "Care continuum stage"
+  ;  file-write "Acute"
+  ;  file-write "Non-acute unaware"
+  ;  file-write "Aware not in care"
+  ;  file-write "Care no ART"
+  ;  file-write "ART no VLS"
+  ;  file-write "ART with VLS"
+  
+  
+;  ;time from infection to diagnosis
+;  file-write ""
+;  file-write "time from infection to diagnosis"
+;  file-write "min"
+;  file-write "25th percentile"
+;  file-write "50th percentile"
+;  file-write "75th percentile"
+;  file-write "maximum"
+;  
+;  ; New infections by stage of infected partner / Number of people in stage
+;  file-write ""
+;  file-write "";New infections by stage of infected partner / Number of people in stage"
+;  file-write "Acute"
+;  file-write "Non-acute unaware"
+;  file-write "Aware not in care"
+;  file-write "Care no ART"
+;  file-write "ART no VLS"
+;  file-write "ART with VLS"
+;  
+;  ;  ;Number of new infetcions by stage or primary infected partner
+;  file-write ""
+;  file-write "";Distribution of new infetcions by stage of primary infected partner"
+;  file-write "Acute"
+;  file-write "Non-acute unaware"
+;  file-write "Aware not in care"
+;  file-write "Care no ART"
+;  file-write "ART no VLS"
+;  file-write "ART with VLS"
+;  
+  
+  
+  file-print ""
+  file-close
+end
+
+to write-EpidemicFeatures [sexInd]
+  
+  file-open "EpidemicFeatures.csv"
+  
+  let people-2006 people; with [index? = false]; [trans-year >= trans-year-threshold];16]
+  let infected-alive-people people with [infected? = true and dead = 0 and sex = sexInd + 1]; and index? = false ]
+                                                                                            ;  file-write "MSM"
+                                                                                            ;  file-write num-nodes
+                                                                                            ;  file-write termination-node
+                                                                                            ;  file-write last(degree-dist-Bin)
+                                                                                            ;  file-write TimeToDiagnosis * time-unit
+                                                                                            ;  file-write evolution-time-window
+                                                                                            ;  file-write transmission-rate
+  
+  file-write sexInd + 1
+  
+  file-write ticks 
+  file-write count people-2006 with [infected? = true and sex = sexInd + 1]
+  file-write count people-2006 with [infected? = true and index? = false and sex = sexInd + 1]
+  
+  let infected-alive-total count people-2006 with [infected? = true and dead = 0 and sex = sexInd + 1]
+  let diagnosed-alive-total count people-2006 with [infected? = true and dead = 0 and sex = sexInd + 1 and stage > 2]
+  file-write infected-alive-total
+  file-write count people-2006 with [infected? = true and dead = 0 and index? = false and sex = sexInd + 1]
+  file-write ""
+  file-write "";Care continuum stage"
+  carefully 
+  [file-write count people-2006 with [stage = 1 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+    file-write count people-2006 with [stage = 2 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+    file-write count people-2006 with [stage = 3 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+    file-write count people-2006 with [stage = 4 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+    file-write count people-2006 with [stage = 5 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+    file-write count people-2006 with [stage = 6 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+  ]
+  [file-write "0"
+    file-write "0"
+    file-write "0"
+    file-write "0"
+    file-write "0"
+    file-write "0"
+  ]
+  ;transmisison rate
+  let newly-infected-people people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = sexInd + 1];; new infections
+  file-write ""
+  carefully[file-write count newly-infected-people / infected-alive-total]
+  [file-write 0]
+  
+  ;prevalence
+  ;  let i 0
+  ;  let sumSusceptibleNonAgents 0
+  ;  
+  ;  if sexInd = 0[
+  ;    while [i < item 0 (matrix:dimensions susceptible-degree-dist-mat-HETM)][
+  ;      set sumSusceptibleNonAgents sumSusceptibleNonAgents + sum (matrix:get-row susceptible-degree-dist-mat-HETM i)
+  ;      set i i + 1
+  ;    ]
+  ;  ]
+  ;  
+  ;  if sexInd = 1[
+  ;    while [i < item 0 (matrix:dimensions susceptible-degree-dist-mat-HETF)][
+  ;      set sumSusceptibleNonAgents sumSusceptibleNonAgents + sum (matrix:get-row susceptible-degree-dist-mat-HETF i)
+  ;      set i i + 1
+  ;    ]
+  ;  ]
+  ;  
+  ;  if sexInd = 2[
+  ;    while [i < item 0 (matrix:dimensions susceptible-degree-dist-mat-MSM)][
+  ;      set sumSusceptibleNonAgents sumSusceptibleNonAgents + sum (matrix:get-row susceptible-degree-dist-mat-MSM i)
+  ;      set i i + 1
+  ;    ]
+  ;  ]
+  ;   
+  ;  carefully[file-write count people with [dead = 0 and sex = sexInd + 1] / ((count people with [dead = 0 and sex = sexInd + 1] + count susceptibles with [sex = sexInd + 1] + sumSusceptibleNonAgents) )];note in model- susceptible agents above 65 are removed to prevent HIV tarsnmissions consider adjusting; 
+  ;  [
+  ;  file-write 0
+  ;]
+  let newly-diagnosed-people people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = sexInd + 1];;newly diagnosed persons
+  file-write ""
+  carefully[file-write count newly-diagnosed-people / diagnosed-alive-total]
+  [file-write 0]
+  
+  file-write ""
+  ;distribution of new infections by age
+  file-write count newly-infected-people
+  file-write ""
+  
+  file-write "";Age at infection"
+  carefully 
+  [file-write count newly-infected-people with  [age-at-infection < 25 ] / count newly-infected-people
+    file-write count newly-infected-people with [age-at-infection >= 25 and age-at-infection < 35 ] / count newly-infected-people
+    file-write count newly-infected-people with [age-at-infection >= 35 and age-at-infection < 45 ] / count newly-infected-people
+    file-write count newly-infected-people with [age-at-infection >= 45 and age-at-infection < 55 ] / count newly-infected-people
+    file-write count newly-infected-people with [age-at-infection >= 55 ] / count newly-infected-people
+  ]
+  [file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+  ]
+  
+  ;;CD4 at diagnosis distribution
+  file-write ""
+  file-write count newly-diagnosed-people 
+  file-write "";CD4 at diagnosis"
+  carefully 
+  [file-write count newly-diagnosed-people with [CD4-diagnosis >= 500 ] / count newly-diagnosed-people
+    file-write count newly-diagnosed-people with [CD4-diagnosis >= 350 and CD4-diagnosis < 500 ] / count newly-diagnosed-people 
+    file-write count newly-diagnosed-people with [CD4-diagnosis >= 200 and CD4-diagnosis < 350 ] / count newly-diagnosed-people 
+    file-write count newly-diagnosed-people with [CD4-diagnosis < 200 ] / count newly-diagnosed-people 
+  ]
+  [file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+  ]
+  
+  ;distribution of age at diagnosis
+  file-write ""
+  file-write "";Age at diagnosis"
+  carefully 
+  [file-write count newly-diagnosed-people with [age-at-diagnosis < 25 ] / count newly-diagnosed-people
+    file-write count newly-diagnosed-people with [age-at-diagnosis >= 25 and age-at-diagnosis < 35 ] / count newly-diagnosed-people 
+    file-write count newly-diagnosed-people with [age-at-diagnosis >= 35 and age-at-diagnosis < 45 ] / count newly-diagnosed-people 
+    file-write count newly-diagnosed-people with [age-at-diagnosis >= 45 and age-at-diagnosis < 55 ] / count newly-diagnosed-people 
+    file-write count newly-diagnosed-people with [age-at-diagnosis >= 55 ] / count newly-diagnosed-people 
+  ]
+  [file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+  ]
+  
+  
+  ;Incidence divided by pevalence by age
+  file-write ""
+  file-write ""
+  
+  carefully 
+  [file-write count newly-infected-people with [age-at-infection < 25 ] / count infected-alive-people with [age < 25 ] ]
+  [file-write ""]
+  carefully 
+  [  file-write count newly-infected-people with [age-at-infection >= 25 and age-at-infection < 35 ] / count infected-alive-people with [age >= 25 and age < 35 ] ]
+  [file-write ""]
+  carefully 
+  [  file-write count newly-infected-people with [age-at-infection >= 35 and age-at-infection < 45 ] / count infected-alive-people with [age >= 35 and age < 45 ] ]
+  [file-write ""]
+  carefully 
+  [  file-write count newly-infected-people with [age-at-infection >= 45 and age-at-infection < 55 ] / count infected-alive-people with [age >= 45 and age < 55 ] ]
+  [file-write ""]
+  carefully 
+  [  file-write count newly-infected-people with [age-at-infection >= 55 ] / count infected-alive-people with [age >= 55 ] ]
+  [file-write ""]
+  
+  ;New diagnosis divided by peopleliving with diagnosed infection by age
+  file-write ""
+  file-write ""
+  
+  carefully 
+    [file-write count newly-diagnosed-people with [age-at-diagnosis < 25 ] / count people-2006 with [stage > 2 and dead = 0 and sex = sexInd + 1 and age < 25]]
+  [file-write ""]
+  carefully 
+    [ file-write count newly-diagnosed-people with [age-at-diagnosis >= 25 and age-at-diagnosis < 35 ] / count people-2006 with [stage > 2 and dead = 0 and sex = sexInd + 1 and age >= 25 and age < 35]]
+  [file-write ""]
+  carefully 
+      [file-write count newly-diagnosed-people with [age-at-diagnosis >= 35 and age-at-diagnosis < 45 ] / count people-2006 with [stage > 2 and dead = 0 and sex = sexInd + 1 and age >= 35 and age < 45]]
+  [file-write ""]
+  carefully 
+      [file-write count newly-diagnosed-people with [age-at-diagnosis >= 45 and age-at-diagnosis < 55 ] / count people-2006 with [stage > 2 and dead = 0 and sex = sexInd + 1 and age >= 45 and age < 55]]
+  [file-write ""]
+  carefully 
+      [file-write count newly-diagnosed-people with [age-at-diagnosis >= 55 ] / count people-2006 with [stage > 2 and dead = 0 and sex = sexInd + 1 and age >= 55]]
+  [file-write ""]
+  
+  
+  ;Distribution of people living with HIV by age
+  file-write ""
+  file-write ""
+  carefully 
+  [file-write count infected-alive-people with [age < 25 ] / count infected-alive-people
+    file-write count infected-alive-people with [age >= 25 and age < 35 ] / count infected-alive-people
+    file-write count infected-alive-people with [age >= 35 and age < 45 ] / count infected-alive-people
+    file-write count infected-alive-people with [age >= 45 and age < 55 ] / count infected-alive-people
+    file-write count infected-alive-people with [age >= 55 ] / count infected-alive-people
+  ]
+  [file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+  ]
+  
+  file-write ""
+  file-write "";Diagnosed prevalence by age group"
+  carefully 
+  [file-write count infected-alive-people with [age < 25 and stage > 2] / diagnosed-alive-total
+    file-write count infected-alive-people with [age >= 25 and age < 35 and stage > 2] / diagnosed-alive-total
+    file-write count infected-alive-people with [age >= 35 and age < 45 and stage > 2] / diagnosed-alive-total
+    file-write count infected-alive-people with [age >= 45 and age < 55 and stage > 2] / diagnosed-alive-total
+    file-write count infected-alive-people with [age >= 55 and stage > 2] / diagnosed-alive-total
+  ]
+  [file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+  ]
+  
+     
+;  ;  ;Distribution of people living with HIV by stage
+;  ;  file-write ""
+;  ;  file-write ""
+;  ;  carefully 
+;  ;  [file-write count infected-alive-people with [stage = 1 ] / count infected-alive-people
+;  ;    file-write count infected-alive-people with [stage = 2 ] / count infected-alive-people
+;  ;    file-write count infected-alive-people with [stage = 3 ] / count infected-alive-people
+;  ;    file-write count infected-alive-people with [stage = 4 ] / count infected-alive-people
+;  ;    file-write count infected-alive-people with [stage = 5 ] / count infected-alive-people
+;  ;    file-write count infected-alive-people with [stage = 6 ] / count infected-alive-people
+;  ;  ]
+;  ;  [file-write ""
+;  ;    file-write ""
+;  ;    file-write ""
+;  ;    file-write ""
+;  ;    file-write ""
+;  ;    file-write ""
+;  ;  ]
+;  
+;  ;time from infection to diagnosis
+;  file-write ""
+;  
+;  
+;  file-write "";Distribution of time from infection to diagnosis"
+;  carefully    [ 
+;    ;file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection < 1 ] / count newly-diagnosed-people
+;    ; file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 1  and age-at-diagnosis - age-at-infection < 3 ] / count newly-diagnosed-people
+;    ; file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 3  and age-at-diagnosis - age-at-infection < 8 ] / count newly-diagnosed-people
+;    ;file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 8 ] / count newly-diagnosed-people
+;    ;file-write median [age-at-diagnosis - age-at-infection] of newly-diagnosed-people
+;    let sorted sort [age-at-diagnosis - age-at-infection] of newly-diagnosed-people
+;    file-write  (item 0 sorted)
+;    let index  round (0.25 * length(sorted))
+;    file-write  (item index sorted)
+;    set index  round (0.5 * length(sorted))
+;    file-write  (item index sorted)
+;    set index  round (0.75 * length(sorted))
+;    file-write  (item index sorted)
+;    set index  length(sorted) - 1
+;    file-write  (item index sorted)
+;    ;    count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 1  and age-at-diagnosis - age-at-infection < 3 ] / count newly-diagnosed-people
+;    ;file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 3  and age-at-diagnosis - age-at-infection < 8 ] / count newly-diagnosed-people
+;    ;file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 8 ] / count newly-diagnosed-people
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  ;   ;Incidence divided by pevalence by stage
+;  
+;  file-write ""
+;  carefully 
+;  [file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 1] / count infected-alive-people with [stage = 1 ] 
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 2] / count infected-alive-people with [stage = 2 ] 
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 3] /  count infected-alive-people with [stage = 3 ] 
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 4] /  count infected-alive-people with [stage = 4 ] 
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 5] /  count infected-alive-people with [stage = 5 ] 
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 6] /  count infected-alive-people with [stage = 6 ] 
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  
+;  ;  ;Distribution of new infections by stage of primary infected partner
+;  file-write ""
+;  file-write ""
+;  carefully 
+;  [
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 1] / count infected-alive-people
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 2]  / count infected-alive-people
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 3]/ count infected-alive-people
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 4]/ count infected-alive-people
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 5]/ count infected-alive-people
+;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 6]/ count infected-alive-people
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]  
+ 
+  file-print ""
+  file-close
+  
+end
+
+to write-risk-mixing-header
+  
+  ; set random_counter 0
+  
+  file-open "RiskMixing.csv"
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;HEADER ROW 1
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  file-write "Current-Month (Ticks)"
+  
+  ;file-write "Num-Nodes"
+  ;file-write "PopSize"
+  
+  file-write "PLWH"
+  file-write "PLWH"
+  file-write "PLWH"
+  file-write "PLWH"
+  file-write "PLWH"
+  file-write "PLWH"
+  
+  file-write "Total Links"
+  
+  
+  file-write "Num Links HETF-HETM"
+  file-write "Num Links HETF-MSM"
+  file-write "Num Links MSM-HETF"
+  file-write "Num Links MSM-MSM"
+  
+  file-write "Total People Stage"
+  file-write "Total People Sex"
+  
+  file-write "";Total prevalence" ; Distribution of PLWH by risk group"
+  file-write "Total prevalence"
+  file-write "Total prevalence"
+  file-write "Total prevalence"
+  file-write "Total prevalence"
+  file-write "Total prevalence"
+  file-write "Total prevalence"
+  
+  file-write ""
+  file-write "" ; Distribution of diagnsoed PLWH by risk group"
+  file-write "Diagnosed prevalence"
+  file-write "Diagnosed prevalence"
+  file-write "Diagnosed prevalence"
+  file-write "Diagnosed prevalence"
+  file-write "Diagnosed prevalence"
+  file-write "Diagnosed prevalence"
+  
+  file-write ""
+  file-write ""
+  file-write "new infections by risk group"
+  file-write "new infections by risk group"
+  file-write "new infections by risk group"
+  file-write "new infections by risk group"
+  file-write "new infections by risk group"
+  file-write "new infections by risk group"
+  
+  file-write ""
+  file-write "Annual incidence"
+  file-write "Annual incidence"
+  file-write "Annual incidence"
+  file-write "Annual incidence"
+  file-write "Annual incidence"
+  file-write "Annual incidence"
+  
+  file-write ""
+  file-write "new diagnosis by risk group"
+  file-write "new diagnosis by risk group"
+  file-write "new diagnosis by risk group"
+  file-write "new diagnosis by risk group"
+  file-write "new diagnosis by risk group"
+  file-write "new diagnosis by risk group"
+  
+  file-write ""
+  file-write "Annual diagnosis"
+  file-write "Annual diagnosis"
+  file-write "Annual diagnosis"
+  file-write "Annual diagnosis"
+  file-write "Annual diagnosis"
+  file-write "Annual diagnosis"
+  
+  ;file-write "Prop Links HETM-HETF"
+  ;file-write "Prop Links HETM-MSM"
+  ;file-write "Prop Links MSM-HETF"
+  ;file-write "Prop Links MSM-MSM"
+  
+  ;transmisison rate
+  file-write ""
+  file-write "Annual incidence / total prevalence";HETF"
+  file-write "Annual incidence / total prevalence";HETM"
+  file-write "Annual incidence / total prevalence"; MSM"
+  file-write "Annual incidence / total prevalence";IDUF"
+  file-write "Annual incidence / total prevalence";IDUM"
+  file-write "Annual incidence / total prevalence"; IDUMSM"
+  
+  
+  file-write ""
+  file-write "Annual diagnosis / diagnosed prevalence";HETF"
+  file-write "Annual diagnosis / diagnosed prevalence";HETM"
+  file-write "Annual diagnosis / diagnosed prevalence"; MSM"
+  file-write "Annual diagnosis / diagnosed prevalence";IDUF"
+  file-write "Annual diagnosis / diagnosed prevalence";IDUM"
+  file-write "Annual diagnosis / diagnosed prevalence"; IDUMSM"
+  
+  file-write ""
+  ;distribution of new infections by age
+  file-write "new infections";count newly-infected-people
+  file-write ""
+  
+  
+  ;;;;;;;;;;;;;;;;;;;;;A
+  ;AGE
+  ;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  file-write "";Age at infection"
+  file-write "Annual incidence by age group";<24"
+  file-write "Annual incidence by age group";25 - 34"
+  file-write "Annual incidence by age group";35 - 44"
+  file-write "Annual incidence by age group";45 - 54"
+  file-write "Annual incidence by age group";>=55"
+  
+  
+  ;distribution of age at diagnosis
+  file-write ""
+  file-write "";Age at diagnosis"
+  file-write "Annual diagnosis by age group";<24"
+  file-write "Annual diagnosis by age group";25 - 34"
+  file-write "Annual diagnosis by age group";35 - 44"
+  file-write "Annual diagnosis by age group";45 - 54"
+  file-write "Annual diagnosis by age group";>=55"
+  
+  
+  ;Incidence divided by pevalence by age
+  file-write ""
+  file-write ""
+  file-write "Annual incidence / total prevalence in age group";<24"
+  file-write "Annual incidence / total prevalence in age group";25 - 34"
+  file-write "Annual incidence / total prevalence in age group";35 - 44"
+  file-write "Annual incidence / total prevalence in age group";45 - 54"
+  file-write "Annual incidence / total prevalence in age group";>=55"
+  
+  ;New diagnosis divided by peopleliving with diagnosed infection by age
+  file-write ""
+  file-write ""
+  file-write "Annual diagnosis / diagnosed prevalence in age group";<24"
+  file-write "Annual diagnosis / diagnosed prevalence in age group";25 - 34"
+  file-write "Annual diagnosis / diagnosed prevalence in age group";35 - 44"
+  file-write "Annual diagnosis / diagnosed prevalence in age group";45 - 54"
+  file-write "Annual diagnosis / diagnosed prevalence in age group";>=55"
+  
+  ;Distribution of people living with HIV by age
+  file-write ""
+  file-write ""
+  file-write "Total prevalence by age group";<24"
+  file-write "Total prevalence by age group";25 - 34"
+  file-write "Total prevalence by age group";35 - 44"
+  file-write "Total prevalence by age group";45 - 54"
+  file-write "Total prevalence by age group";>=55"
+  
+  file-write ""
+  file-write "";Diagnosed prevalence by age group"
+  file-write "Diagnosed prevalence by age group";<24"
+  file-write "Diagnosed prevalence by age group";25 - 34"
+  file-write "Diagnosed prevalence by age group";35 - 44"
+  file-write "Diagnosed prevalence by age group";45 - 54"
+  file-write "Diagnosed prevalence by age group";>=55"
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;OTHER  (not age or risk group"
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  file-write "";Care continuum stage"
+  file-write "Care continuum stage";Acute"
+  file-write "Care continuum stage";Non-acute unaware"
+  file-write "Care continuum stage";Aware not in care"
+  file-write "Care continuum stage";Care no ART"
+  file-write "Care continuum stage";ART no VLS"
+  file-write "Care continuum stage";ART with VLS"
+  
+  file-print ""
+  
+  ;file-write "Counter"
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;HEADER ROW 2
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  file-write "Current-Month (Ticks)"
+  
+  ;file-write "Num-Nodes"
+  ;file-write "PopSize"
+  
+  file-write "Risk group- 1";HETF"
+  file-write "Risk group- 2";HETM"
+  file-write "Risk group- 3"; MSM"
+  file-write "Risk group- 4";IDUF"
+  file-write "Risk group- 5";IDUM"
+  file-write "Risk group- 6";IDUMSM"
+  
+  file-write "Total Links"
+  
+  
+  file-write "Num Links HETF-HETM"
+  file-write "Num Links HETF-MSM"
+  file-write "Num Links MSM-HETF"
+  file-write "Num Links MSM-MSM"
+  
+  file-write "Total People Stage"
+  file-write "Total People Sex"
+  
+  file-write "";Total prevalence" ; Distribution of PLWH by risk group"
+  file-write "Risk group- 1";HETF"
+  file-write "Risk group- 2";HETM"
+  file-write "Risk group- 3"; MSM"
+  file-write "Risk group- 4";IDUF"
+  file-write "Risk group- 5";IDUM"
+  file-write "Risk group- 6";IDUMSM"
+  
+  file-write ""
+  file-write "";Diagnosed prevalence" ; Distribution of diagnsoed PLWH by risk group"
+  file-write "Risk group- 1";HETF"
+  file-write "Risk group- 2";HETM"
+  file-write "Risk group- 3"; MSM"
+  file-write "Risk group- 4";IDUF"
+  file-write "Risk group- 5";IDUM"
+  file-write "Risk group- 6";IDUMSM"
+  
+  file-write ""
+  file-write "";new infections by risk group"
+  file-write "Risk group- 1";HETF"
+  file-write "Risk group- 2";HETM"
+  file-write "Risk group- 3"; MSM"
+  file-write "Risk group- 4";IDUF"
+  file-write "Risk group- 5";IDUM"
+  file-write "Risk group- 6";IDUMSM"
+  
+  file-write "";Annual incidence"
+  file-write "Risk group- 1";HETF"
+  file-write "Risk group- 2";HETM"
+  file-write "Risk group- 3"; MSM"
+  file-write "Risk group- 4";IDUF"
+  file-write "Risk group- 5";IDUM"
+  file-write "Risk group- 6";IDUMSM"
+  
+  file-write "";new diagnosis by risk group"
+  file-write "Risk group- 1";HETF"
+  file-write "Risk group- 2";HETM"
+  file-write "Risk group- 3"; MSM"
+  file-write "Risk group- 4";IDUF"
+  file-write "Risk group- 5";IDUM"
+  file-write "Risk group- 6";IDUMSM"
+  
+  file-write "";Annual diagnosis"
+  file-write "Risk group- 1";HETF"
+  file-write "Risk group- 2";HETM"
+  file-write "Risk group- 3"; MSM"
+  file-write "Risk group- 4";IDUF"
+  file-write "Risk group- 5";IDUM"
+  file-write "Risk group- 6";IDUMSM"
+  
+  ;transmisison rate
+  file-write ""
+  file-write "Risk group- 1";HETF"
+  file-write "Risk group- 2";HETM"
+  file-write "Risk group- 3"; MSM"
+  file-write "Risk group- 4";IDUF"
+  file-write "Risk group- 5";IDUM"
+  file-write "Risk group- 6";IDUMSM"
+  
+  file-write ""
+  file-write "Risk group- 1";HETF"
+  file-write "Risk group- 2";HETM"
+  file-write "Risk group- 3"; MSM"
+  file-write "Risk group- 4";IDUF"
+  file-write "Risk group- 5";IDUM"
+  file-write "Risk group- 6";IDUMSM"
+  
+  file-write ""
+  ;distribution of new infections by age
+  file-write "";count newly-infected-people
+  file-write ""
+  
+  
+  ;;;;;;;;;;;;;;;;;;;;;A
+  ;AGE
+  ;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  file-write "";Age at infection"
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  
+  ;distribution of age at diagnosis
+  file-write ""
+  file-write "";Age at diagnosis"
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  
+  ;Incidence divided by pevalence by age
+  file-write ""
+  file-write ""
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  ;New diagnosis divided by peopleliving with diagnosed infection by age
+  file-write ""
+  file-write ""
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  ;Distribution of people living with HIV by age
+  file-write ""
+  file-write ""
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  file-write ""
+  file-write "";Diagnosed prevalence by age group"
+  file-write "<24"
+  file-write "25 - 34"
+  file-write "35 - 44"
+  file-write "45 - 54"
+  file-write ">=55"
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;OTHER  (not age or risk group"
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  file-write "";Care continuum stage"
+  file-write "Acute"
+  file-write "Non-acute unaware"
+  file-write "Aware not in care"
+  file-write "Care no ART"
+  file-write "ART no VLS"
+  file-write "ART with VLS"
+  
+  
+  
+  file-print ""
+  
+  
+  file-close
+end
+
+to write-risk-group-mixing
+  let people-2006 people
+  ;set random_counter random_counter + 1
+  
+  file-open "RiskMixing.csv"
+  let pop  people with [infected? = true and dead = 0 ]
+  ; let HETFpop count people with [infected? = true and dead = 0 and sex = 1]
+  ;let HETMpop count people with [infected? = true and dead = 0 and sex = 2]
+  ; let MSMpop count people with [infected? = true and dead = 0 and sex = 3]
+  
+  let diagPop  people with [infected? = true and dead = 0  and stage > 2]
+  ;let HETFpopDiag count people with [infected? = true and dead = 0 and sex = 1 and stage > 2]
+  ; let HETMpopDiag count people with [infected? = true and dead = 0 and sex = 2 and stage > 2]
+  ; let MSMpopDiag count people with [infected? = true and dead = 0 and sex = 3 and stage > 2]
+  
+  ;file-write random_counter
+  
+  file-write ticks
+  
+  ;file-write num-nodes
+  ;file-write PopSize
+  
+  file-write count pop with [sex = 1] 
+  file-write count pop with [sex = 2] 
+  file-write count pop with [sex = 3] 
+  file-write count pop with [sex = 4] 
+  file-write count pop with [sex = 5] 
+  file-write count pop with [sex = 6] 
+  ;file-write HETMpop
+  ;file-write MSMpop 
+  
+  let totlinks sum [count my-links] of people with [dead = 0]
+  
+  file-write totlinks
+  
+  let HETF-HETM-link 0
+  let HETF-MSM-link 0
+  let MSM-HETF-link 0
+  let MSM-MSM-link 0
+  
+  file-write 0;HETF-HETM-link
+  file-write 0;HETF-MSM-link
+  file-write 0;MSM-HETF-link
+  file-write 0;MSM-MSM-link
+  
+  ;file-write total-people-stage
+  ;file-write total-people-sex
+  
+  file-write ""
+  file-write ""
+  
+  file-write ""; Distribution of PLWH by risk group"
+  file-write count pop with [sex = 1] / count pop
+  file-write count pop with [sex = 2] / count pop
+  file-write count pop with [sex = 3] / count pop
+  file-write count pop with [sex = 4] / count pop
+  file-write count pop with [sex = 5] / count pop
+  file-write count pop with [sex = 6] / count pop
+  
+  
+  file-write ""
+  file-write "" ;Distribution of diagnosed PLWH by risk group"
+  file-write count diagPop with [sex = 1] / count diagPop
+  file-write count diagPop with [sex = 2] / count diagPop
+  file-write count diagPop with [sex = 3] / count diagPop
+  file-write count diagPop with [sex = 4] / count diagPop
+  file-write count diagPop with [sex = 5] / count diagPop
+  file-write count diagPop with [sex = 6] / count diagPop
+  
+  
+  file-write ""
+  file-write "";new infections by risk group"
+  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 1];; new infections
+  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 2];; new infections
+  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 3];; new infections
+  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 4];; new infections
+  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 5];; new infections
+  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 6];; new infections
+  
+  file-write "";Distribution of new infections by risk group"
+  ifelse count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)] > 0 [
+    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 1]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)];; new infections
+    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 2]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)]
+    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 3]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)]
+    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 4]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)];; new infections
+    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 5]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)]
+    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 6]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)]
+    
+  ]
+  [
+    file-write 0
+    file-write 0
+    file-write 0
+    file-write 0
+    file-write 0
+    file-write 0
+  ]
+  
+  file-write "";new diagnosis by risk group"
+  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 1]
+  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 2]
+  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 3]
+  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 4]
+  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 5]
+  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 6]
+  
+  file-write "";Distribution of new diagnosis by risk group"
+  ifelse count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] > 0[
+    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 1] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 2] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 3] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 4] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 5] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 6] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+  ]
+  [file-write 0
+    file-write 0
+    file-write 0
+    file-write 0
+    file-write 0
+    file-write 0
+  ]
+  ;file-write HETM-HETF-link / totlinks
+  ;file-write HETM-MSM-link / totlinks
+  ;file-write MSM-HETF-link / totlinks
+  ;file-write MSM-MSM-link / totlinks
+  
+  
+  
+  let infected-alive-people people with [infected? = true and dead = 0]; and index? = false ]
+  let infected-alive-total count people-2006 with [infected? = true and dead = 0]
+  let diagnosed-alive-people people-2006 with [infected? = true and dead = 0 and stage > 2]
+  let diagnosed-alive-total count people-2006 with [infected? = true and dead = 0 and stage > 2]
+  
+  
+  ;transmisison rate
+  let newly-infected-people people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)];; new infections
+  file-write ""
+  
+  carefully
+  [  file-write count newly-infected-people with [ sex =  1] / count infected-alive-people with [ sex =  1]]
+  [file-write 0]
+  carefully
+  [ file-write count newly-infected-people with [ sex =  2] / count infected-alive-people with [ sex =  2]]
+  [file-write 0]
+  carefully
+  [  file-write count newly-infected-people with [ sex =  3] / count infected-alive-people with [ sex =  3]]
+  [file-write 0]
+  carefully
+  [  file-write count newly-infected-people with [ sex =  4] / count infected-alive-people with [ sex =  4]]
+  [file-write 0]
+  carefully
+  [  file-write count newly-infected-people with [ sex =  5] / count infected-alive-people with [ sex =  5]]
+  [file-write 0]
+  carefully
+  [  file-write count newly-infected-people with [ sex =  6] / count infected-alive-people with [ sex =  6]]
+  [file-write 0]
+  
+  
+  
+  let newly-diagnosed-people people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true];;newly diagnosed persons
+  file-write ""
+  
+  carefully
+  [file-write count newly-diagnosed-people  with [sex = 1] / count diagnosed-alive-people with [sex = 1]]
+  [file-write 0]
+  carefully
+  [ file-write count newly-diagnosed-people  with [sex = 2] / count diagnosed-alive-people with [sex = 2]]
+  [file-write 0]
+  carefully
+  [ file-write count newly-diagnosed-people  with [sex = 3] / count diagnosed-alive-people with [sex = 3]]
+  [file-write 0]
+  carefully
+  [  file-write count newly-diagnosed-people  with [sex = 4] / count diagnosed-alive-people with [sex = 4]]
+  [file-write 0]
+  carefully
+  [  file-write count newly-diagnosed-people  with [sex = 5] / count diagnosed-alive-people with [sex = 5]]
+  [file-write 0]
+  carefully
+  [  file-write count newly-diagnosed-people  with [sex = 6] / count diagnosed-alive-people with [sex = 6]]
+  [file-write 0]
+  
+    
+  
+  file-write ""
+  ;distribution of new infections by age
+  file-write count newly-infected-people
+  file-write ""
+  
+  
+  ;;;;;;;;;;;;;;;;;;;;;A
+  ;AGE
+  ;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  file-write "";Age at infection"
+  carefully 
+  [file-write count newly-infected-people with  [age-at-infection < 25 ] / count newly-infected-people
+    file-write count newly-infected-people with [age-at-infection >= 25 and age-at-infection < 35 ] / count newly-infected-people
+    file-write count newly-infected-people with [age-at-infection >= 35 and age-at-infection < 45 ] / count newly-infected-people
+    file-write count newly-infected-people with [age-at-infection >= 45 and age-at-infection < 55 ] / count newly-infected-people
+    file-write count newly-infected-people with [age-at-infection >= 55 ] / count newly-infected-people
+  ]
+  [file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+  ]
+  
+  ;distribution of age at diagnosis
+  file-write ""
+  file-write "";Age at diagnosis"
+  carefully 
+  [file-write count newly-diagnosed-people with [age-at-diagnosis < 25 ] / count newly-diagnosed-people
+    file-write count newly-diagnosed-people with [age-at-diagnosis >= 25 and age-at-diagnosis < 35 ] / count newly-diagnosed-people 
+    file-write count newly-diagnosed-people with [age-at-diagnosis >= 35 and age-at-diagnosis < 45 ] / count newly-diagnosed-people 
+    file-write count newly-diagnosed-people with [age-at-diagnosis >= 45 and age-at-diagnosis < 55 ] / count newly-diagnosed-people 
+    file-write count newly-diagnosed-people with [age-at-diagnosis >= 55 ] / count newly-diagnosed-people 
+  ]
+  [file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+  ]
+  
+  
+  ;Incidence divided by pevalence by age
+  file-write ""
+  file-write ""
+  carefully 
+  [file-write count newly-infected-people with [age-at-infection < 25 ] / count infected-alive-people with [age < 25 ] ]
+  [file-write ""]
+  carefully 
+  [ file-write count newly-infected-people with [age-at-infection >= 25 and age-at-infection < 35 ] / count infected-alive-people with [age >= 25 and age < 35 ] ]
+  [file-write ""]
+  carefully 
+  [file-write count newly-infected-people with [age-at-infection >= 35 and age-at-infection < 45 ] / count infected-alive-people with [age >= 35 and age < 45 ] ]
+  [file-write ""]
+  carefully 
+  [file-write count newly-infected-people with [age-at-infection >= 45 and age-at-infection < 55 ] / count infected-alive-people with [age >= 45 and age < 55 ] ]
+  [file-write ""]
+  carefully 
+  [file-write count newly-infected-people with [age-at-infection >= 55 ] / count infected-alive-people with [age >= 55 ] ]
+  [file-write ""]
+  
+
+
+  ;New diagnosis divided by peopleliving with diagnosed infection by age
+  file-write ""
+  file-write ""
+  
+  carefully 
+  [file-write count newly-diagnosed-people with [age-at-diagnosis < 25 ] / count people-2006 with [stage > 2 and dead = 0  and age < 25]]
+  [file-write ""]
+  carefully 
+  [   file-write count newly-diagnosed-people with [age-at-diagnosis >= 25 and age-at-diagnosis < 35 ] / count people-2006 with [stage > 2 and dead = 0 and  age >= 25 and age < 35]]
+  [file-write ""]
+  carefully 
+  [   file-write count newly-diagnosed-people with [age-at-diagnosis >= 35 and age-at-diagnosis < 45 ] / count people-2006 with [stage > 2 and dead = 0 and  age >= 35 and age < 45]]
+  [file-write ""]
+  carefully 
+  [    file-write count newly-diagnosed-people with [age-at-diagnosis >= 45 and age-at-diagnosis < 55 ] / count people-2006 with [stage > 2 and dead = 0 and  age >= 45 and age < 55]]
+  [file-write ""]
+  carefully 
+  [   file-write count newly-diagnosed-people with [age-at-diagnosis >= 55 ] / count people-2006 with [stage > 2 and dead = 0 and age >= 55]]
+  [file-write ""]
+  
+  
+  ;Distribution of people living with HIV by age
+  file-write ""
+  file-write ""
+  carefully 
+  [file-write count infected-alive-people with [age < 25 ] / count infected-alive-people
+    file-write count infected-alive-people with [age >= 25 and age < 35 ] / count infected-alive-people
+    file-write count infected-alive-people with [age >= 35 and age < 45 ] / count infected-alive-people
+    file-write count infected-alive-people with [age >= 45 and age < 55 ] / count infected-alive-people
+    file-write count infected-alive-people with [age >= 55 ] / count infected-alive-people
+  ]
+  [file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+  ]
+  
+  file-write ""
+  file-write "";Diagnosed prevalence by age group"
+  carefully 
+  [file-write count infected-alive-people with [age < 25 and stage > 2] / diagnosed-alive-total
+    file-write count infected-alive-people with [age >= 25 and age < 35 and stage > 2] / diagnosed-alive-total
+    file-write count infected-alive-people with [age >= 35 and age < 45 and stage > 2] / diagnosed-alive-total
+    file-write count infected-alive-people with [age >= 45 and age < 55 and stage > 2] / diagnosed-alive-total
+    file-write count infected-alive-people with [age >= 55 and stage > 2] / diagnosed-alive-total
+  ]
+  [file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+  ]
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;OTHER  (not age or risk group"
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  file-write "";Care continuum stage"
+  carefully 
+  [file-write count people-2006 with [stage = 1 and dead = 0 ] / infected-alive-total
+    file-write count people-2006 with [stage = 2 and dead = 0 ] / infected-alive-total
+    file-write count people-2006 with [stage = 3 and dead = 0 ] / infected-alive-total
+    file-write count people-2006 with [stage = 4 and dead = 0 ] / infected-alive-total
+    file-write count people-2006 with [stage = 5 and dead = 0 ] / infected-alive-total
+    file-write count people-2006 with [stage = 6 and dead = 0 ] / infected-alive-total
+  ]
+  [file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+    file-write ""
+  ]
+  
+  file-print ""
+  file-close
+  
+end
+
+
+
+
+
+
+
+;to write-EpidemicFeatures-Header
+;  
+;  file-open "EpidemicFeatures.csv"
+;  ;;;;;;;;;;;;;;;;;;;;
+;  ;HEADER 1
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;
+;  
+;  file-write "Risk group"
+;  
+;  file-write "Current-Month (Ticks)"
+;  file-write "Total infected (index and non-index)"
+;  file-write "Total infected (non-index)"
+;  file-write "Total infected and alive (index and non-index)"
+;  file-write "Total infected and alive (non-index)"
+;  
+;  ;proportion by stage
+;  file-write ""
+;  file-write "";Care continuum stage"
+;  file-write "Care continuum stage"
+;  file-write "Care continuum stage"
+;  file-write "Care continuum stage"
+;  file-write "Care continuum stage"
+;  file-write "Care continuum stage"
+;  file-write "Care continuum stage"
+;  
+;  ;transmisison rate
+;  file-write ""
+;  file-write "Annual incidence / total prevalence"
+;  
+;  file-write ""
+;  file-write "Annual diagnosis / diagnosed prevalence"
+;  file-write ""
+;  file-write "Number new infections"
+;  file-write ""
+;  ;distribution of infections by age
+;  file-write ""
+;  ;file-write ""
+;  file-write "Annual incidence by age group"
+;  file-write "Annual incidence by age group"
+;  file-write "Annual incidence by age group"
+;  file-write "Annual incidence by age group"
+;  file-write "Annual incidence by age group"
+;  
+;  ;;CD4 at diagnosis distribution
+;  file-write ""
+;  file-write "number newly diagnosed"
+;  file-write "CD4 at diagnosis distribution"
+;  file-write ">500"
+;  file-write "350 - 500"
+;  file-write "200 - 350"
+;  file-write "<200"
+;  
+;  ;distribution of age at diagnosis
+;  file-write ""
+;  file-write ""
+;  file-write "Annual diagnosis by age group"
+;  file-write "Annual diagnosis by age group"
+;  file-write "Annual diagnosis by age group"
+;  file-write "Annual diagnosis by age group"
+;  file-write "Annual diagnosis by age group"
+;  
+;  ;;New incidence  divided by people living with HIV by age
+;  file-write ""
+;  file-write ""
+;  file-write "Annual incidence / total prevalence in age group"
+;  file-write "Annual incidence / total prevalence in age group"
+;  file-write "Annual incidence / total prevalence in age group"
+;  file-write "Annual incidence / total prevalence in age group"
+;  file-write "Annual incidence / total prevalence in age group"
+;  ;New diagnosis divided by peopleliving with diagnosed infection by age
+;  file-write ""
+;  file-write ""
+;  file-write "Annual diagnosis / diagnosed prevalence in age group"
+;  file-write "Annual diagnosis / diagnosed prevalence in age group"
+;  file-write "Annual diagnosis / diagnosed prevalence in age group"
+;  file-write "Annual diagnosis / diagnosed prevalence in age group"
+;  file-write "Annual diagnosis / diagnosed prevalence in age group"
+;  
+;  
+;  ;Number of people living with HIV by age
+;  file-write ""
+;  file-write ""
+;  file-write "Total prevalence by age group"
+;  file-write "Total prevalence by age group"
+;  file-write "Total prevalence by age group"
+;  file-write "Total prevalence by age group"
+;  file-write "Total prevalence by age group"
+;  
+;  ;Number of diagnsoed people living with HIV by age
+;  file-write ""
+;  file-write ""
+;  file-write "Diagnosed prevalence by age group"
+;  file-write "Diagnosed prevalence by age group"
+;  file-write "Diagnosed prevalence by age group"
+;  file-write "Diagnosed prevalence by age group"
+;  file-write "Diagnosed prevalence by age group"
+;  
+;  ;  ;Number of people living with HIV by stage
+;  ;  file-write ""
+;  ;  file-write "Care continuum stage"
+;  ;  file-write "Acute"
+;  ;  file-write "Non-acute unaware"
+;  ;  file-write "Aware not in care"
+;  ;  file-write "Care no ART"
+;  ;  file-write "ART no VLS"
+;  ;  file-write "ART with VLS"
+;  
+;  
+;;  ;time from infection to diagnosis
+;;  file-write ""
+;;  file-write "time from infection to diagnosis"
+;;  file-write "min"
+;;  file-write "25th percentile"
+;;  file-write "50th percentile"
+;;  file-write "75th percentile"
+;;  file-write "maximum"
+;;  
+;;  ; New infections by stage of infected partner / Number of people in stage
+;;  file-write ""
+;;  file-write ""
+;;  file-write "New infections by stage of infected partner / Number of people in stage"
+;;  file-write "New infections by stage of infected partner / Number of people in stage"
+;;  file-write "New infections by stage of infected partner / Number of people in stage"
+;;  file-write "New infections by stage of infected partner / Number of people in stage"
+;;  file-write "New infections by stage of infected partner / Number of people in stage"
+;;  file-write "New infections by stage of infected partner / Number of people in stage"
+;;  
+;;  ;  ;Number of new infetcions by stage or primary infected partner
+;;  file-write ""
+;;  file-write ""
+;;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;;  file-write "Distribution of new infetcions by stage of primary infected partner"
+;  file-print ""
+;  ;#################################
+;  ;#HEADER 2
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  
+;  
+;  
+;  file-write "Risk group"
+;  
+;  file-write "Current-Month (Ticks)"
+;  file-write "Total infected (index and non-index)"
+;  file-write "Total infected (non-index)"
+;  file-write "Total infected and alive (index and non-index)"
+;  file-write "Total infected and alive (non-index)"
+;  
+;  ;proportion by stage
+;  file-write ""
+;  file-write "";Care continuum stage"
+;  file-write "Acute"
+;  file-write "Non-acute unaware"
+;  file-write "Aware not in care"
+;  file-write "Care no ART"
+;  file-write "ART no VLS"
+;  file-write "ART with VLS"
+;  
+;  ;transmisison rate
+;  file-write ""
+;  file-write "Annual incidence / total prevalence"
+;  
+;  file-write ""
+;  file-write "Annual diagnosis / diagnosed prevalence"
+;  file-write ""
+;  file-write "Number new infections"
+;  file-write ""
+;  ;distribution of infections by age
+;  file-write "";Annual incidence by age group"
+;               ;file-write ""
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  ;;CD4 at diagnosis distribution
+;  file-write ""
+;  file-write "number newly diagnosed"
+;  file-write "CD4 at diagnosis distribution"
+;  file-write ">500"
+;  file-write "350 - 500"
+;  file-write "200 - 350"
+;  file-write "<200"
+;  
+;  ;distribution of age at diagnosis
+;  file-write ""
+;  file-write "";Annual diagnosis by age group"
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  ;;New incidence  divided by people living with HIV by age
+;  file-write ""
+;  file-write "";Annual incidence / total prevalence in age group"
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  ;New diagnosis divided by peopleliving with diagnosed infection by age
+;  file-write ""
+;  file-write "";Annual diagnosis / diagnosed prevalence in age group"
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  
+;  ;Number of people living with HIV by age
+;  file-write ""
+;  file-write "";Total prevalence by age group"
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  ;Number of diagnsoed people living with HIV by age
+;  file-write ""
+;  file-write "";Diagnosed prevalence by age group"
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  ;  ;Number of people living with HIV by stage
+;  ;  file-write ""
+;  ;  file-write "Care continuum stage"
+;  ;  file-write "Acute"
+;  ;  file-write "Non-acute unaware"
+;  ;  file-write "Aware not in care"
+;  ;  file-write "Care no ART"
+;  ;  file-write "ART no VLS"
+;  ;  file-write "ART with VLS"
+;  
+;  
+;;  ;time from infection to diagnosis
+;;  file-write ""
+;;  file-write "time from infection to diagnosis"
+;;  file-write "min"
+;;  file-write "25th percentile"
+;;  file-write "50th percentile"
+;;  file-write "75th percentile"
+;;  file-write "maximum"
+;;  
+;;  ; New infections by stage of infected partner / Number of people in stage
+;;  file-write ""
+;;  file-write "";New infections by stage of infected partner / Number of people in stage"
+;;  file-write "Acute"
+;;  file-write "Non-acute unaware"
+;;  file-write "Aware not in care"
+;;  file-write "Care no ART"
+;;  file-write "ART no VLS"
+;;  file-write "ART with VLS"
+;;  
+;;  ;  ;Number of new infetcions by stage or primary infected partner
+;;  file-write ""
+;;  file-write "";Distribution of new infetcions by stage of primary infected partner"
+;;  file-write "Acute"
+;;  file-write "Non-acute unaware"
+;;  file-write "Aware not in care"
+;;  file-write "Care no ART"
+;;  file-write "ART no VLS"
+;;  file-write "ART with VLS"
+;;  
+;  
+;  
+;  file-print ""
+;  file-close
+;end
+;
+;to write-EpidemicFeatures [sexInd]
+;  
+;  file-open "EpidemicFeatures.csv"
+;  
+;  let people-2006 people; with [index? = false]; [trans-year >= trans-year-threshold];16]
+;  let infected-alive-people people with [infected? = true and dead = 0 and sex = sexInd + 1]; and index? = false ]
+;                                                                                            ;  file-write "MSM"
+;                                                                                            ;  file-write num-nodes
+;                                                                                            ;  file-write termination-node
+;                                                                                            ;  file-write last(degree-dist-Bin)
+;                                                                                            ;  file-write TimeToDiagnosis * time-unit
+;                                                                                            ;  file-write evolution-time-window
+;                                                                                            ;  file-write transmission-rate
+;  
+;  file-write sexInd + 1
+;  
+;  file-write ticks 
+;  file-write count people-2006 with [infected? = true and sex = sexInd + 1]
+;  file-write count people-2006 with [infected? = true and index? = false and sex = sexInd + 1]
+;  
+;  let infected-alive-total count people-2006 with [infected? = true and dead = 0 and sex = sexInd + 1]
+;  let diagnosed-alive-total count people-2006 with [infected? = true and dead = 0 and sex = sexInd + 1 and stage > 2]
+;  file-write infected-alive-total
+;  file-write count people-2006 with [infected? = true and dead = 0 and index? = false and sex = sexInd + 1]
+;  file-write ""
+;  file-write "";Care continuum stage"
+;  carefully 
+;  [file-write count people-2006 with [stage = 1 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+;    file-write count people-2006 with [stage = 2 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+;    file-write count people-2006 with [stage = 3 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+;    file-write count people-2006 with [stage = 4 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+;    file-write count people-2006 with [stage = 5 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+;    file-write count people-2006 with [stage = 6 and dead = 0 and sex = sexInd + 1] / infected-alive-total
+;  ]
+;  [file-write "0"
+;    file-write "0"
+;    file-write "0"
+;    file-write "0"
+;    file-write "0"
+;    file-write "0"
+;  ]
+;  ;transmisison rate
+;  let newly-infected-people people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = sexInd + 1];; new infections
+;  file-write ""
+;  carefully[file-write count newly-infected-people / infected-alive-total]
+;  [file-write 0]
+;  
+;  ;prevalence
+;  ;  let i 0
+;  ;  let sumSusceptibleNonAgents 0
+;  ;  
+;  ;  if sexInd = 0[
+;  ;    while [i < item 0 (matrix:dimensions susceptible-degree-dist-mat-HETM)][
+;  ;      set sumSusceptibleNonAgents sumSusceptibleNonAgents + sum (matrix:get-row susceptible-degree-dist-mat-HETM i)
+;  ;      set i i + 1
+;  ;    ]
+;  ;  ]
+;  ;  
+;  ;  if sexInd = 1[
+;  ;    while [i < item 0 (matrix:dimensions susceptible-degree-dist-mat-HETF)][
+;  ;      set sumSusceptibleNonAgents sumSusceptibleNonAgents + sum (matrix:get-row susceptible-degree-dist-mat-HETF i)
+;  ;      set i i + 1
+;  ;    ]
+;  ;  ]
+;  ;  
+;  ;  if sexInd = 2[
+;  ;    while [i < item 0 (matrix:dimensions susceptible-degree-dist-mat-MSM)][
+;  ;      set sumSusceptibleNonAgents sumSusceptibleNonAgents + sum (matrix:get-row susceptible-degree-dist-mat-MSM i)
+;  ;      set i i + 1
+;  ;    ]
+;  ;  ]
+;  ;   
+;  ;  carefully[file-write count people with [dead = 0 and sex = sexInd + 1] / ((count people with [dead = 0 and sex = sexInd + 1] + count susceptibles with [sex = sexInd + 1] + sumSusceptibleNonAgents) )];note in model- susceptible agents above 65 are removed to prevent HIV tarsnmissions consider adjusting; 
+;  ;  [
+;  ;  file-write 0
+;  ;]
+;  let newly-diagnosed-people people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = sexInd + 1];;newly diagnosed persons
+;  file-write ""
+;  carefully[file-write count newly-diagnosed-people / diagnosed-alive-total]
+;  [file-write 0]
+;  
+;  file-write ""
+;  ;distribution of new infections by age
+;  file-write count newly-infected-people
+;  file-write ""
+;  
+;  file-write "";Age at infection"
+;  carefully 
+;  [file-write count newly-infected-people with  [age-at-infection < 25 ] / count newly-infected-people
+;    file-write count newly-infected-people with [age-at-infection >= 25 and age-at-infection < 35 ] / count newly-infected-people
+;    file-write count newly-infected-people with [age-at-infection >= 35 and age-at-infection < 45 ] / count newly-infected-people
+;    file-write count newly-infected-people with [age-at-infection >= 45 and age-at-infection < 55 ] / count newly-infected-people
+;    file-write count newly-infected-people with [age-at-infection >= 55 ] / count newly-infected-people
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  ;;CD4 at diagnosis distribution
+;  file-write ""
+;  file-write count newly-diagnosed-people 
+;  file-write "";CD4 at diagnosis"
+;  carefully 
+;  [file-write count newly-diagnosed-people with [CD4-diagnosis >= 500 ] / count newly-diagnosed-people
+;    file-write count newly-diagnosed-people with [CD4-diagnosis >= 350 and CD4-diagnosis < 500 ] / count newly-diagnosed-people 
+;    file-write count newly-diagnosed-people with [CD4-diagnosis >= 200 and CD4-diagnosis < 350 ] / count newly-diagnosed-people 
+;    file-write count newly-diagnosed-people with [CD4-diagnosis < 200 ] / count newly-diagnosed-people 
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  ;distribution of age at diagnosis
+;  file-write ""
+;  file-write "";Age at diagnosis"
+;  carefully 
+;  [file-write count newly-diagnosed-people with [age-at-diagnosis < 25 ] / count newly-diagnosed-people
+;    file-write count newly-diagnosed-people with [age-at-diagnosis >= 25 and age-at-diagnosis < 35 ] / count newly-diagnosed-people 
+;    file-write count newly-diagnosed-people with [age-at-diagnosis >= 35 and age-at-diagnosis < 45 ] / count newly-diagnosed-people 
+;    file-write count newly-diagnosed-people with [age-at-diagnosis >= 45 and age-at-diagnosis < 55 ] / count newly-diagnosed-people 
+;    file-write count newly-diagnosed-people with [age-at-diagnosis >= 55 ] / count newly-diagnosed-people 
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  
+;  ;Incidence divided by pevalence by age
+;  file-write ""
+;  file-write ""
+;  carefully 
+;  [file-write count newly-infected-people with [age-at-infection < 25 ] / count infected-alive-people with [age < 25 ] 
+;    file-write count newly-infected-people with [age-at-infection >= 25 and age-at-infection < 35 ] / count infected-alive-people with [age >= 25 and age < 35 ] 
+;    file-write count newly-infected-people with [age-at-infection >= 35 and age-at-infection < 45 ] / count infected-alive-people with [age >= 35 and age < 45 ] 
+;    file-write count newly-infected-people with [age-at-infection >= 45 and age-at-infection < 55 ] / count infected-alive-people with [age >= 45 and age < 55 ] 
+;    file-write count newly-infected-people with [age-at-infection >= 55 ] / count infected-alive-people with [age >= 55 ] 
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  ;New diagnosis divided by peopleliving with diagnosed infection by age
+;  file-write ""
+;  file-write ""
+;  carefully 
+;    [file-write count newly-diagnosed-people with [age-at-diagnosis < 25 ] / count people-2006 with [stage > 2 and dead = 0 and sex = sexInd + 1 and age < 25]
+;      file-write count newly-diagnosed-people with [age-at-diagnosis >= 25 and age-at-diagnosis < 35 ] / count people-2006 with [stage > 2 and dead = 0 and sex = sexInd + 1 and age >= 25 and age < 35]
+;      file-write count newly-diagnosed-people with [age-at-diagnosis >= 35 and age-at-diagnosis < 45 ] / count people-2006 with [stage > 2 and dead = 0 and sex = sexInd + 1 and age >= 35 and age < 45]
+;      file-write count newly-diagnosed-people with [age-at-diagnosis >= 45 and age-at-diagnosis < 55 ] / count people-2006 with [stage > 2 and dead = 0 and sex = sexInd + 1 and age >= 45 and age < 55]
+;      file-write count newly-diagnosed-people with [age-at-diagnosis >= 55 ] / count people-2006 with [stage > 2 and dead = 0 and sex = sexInd + 1 and age >= 55]
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  ;Distribution of people living with HIV by age
+;  file-write ""
+;  file-write ""
+;  carefully 
+;  [file-write count infected-alive-people with [age < 25 ] / count infected-alive-people
+;    file-write count infected-alive-people with [age >= 25 and age < 35 ] / count infected-alive-people
+;    file-write count infected-alive-people with [age >= 35 and age < 45 ] / count infected-alive-people
+;    file-write count infected-alive-people with [age >= 45 and age < 55 ] / count infected-alive-people
+;    file-write count infected-alive-people with [age >= 55 ] / count infected-alive-people
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  file-write ""
+;  file-write "";Diagnosed prevalence by age group"
+;  carefully 
+;  [file-write count infected-alive-people with [age < 25 and stage > 2] / diagnosed-alive-total
+;    file-write count infected-alive-people with [age >= 25 and age < 35 and stage > 2] / diagnosed-alive-total
+;    file-write count infected-alive-people with [age >= 35 and age < 45 and stage > 2] / diagnosed-alive-total
+;    file-write count infected-alive-people with [age >= 45 and age < 55 and stage > 2] / diagnosed-alive-total
+;    file-write count infected-alive-people with [age >= 55 and stage > 2] / diagnosed-alive-total
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;     
+;;  ;  ;Distribution of people living with HIV by stage
+;;  ;  file-write ""
+;;  ;  file-write ""
+;;  ;  carefully 
+;;  ;  [file-write count infected-alive-people with [stage = 1 ] / count infected-alive-people
+;;  ;    file-write count infected-alive-people with [stage = 2 ] / count infected-alive-people
+;;  ;    file-write count infected-alive-people with [stage = 3 ] / count infected-alive-people
+;;  ;    file-write count infected-alive-people with [stage = 4 ] / count infected-alive-people
+;;  ;    file-write count infected-alive-people with [stage = 5 ] / count infected-alive-people
+;;  ;    file-write count infected-alive-people with [stage = 6 ] / count infected-alive-people
+;;  ;  ]
+;;  ;  [file-write ""
+;;  ;    file-write ""
+;;  ;    file-write ""
+;;  ;    file-write ""
+;;  ;    file-write ""
+;;  ;    file-write ""
+;;  ;  ]
+;;  
+;;  ;time from infection to diagnosis
+;;  file-write ""
+;;  
+;;  
+;;  file-write "";Distribution of time from infection to diagnosis"
+;;  carefully    [ 
+;;    ;file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection < 1 ] / count newly-diagnosed-people
+;;    ; file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 1  and age-at-diagnosis - age-at-infection < 3 ] / count newly-diagnosed-people
+;;    ; file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 3  and age-at-diagnosis - age-at-infection < 8 ] / count newly-diagnosed-people
+;;    ;file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 8 ] / count newly-diagnosed-people
+;;    ;file-write median [age-at-diagnosis - age-at-infection] of newly-diagnosed-people
+;;    let sorted sort [age-at-diagnosis - age-at-infection] of newly-diagnosed-people
+;;    file-write  (item 0 sorted)
+;;    let index  round (0.25 * length(sorted))
+;;    file-write  (item index sorted)
+;;    set index  round (0.5 * length(sorted))
+;;    file-write  (item index sorted)
+;;    set index  round (0.75 * length(sorted))
+;;    file-write  (item index sorted)
+;;    set index  length(sorted) - 1
+;;    file-write  (item index sorted)
+;;    ;    count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 1  and age-at-diagnosis - age-at-infection < 3 ] / count newly-diagnosed-people
+;;    ;file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 3  and age-at-diagnosis - age-at-infection < 8 ] / count newly-diagnosed-people
+;;    ;file-write count newly-diagnosed-people with [age-at-diagnosis - age-at-infection >= 8 ] / count newly-diagnosed-people
+;;  ]
+;;  [file-write ""
+;;    file-write ""
+;;    file-write ""
+;;    file-write ""
+;;    file-write ""
+;;  ]
+;;  ;   ;Incidence divided by pevalence by stage
+;;  
+;;  file-write ""
+;;  carefully 
+;;  [file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 1] / count infected-alive-people with [stage = 1 ] 
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 2] / count infected-alive-people with [stage = 2 ] 
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 3] /  count infected-alive-people with [stage = 3 ] 
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 4] /  count infected-alive-people with [stage = 4 ] 
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 5] /  count infected-alive-people with [stage = 5 ] 
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 6] /  count infected-alive-people with [stage = 6 ] 
+;;  ]
+;;  [file-write ""
+;;    file-write ""
+;;    file-write ""
+;;    file-write ""
+;;    file-write ""
+;;    file-write ""
+;;  ]
+;;  
+;;  
+;;  ;  ;Distribution of new infections by stage of primary infected partner
+;;  file-write ""
+;;  file-write ""
+;;  carefully 
+;;  [
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 1] / count infected-alive-people
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 2]  / count infected-alive-people
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 3]/ count infected-alive-people
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 4]/ count infected-alive-people
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 5]/ count infected-alive-people
+;;    file-write 0;count newly-infected-people with [[stage] of person source-of-infection = 6]/ count infected-alive-people
+;;  ]
+;;  [file-write ""
+;;    file-write ""
+;;    file-write ""
+;;    file-write ""
+;;    file-write ""
+;;    file-write ""
+;;  ]  
+; 
+;  file-print ""
+;  file-close
+;  
+;end
+;
+;to write-risk-mixing-header
+;  
+;  ; set random_counter 0
+;  
+;  file-open "RiskMixing.csv"
+;  
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  ;HEADER ROW 1
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  file-write "Current-Month (Ticks)"
+;  
+;  ;file-write "Num-Nodes"
+;  ;file-write "PopSize"
+;  
+;  file-write "PLWH"
+;  file-write "PLWH"
+;  file-write "PLWH"
+;  file-write "PLWH"
+;  file-write "PLWH"
+;  file-write "PLWH"
+;  
+;  file-write "Total Links"
+;  
+;  
+;  file-write "Num Links HETF-HETM"
+;  file-write "Num Links HETF-MSM"
+;  file-write "Num Links MSM-HETF"
+;  file-write "Num Links MSM-MSM"
+;  
+;  file-write "Total People Stage"
+;  file-write "Total People Sex"
+;  
+;  file-write "";Total prevalence" ; Distribution of PLWH by risk group"
+;  file-write "Total prevalence"
+;  file-write "Total prevalence"
+;  file-write "Total prevalence"
+;  file-write "Total prevalence"
+;  file-write "Total prevalence"
+;  file-write "Total prevalence"
+;  
+;  file-write ""
+;  file-write "" ; Distribution of diagnsoed PLWH by risk group"
+;  file-write "Diagnosed prevalence"
+;  file-write "Diagnosed prevalence"
+;  file-write "Diagnosed prevalence"
+;  file-write "Diagnosed prevalence"
+;  file-write "Diagnosed prevalence"
+;  file-write "Diagnosed prevalence"
+;  
+;  file-write ""
+;  file-write ""
+;  file-write "new infections by risk group"
+;  file-write "new infections by risk group"
+;  file-write "new infections by risk group"
+;  file-write "new infections by risk group"
+;  file-write "new infections by risk group"
+;  file-write "new infections by risk group"
+;  
+;  file-write ""
+;  file-write "Annual incidence"
+;  file-write "Annual incidence"
+;  file-write "Annual incidence"
+;  file-write "Annual incidence"
+;  file-write "Annual incidence"
+;  file-write "Annual incidence"
+;  
+;  file-write ""
+;  file-write "new diagnosis by risk group"
+;  file-write "new diagnosis by risk group"
+;  file-write "new diagnosis by risk group"
+;  file-write "new diagnosis by risk group"
+;  file-write "new diagnosis by risk group"
+;  file-write "new diagnosis by risk group"
+;  
+;  file-write ""
+;  file-write "Annual diagnosis"
+;  file-write "Annual diagnosis"
+;  file-write "Annual diagnosis"
+;  file-write "Annual diagnosis"
+;  file-write "Annual diagnosis"
+;  file-write "Annual diagnosis"
+;  
+;  ;file-write "Prop Links HETM-HETF"
+;  ;file-write "Prop Links HETM-MSM"
+;  ;file-write "Prop Links MSM-HETF"
+;  ;file-write "Prop Links MSM-MSM"
+;  
+;  ;transmisison rate
+;  file-write ""
+;  file-write "Annual incidence / total prevalence";HETF"
+;  file-write "Annual incidence / total prevalence";HETM"
+;  file-write "Annual incidence / total prevalence"; MSM"
+;  file-write "Annual incidence / total prevalence";IDUF"
+;  file-write "Annual incidence / total prevalence";IDUM"
+;  file-write "Annual incidence / total prevalence"; IDUMSM"
+;  
+;  
+;  file-write ""
+;  file-write "Annual diagnosis / diagnosed prevalence";HETF"
+;  file-write "Annual diagnosis / diagnosed prevalence";HETM"
+;  file-write "Annual diagnosis / diagnosed prevalence"; MSM"
+;  file-write "Annual diagnosis / diagnosed prevalence";IDUF"
+;  file-write "Annual diagnosis / diagnosed prevalence";IDUM"
+;  file-write "Annual diagnosis / diagnosed prevalence"; IDUMSM"
+;  
+;  file-write ""
+;  ;distribution of new infections by age
+;  file-write "new infections";count newly-infected-people
+;  file-write ""
+;  
+;  
+;  ;;;;;;;;;;;;;;;;;;;;;A
+;  ;AGE
+;  ;;;;;;;;;;;;;;;;;;;;;;;;
+;  
+;  file-write "";Age at infection"
+;  file-write "Annual incidence by age group";<24"
+;  file-write "Annual incidence by age group";25 - 34"
+;  file-write "Annual incidence by age group";35 - 44"
+;  file-write "Annual incidence by age group";45 - 54"
+;  file-write "Annual incidence by age group";>=55"
+;  
+;  
+;  ;distribution of age at diagnosis
+;  file-write ""
+;  file-write "";Age at diagnosis"
+;  file-write "Annual diagnosis by age group";<24"
+;  file-write "Annual diagnosis by age group";25 - 34"
+;  file-write "Annual diagnosis by age group";35 - 44"
+;  file-write "Annual diagnosis by age group";45 - 54"
+;  file-write "Annual diagnosis by age group";>=55"
+;  
+;  
+;  ;Incidence divided by pevalence by age
+;  file-write ""
+;  file-write ""
+;  file-write "Annual incidence / total prevalence in age group";<24"
+;  file-write "Annual incidence / total prevalence in age group";25 - 34"
+;  file-write "Annual incidence / total prevalence in age group";35 - 44"
+;  file-write "Annual incidence / total prevalence in age group";45 - 54"
+;  file-write "Annual incidence / total prevalence in age group";>=55"
+;  
+;  ;New diagnosis divided by peopleliving with diagnosed infection by age
+;  file-write ""
+;  file-write ""
+;  file-write "Annual diagnosis / diagnosed prevalence in age group";<24"
+;  file-write "Annual diagnosis / diagnosed prevalence in age group";25 - 34"
+;  file-write "Annual diagnosis / diagnosed prevalence in age group";35 - 44"
+;  file-write "Annual diagnosis / diagnosed prevalence in age group";45 - 54"
+;  file-write "Annual diagnosis / diagnosed prevalence in age group";>=55"
+;  
+;  ;Distribution of people living with HIV by age
+;  file-write ""
+;  file-write ""
+;  file-write "Total prevalence by age group";<24"
+;  file-write "Total prevalence by age group";25 - 34"
+;  file-write "Total prevalence by age group";35 - 44"
+;  file-write "Total prevalence by age group";45 - 54"
+;  file-write "Total prevalence by age group";>=55"
+;  
+;  file-write ""
+;  file-write "";Diagnosed prevalence by age group"
+;  file-write "Diagnosed prevalence by age group";<24"
+;  file-write "Diagnosed prevalence by age group";25 - 34"
+;  file-write "Diagnosed prevalence by age group";35 - 44"
+;  file-write "Diagnosed prevalence by age group";45 - 54"
+;  file-write "Diagnosed prevalence by age group";>=55"
+;  
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  ;OTHER  (not age or risk group"
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  
+;  file-write "";Care continuum stage"
+;  file-write "Care continuum stage";Acute"
+;  file-write "Care continuum stage";Non-acute unaware"
+;  file-write "Care continuum stage";Aware not in care"
+;  file-write "Care continuum stage";Care no ART"
+;  file-write "Care continuum stage";ART no VLS"
+;  file-write "Care continuum stage";ART with VLS"
+;  
+;  file-print ""
+;  
+;  ;file-write "Counter"
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  ;HEADER ROW 2
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  file-write "Current-Month (Ticks)"
+;  
+;  ;file-write "Num-Nodes"
+;  ;file-write "PopSize"
+;  
+;  file-write "Risk group- 1";HETF"
+;  file-write "Risk group- 2";HETM"
+;  file-write "Risk group- 3"; MSM"
+;  file-write "Risk group- 4";IDUF"
+;  file-write "Risk group- 5";IDUM"
+;  file-write "Risk group- 6";IDUMSM"
+;  
+;  file-write "Total Links"
+;  
+;  
+;  file-write "Num Links HETF-HETM"
+;  file-write "Num Links HETF-MSM"
+;  file-write "Num Links MSM-HETF"
+;  file-write "Num Links MSM-MSM"
+;  
+;  file-write "Total People Stage"
+;  file-write "Total People Sex"
+;  
+;  file-write "";Total prevalence" ; Distribution of PLWH by risk group"
+;  file-write "Risk group- 1";HETF"
+;  file-write "Risk group- 2";HETM"
+;  file-write "Risk group- 3"; MSM"
+;  file-write "Risk group- 4";IDUF"
+;  file-write "Risk group- 5";IDUM"
+;  file-write "Risk group- 6";IDUMSM"
+;  
+;  file-write ""
+;  file-write "";Diagnosed prevalence" ; Distribution of diagnsoed PLWH by risk group"
+;  file-write "Risk group- 1";HETF"
+;  file-write "Risk group- 2";HETM"
+;  file-write "Risk group- 3"; MSM"
+;  file-write "Risk group- 4";IDUF"
+;  file-write "Risk group- 5";IDUM"
+;  file-write "Risk group- 6";IDUMSM"
+;  
+;  file-write ""
+;  file-write "";new infections by risk group"
+;  file-write "Risk group- 1";HETF"
+;  file-write "Risk group- 2";HETM"
+;  file-write "Risk group- 3"; MSM"
+;  file-write "Risk group- 4";IDUF"
+;  file-write "Risk group- 5";IDUM"
+;  file-write "Risk group- 6";IDUMSM"
+;  
+;  file-write "";Annual incidence"
+;  file-write "Risk group- 1";HETF"
+;  file-write "Risk group- 2";HETM"
+;  file-write "Risk group- 3"; MSM"
+;  file-write "Risk group- 4";IDUF"
+;  file-write "Risk group- 5";IDUM"
+;  file-write "Risk group- 6";IDUMSM"
+;  
+;  file-write "";new diagnosis by risk group"
+;  file-write "Risk group- 1";HETF"
+;  file-write "Risk group- 2";HETM"
+;  file-write "Risk group- 3"; MSM"
+;  file-write "Risk group- 4";IDUF"
+;  file-write "Risk group- 5";IDUM"
+;  file-write "Risk group- 6";IDUMSM"
+;  
+;  file-write "";Annual diagnosis"
+;  file-write "Risk group- 1";HETF"
+;  file-write "Risk group- 2";HETM"
+;  file-write "Risk group- 3"; MSM"
+;  file-write "Risk group- 4";IDUF"
+;  file-write "Risk group- 5";IDUM"
+;  file-write "Risk group- 6";IDUMSM"
+;  
+;  ;transmisison rate
+;  file-write ""
+;  file-write "Risk group- 1";HETF"
+;  file-write "Risk group- 2";HETM"
+;  file-write "Risk group- 3"; MSM"
+;  file-write "Risk group- 4";IDUF"
+;  file-write "Risk group- 5";IDUM"
+;  file-write "Risk group- 6";IDUMSM"
+;  
+;  file-write ""
+;  file-write "Risk group- 1";HETF"
+;  file-write "Risk group- 2";HETM"
+;  file-write "Risk group- 3"; MSM"
+;  file-write "Risk group- 4";IDUF"
+;  file-write "Risk group- 5";IDUM"
+;  file-write "Risk group- 6";IDUMSM"
+;  
+;  file-write ""
+;  ;distribution of new infections by age
+;  file-write "";count newly-infected-people
+;  file-write ""
+;  
+;  
+;  ;;;;;;;;;;;;;;;;;;;;;A
+;  ;AGE
+;  ;;;;;;;;;;;;;;;;;;;;;;;;
+;  
+;  file-write "";Age at infection"
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  
+;  ;distribution of age at diagnosis
+;  file-write ""
+;  file-write "";Age at diagnosis"
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  
+;  ;Incidence divided by pevalence by age
+;  file-write ""
+;  file-write ""
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  ;New diagnosis divided by peopleliving with diagnosed infection by age
+;  file-write ""
+;  file-write ""
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  ;Distribution of people living with HIV by age
+;  file-write ""
+;  file-write ""
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  file-write ""
+;  file-write "";Diagnosed prevalence by age group"
+;  file-write "<24"
+;  file-write "25 - 34"
+;  file-write "35 - 44"
+;  file-write "45 - 54"
+;  file-write ">=55"
+;  
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  ;OTHER  (not age or risk group"
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  
+;  file-write "";Care continuum stage"
+;  file-write "Acute"
+;  file-write "Non-acute unaware"
+;  file-write "Aware not in care"
+;  file-write "Care no ART"
+;  file-write "ART no VLS"
+;  file-write "ART with VLS"
+;  
+;  
+;  
+;  file-print ""
+;  
+;  
+;  file-close
+;end
+;
+;to write-risk-group-mixing
+;  let people-2006 people
+;  ;set random_counter random_counter + 1
+;  
+;  file-open "RiskMixing.csv"
+;  let pop  people with [infected? = true and dead = 0 ]
+;  ; let HETFpop count people with [infected? = true and dead = 0 and sex = 1]
+;  ;let HETMpop count people with [infected? = true and dead = 0 and sex = 2]
+;  ; let MSMpop count people with [infected? = true and dead = 0 and sex = 3]
+;  
+;  let diagPop  people with [infected? = true and dead = 0  and stage > 2]
+;  ;let HETFpopDiag count people with [infected? = true and dead = 0 and sex = 1 and stage > 2]
+;  ; let HETMpopDiag count people with [infected? = true and dead = 0 and sex = 2 and stage > 2]
+;  ; let MSMpopDiag count people with [infected? = true and dead = 0 and sex = 3 and stage > 2]
+;  
+;  ;file-write random_counter
+;  
+;  file-write ticks
+;  
+;  ;file-write num-nodes
+;  ;file-write PopSize
+;  
+;  file-write count pop with [sex = 1] 
+;  file-write count pop with [sex = 2] 
+;  file-write count pop with [sex = 3] 
+;  file-write count pop with [sex = 4] 
+;  file-write count pop with [sex = 5] 
+;  file-write count pop with [sex = 6] 
+;  ;file-write HETMpop
+;  ;file-write MSMpop 
+;  
+;  let totlinks sum [count my-links] of people with [dead = 0]
+;  
+;  file-write totlinks
+;  
+;  let HETF-HETM-link 0
+;  let HETF-MSM-link 0
+;  let MSM-HETF-link 0
+;  let MSM-MSM-link 0
+;  
+;  file-write 0;HETF-HETM-link
+;  file-write 0;HETF-MSM-link
+;  file-write 0;MSM-HETF-link
+;  file-write 0;MSM-MSM-link
+;  
+;  ;file-write total-people-stage
+;  ;file-write total-people-sex
+;  
+;  file-write ""
+;  file-write ""
+;  
+;  file-write ""; Distribution of PLWH by risk group"
+;  file-write count pop with [sex = 1] / count pop
+;  file-write count pop with [sex = 2] / count pop
+;  file-write count pop with [sex = 3] / count pop
+;  file-write count pop with [sex = 4] / count pop
+;  file-write count pop with [sex = 5] / count pop
+;  file-write count pop with [sex = 6] / count pop
+;  
+;  
+;  file-write ""
+;  file-write "" ;Distribution of diagnosed PLWH by risk group"
+;  file-write count diagPop with [sex = 1] / count diagPop
+;  file-write count diagPop with [sex = 2] / count diagPop
+;  file-write count diagPop with [sex = 3] / count diagPop
+;  file-write count diagPop with [sex = 4] / count diagPop
+;  file-write count diagPop with [sex = 5] / count diagPop
+;  file-write count diagPop with [sex = 6] / count diagPop
+;  
+;  
+;  file-write ""
+;  file-write "";new infections by risk group"
+;  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 1];; new infections
+;  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 2];; new infections
+;  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 3];; new infections
+;  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 4];; new infections
+;  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 5];; new infections
+;  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 6];; new infections
+;  
+;  file-write "";Distribution of new infections by risk group"
+;  ifelse count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)] > 0 [
+;    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 1]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)];; new infections
+;    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 2]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)]
+;    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 3]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)]
+;    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 4]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)];; new infections
+;    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 5]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)]
+;    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 6]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)]
+;    
+;  ]
+;  [
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;  ]
+;  
+;  file-write "";new diagnosis by risk group"
+;  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 1]
+;  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 2]
+;  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 3]
+;  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 4]
+;  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 5]
+;  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 6]
+;  
+;  file-write "";Distribution of new diagnosis by risk group"
+;  ifelse count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] > 0[
+;    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 1] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+;    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 2] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+;    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 3] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+;    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 4] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+;    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 5] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+;    file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 6] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+;  ]
+;  [file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;  ]
+;  ;file-write HETM-HETF-link / totlinks
+;  ;file-write HETM-MSM-link / totlinks
+;  ;file-write MSM-HETF-link / totlinks
+;  ;file-write MSM-MSM-link / totlinks
+;  
+;  
+;  
+;  let infected-alive-people people with [infected? = true and dead = 0]; and index? = false ]
+;  let infected-alive-total count people-2006 with [infected? = true and dead = 0]
+;  let diagnosed-alive-people people-2006 with [infected? = true and dead = 0 and stage > 2]
+;  let diagnosed-alive-total count people-2006 with [infected? = true and dead = 0 and stage > 2]
+;  
+;  
+;  ;transmisison rate
+;  let newly-infected-people people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)];; new infections
+;  file-write ""
+;  carefully[
+;    file-write count newly-infected-people with [ sex =  1] / count infected-alive-people with [ sex =  1]
+;    file-write count newly-infected-people with [ sex =  2] / count infected-alive-people with [ sex =  2]
+;    file-write count newly-infected-people with [ sex =  3] / count infected-alive-people with [ sex =  3]
+;    file-write count newly-infected-people with [ sex =  4] / count infected-alive-people with [ sex =  4]
+;    file-write count newly-infected-people with [ sex =  5] / count infected-alive-people with [ sex =  5]
+;    file-write count newly-infected-people with [ sex =  6] / count infected-alive-people with [ sex =  6]
+;  ]
+;  [file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;  ]
+;  
+;  
+;  let newly-diagnosed-people people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true];;newly diagnosed persons
+;  file-write ""
+;  carefully[
+;    file-write count newly-diagnosed-people  with [sex = 1] / count diagnosed-alive-people with [sex = 1]
+;    file-write count newly-diagnosed-people  with [sex = 2] / count diagnosed-alive-people with [sex = 2]
+;    file-write count newly-diagnosed-people  with [sex = 3] / count diagnosed-alive-people with [sex = 3]
+;    file-write count newly-diagnosed-people  with [sex = 4] / count diagnosed-alive-people with [sex = 4]
+;    file-write count newly-diagnosed-people  with [sex = 5] / count diagnosed-alive-people with [sex = 5]
+;    file-write count newly-diagnosed-people  with [sex = 6] / count diagnosed-alive-people with [sex = 6]
+;  ]
+;  [file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;    file-write 0
+;  ]
+;  
+;  file-write ""
+;  ;distribution of new infections by age
+;  file-write count newly-infected-people
+;  file-write ""
+;  
+;  
+;  ;;;;;;;;;;;;;;;;;;;;;A
+;  ;AGE
+;  ;;;;;;;;;;;;;;;;;;;;;;;;
+;  
+;  file-write "";Age at infection"
+;  carefully 
+;  [file-write count newly-infected-people with  [age-at-infection < 25 ] / count newly-infected-people
+;    file-write count newly-infected-people with [age-at-infection >= 25 and age-at-infection < 35 ] / count newly-infected-people
+;    file-write count newly-infected-people with [age-at-infection >= 35 and age-at-infection < 45 ] / count newly-infected-people
+;    file-write count newly-infected-people with [age-at-infection >= 45 and age-at-infection < 55 ] / count newly-infected-people
+;    file-write count newly-infected-people with [age-at-infection >= 55 ] / count newly-infected-people
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  ;distribution of age at diagnosis
+;  file-write ""
+;  file-write "";Age at diagnosis"
+;  carefully 
+;  [file-write count newly-diagnosed-people with [age-at-diagnosis < 25 ] / count newly-diagnosed-people
+;    file-write count newly-diagnosed-people with [age-at-diagnosis >= 25 and age-at-diagnosis < 35 ] / count newly-diagnosed-people 
+;    file-write count newly-diagnosed-people with [age-at-diagnosis >= 35 and age-at-diagnosis < 45 ] / count newly-diagnosed-people 
+;    file-write count newly-diagnosed-people with [age-at-diagnosis >= 45 and age-at-diagnosis < 55 ] / count newly-diagnosed-people 
+;    file-write count newly-diagnosed-people with [age-at-diagnosis >= 55 ] / count newly-diagnosed-people 
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  
+;  ;Incidence divided by pevalence by age
+;  file-write ""
+;  file-write ""
+;  carefully 
+;  [file-write count newly-infected-people with [age-at-infection < 25 ] / count infected-alive-people with [age < 25 ] 
+;    file-write count newly-infected-people with [age-at-infection >= 25 and age-at-infection < 35 ] / count infected-alive-people with [age >= 25 and age < 35 ] 
+;    file-write count newly-infected-people with [age-at-infection >= 35 and age-at-infection < 45 ] / count infected-alive-people with [age >= 35 and age < 45 ] 
+;    file-write count newly-infected-people with [age-at-infection >= 45 and age-at-infection < 55 ] / count infected-alive-people with [age >= 45 and age < 55 ] 
+;    file-write count newly-infected-people with [age-at-infection >= 55 ] / count infected-alive-people with [age >= 55 ] 
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  ;New diagnosis divided by peopleliving with diagnosed infection by age
+;  file-write ""
+;  file-write ""
+;  carefully 
+;    [file-write count newly-diagnosed-people with [age-at-diagnosis < 25 ] / count people-2006 with [stage > 2 and dead = 0  and age < 25]
+;      file-write count newly-diagnosed-people with [age-at-diagnosis >= 25 and age-at-diagnosis < 35 ] / count people-2006 with [stage > 2 and dead = 0 and  age >= 25 and age < 35]
+;      file-write count newly-diagnosed-people with [age-at-diagnosis >= 35 and age-at-diagnosis < 45 ] / count people-2006 with [stage > 2 and dead = 0 and  age >= 35 and age < 45]
+;      file-write count newly-diagnosed-people with [age-at-diagnosis >= 45 and age-at-diagnosis < 55 ] / count people-2006 with [stage > 2 and dead = 0 and  age >= 45 and age < 55]
+;      file-write count newly-diagnosed-people with [age-at-diagnosis >= 55 ] / count people-2006 with [stage > 2 and dead = 0 and age >= 55]
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  ;Distribution of people living with HIV by age
+;  file-write ""
+;  file-write ""
+;  carefully 
+;  [file-write count infected-alive-people with [age < 25 ] / count infected-alive-people
+;    file-write count infected-alive-people with [age >= 25 and age < 35 ] / count infected-alive-people
+;    file-write count infected-alive-people with [age >= 35 and age < 45 ] / count infected-alive-people
+;    file-write count infected-alive-people with [age >= 45 and age < 55 ] / count infected-alive-people
+;    file-write count infected-alive-people with [age >= 55 ] / count infected-alive-people
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  file-write ""
+;  file-write "";Diagnosed prevalence by age group"
+;  carefully 
+;  [file-write count infected-alive-people with [age < 25 and stage > 2] / diagnosed-alive-total
+;    file-write count infected-alive-people with [age >= 25 and age < 35 and stage > 2] / diagnosed-alive-total
+;    file-write count infected-alive-people with [age >= 35 and age < 45 and stage > 2] / diagnosed-alive-total
+;    file-write count infected-alive-people with [age >= 45 and age < 55 and stage > 2] / diagnosed-alive-total
+;    file-write count infected-alive-people with [age >= 55 and stage > 2] / diagnosed-alive-total
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  ;OTHER  (not age or risk group"
+;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  
+;  file-write "";Care continuum stage"
+;  carefully 
+;  [file-write count people-2006 with [stage = 1 and dead = 0 ] / infected-alive-total
+;    file-write count people-2006 with [stage = 2 and dead = 0 ] / infected-alive-total
+;    file-write count people-2006 with [stage = 3 and dead = 0 ] / infected-alive-total
+;    file-write count people-2006 with [stage = 4 and dead = 0 ] / infected-alive-total
+;    file-write count people-2006 with [stage = 5 and dead = 0 ] / infected-alive-total
+;    file-write count people-2006 with [stage = 6 and dead = 0 ] / infected-alive-total
+;  ]
+;  [file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;    file-write ""
+;  ]
+;  
+;  file-print ""
+;  file-close
+;  
+;end
+;
+;
+;
+;

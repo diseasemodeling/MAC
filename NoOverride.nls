@@ -1,0 +1,94 @@
+globals[
+;  CD4-increment-1
+;  CD4-increment-2
+;  CD4-increment-3
+;  IDU-mixing
+;  age-sexual
+;  condom-use-MSM-casual
+;  condom-use-MSM-main
+;  condom-use-female-casual
+;  condom-use-female-main
+;  condom-use-male-casual
+;  condom-use-male-main
+;  death-prob-idu-AIDS 
+; death-prob-idu-no-AIDS 
+;  death-prob-sexual-AIDS 
+;  death-prob-sexual-no-AIDS 
+;  death-rate-no-ART-idu
+;  death-rate-no-ART-sexual
+  factor
+  age-sexual
+  CD4-increment-1
+  CD4-increment-2
+  CD4-increment-3
+  IDU-mixing
+  condom-use-MSM-casual
+  condom-use-MSM-main
+  condom-use-female-casual
+  condom-use-female-main
+  condom-use-male-casual
+  condom-use-male-main
+  death-prob-idu-AIDS
+  death-prob-idu-no-AIDS
+  death-prob-sexual-AIDS
+  death-prob-sexual-no-AIDS
+  death-rate-no-ART-idu
+  death-rate-no-ART-sexual
+  main-ptnrs-female
+  main-ptnrs-male
+  max-ptnr
+  no-ptnrs-female
+  no-ptnrs-male
+  num-casual-sex-max
+  num-casual-sex-min
+  num-sex-acts-lower-female
+  num-sex-acts-lower-male
+  num-sex-acts-upper-female
+  num-sex-acts-upper-male
+  prob-ptnr-sharing
+  prop-anal-acts-female
+  prop-anal-acts-male
+  trans-rate-prob
+  num-casual-main-max 
+ ; num-casual-main-median 
+ ;  num-casual-main-min 
+ ;  num-casual-only-1Q 
+  ; num-casual-only-3Q 
+   num-casual-only-max 
+  ; num-casual-only-median 
+ ;  num-casual-only-min 
+]
+
+
+to nooverride
+set CD4-at-ART-prob   [0.3 0.9]
+set CD4-at-ART-lower   [36 201 351]
+set CD4-at-ART-upper   [200 350 500]
+set unaware-CD4-upper 
+  [200 500 725]
+  set unaware-CD4-lower 
+  [36 201 501]
+  set unaware-CD4-prob 
+  [0.24 0.4]
+  set inCareNoART-CD4-upper 
+  [500 600 725]
+  set inCareNoART-CD4-lower 
+  [350 501 601]
+  set inCareNoART-CD4-prob 
+  [0.10 0.80]
+  set CD4-count-stratum 
+  [0 200 350 500]
+   set prop-concurrency 
+  [0.338 0.303 0.263 0.310 0.231 0.263] ; IDU4 percentage with main partners * percentage with concurrent partners
+  set concurrency-lambda 
+  [0.78 0.78 1.55 0.78 0.78 1.55] ;; [HET-female HET-male MSM]: above distribution of concurrence is exponential, therefore using lambda to determine length of concurrency
+  set CD4-decline-mean-month 
+  [-1.7 -3.3 -4 -4 -4.7 -4.7 -6.5]
+  set CD4-decline-upper-bound-month 
+  [-0.8 -2.4 -3.3 -3.3 -3.9 -3.9 -5.7]
+  set CD4-decline-lower-bound-month 
+  [-2.6 -4.1 -4.6 -4.6 -5.4 -5.4 -7.3]
+  set CD4-decline-std-month 
+  [0.46 0.43 0.33 0.33 0.38 0.38 0.41]
+  set viral-load-salvage-add-std 0.383
+end

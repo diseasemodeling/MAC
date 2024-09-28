@@ -1,0 +1,23 @@
+;globals[
+;    modifier-condom-main 
+;    modifier-condom-casual 
+;    modifier-num-ptnrs
+;]
+;
+;to setup-modifier-sexual-behavior
+;    set modifier-condom-main py:runresult "d2.modifier_condom_main.tolist()"
+;    set modifier-condom-casual py:runresult "d2.modifier_condom_casual.tolist()"
+;    set modifier-num-ptnrs py:runresult "d2.modifier_num_ptnrs.tolist()"
+;end 
+;
+;to modify-sexual-behavior
+;   if ticks = 240 [
+;    set item 0 condom-casual map * (item 0 modifier_condom_casual item 0 condom-casual)
+;    set item 1 condom-casual map * (item 1 modifier_condom_casual item 1 condom-casual)
+;    set item 2 condom-casual map * (item 2 modifier_condom_casual item 2 condom-casual)
+;    set item 0 condom-main map * (item 0 modifier_condom_main item 0 condom-main)
+;    set item 1 condom-main map * (item 1 modifier_condom_main item 1 condom-main)
+;    set item 2 condom-main map * (item 2 modifier_condom_main item 2 condom-main)
+;   ]
+;end
+

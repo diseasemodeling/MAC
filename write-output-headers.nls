@@ -1,0 +1,248 @@
+;;Used for sensitivity analysis
+
+;; Header for population information
+to write-PLWH-header
+  
+  if goal = 1 [file-open "results-PLWH-one.csv"]
+  if goal = 2 [file-open "results-PLWH-two.csv"]
+  if goal = 3 [file-open "results-PLWH-three.csv"]
+  if goal = 4 [file-open "results-PLWH-four.csv"]
+  if goal = 5 [file-open "results-PLWH-five.csv"]
+   
+  file-write "Year"
+  
+  file-write ""
+  file-write "Total pop mean"
+  file-write "Total pop std"
+  file-write "Total pop LB"
+  file-write "Total pop UB"
+
+  repeat 8
+  [
+    file-write ""
+    file-write "HEF"
+    file-write "HEM"
+    file-write "MSM"
+    file-write "IDU-HEF"
+    file-write "IDU-HEM"
+    file-write "IDU-MSM"
+  ]
+  
+  repeat 8
+  [
+    file-write ""
+    file-write "Actue-unaware"
+    file-write "NonAcute-unaware"
+    file-write "Aware-no-care"
+    file-write "In-care-no-ART"
+    file-write "ART-no-VLS"
+    file-write "VLS"
+  ]
+
+  repeat 8
+  [
+    file-write ""
+    file-write "<=24"
+    file-write "25~34"
+    file-write "35~44"
+    file-write "45~54"
+    file-write ">=55"
+  ]
+  
+;  repeat 8
+;  [file-write ""
+;    file-write "<=50"
+;    file-write "51~200"
+;    file-write "201~350"
+;    file-write "351~500"
+;    file-write ">=501"
+;  ]
+;
+;  file-write ""
+;  file-write "Total"
+;  file-write "Utilization"
+;  file-write "ART drug regimen"
+;  file-write "Opportunistic infection"
+;  file-write "Care service"
+;  file-write "Testing"
+;
+;  file-write ""
+;  file-write "3 months"
+;  file-write "6 months"
+;  file-write "12 months"
+;  file-write "24 months"
+;  file-write "Ever"
+;
+;  file-write ""
+;  file-write "Alive"
+;  file-write "Alive drop out"
+;  file-write "Dead"
+;  file-write "Not in care when dead"
+;  file-write "ART initiated when dead"
+;  file-write "ART retention when dead"
+
+  file-print ""
+  
+  file-close
+
+end
+
+;; Header for new infections
+to write-new-infections-header
+  
+  if goal = 1 [file-open "results-new-infections-one.csv"]
+  if goal = 2 [file-open "results-new-infections-two.csv"]
+  if goal = 3 [file-open "results-new-infections-three.csv"]
+  if goal = 4 [file-open "results-new-infections-four.csv"]
+  if goal = 5 [file-open "results-new-infections-five.csv"]
+  
+  file-write "Year"
+  
+  file-write "Total new infection mean"
+  file-write "Total new infection std"
+  file-write "Total new infection lb"
+  file-write "Total new infection ub"
+  
+  file-write "Total new death mean"
+  file-write "Total new death std"
+  file-write "Total new death lb"
+  file-write "Total new death ub"
+  
+  file-write "Total new death life expectancy mean"
+  file-write "Total new death life expectancy std"
+  file-write "Total new death life expectancy lb"
+  file-write "Total new death life expectancy ub"
+  
+  file-write "Total new death cd4 mean"
+  file-write "Total new death cd4 std"
+  file-write "Total new death cd4 lb"
+  file-write "Total new death cd4 ub"
+  
+  file-write "Total new death HIV mean"
+  file-write "Total new death HIV std"
+  file-write "Total new death HIV lb"
+  file-write "Total new death HIV ub"
+  
+  file-write "Transmission rate mean"
+  file-write "Transmission rate std"
+  file-write "Transmission rate lb"
+  file-write "Transmission rate ub"
+
+  repeat 24
+  [
+    file-write ""
+    file-write "HEF"
+    file-write "HEM"
+    file-write "MSM"
+    file-write "IDU-HEF"
+    file-write "IDU-HEM"
+    file-write "IDU-MSM"
+  ]  
+   
+  repeat 16
+  [
+    file-write ""
+    file-write "Actue-unaware"
+    file-write "NonAcute-unaware"
+    file-write "Aware-no-care"
+    file-write "In-care-no-ART"
+    file-write "ART-no-VLS"
+    file-write "VLS"
+  ]  
+
+  repeat 24
+  [
+    file-write ""
+    file-write "13-24"
+    file-write "25-34"
+    file-write "35-44"
+    file-write "45~54"
+    file-write ">=55"
+  ]
+
+;  file-write ""
+;  file-write "HET main"
+;  file-write "Bisexual to female"
+;  file-write "Bisexual to MSM"
+;  file-write "MSM to MSM (only 1 main)"
+;  file-write "MSM to MSM (1 or 2 main with or without casual ptnrs)"
+;  file-write "MSM to casual ptnrs"
+;  file-write "HET concurrent"
+
+;  repeat 6
+;  [file-write ""
+;    file-write "<=50"
+;    file-write "51~200"
+;    file-write "201~350"
+;    file-write "351~500"
+;    file-write ">=501"
+;  ]
+  
+
+  
+;  repeat 6
+;  [file-write ""
+;    file-write "Count"
+;    file-write "Mean"
+;    file-write "Median"]
+
+  file-print ""
+
+  file-close
+  
+end
+
+;; Header for partner information
+to write-ptnr-header
+
+  if goal = 1 [file-open "results-ptnr-one.csv"]
+  if goal = 2 [file-open "results-ptnr-two.csv"]
+  if goal = 3 [file-open "results-ptnr-three.csv"]
+  if goal = 4 [file-open "results-ptnr-four.csv"]
+  if goal = 5 [file-open "results-ptnr-five.csv"]
+
+  file-write "Year"
+
+  repeat 4
+  [
+    file-write ""
+    file-write "median"
+    file-write "min"
+    file-write "max"
+    file-write "mean"
+  ]
+
+  repeat 24
+  [
+    file-write ""
+    file-write "0"
+    file-write "1"
+    file-write "2~4"
+    file-write "5~9"
+    file-write ">=10"
+  ]
+
+  file-print ""
+
+  file-close
+
+end
+
+;; Header for sensitivity analysis
+to write-sensitivity-analysis-header
+  
+  file-open "results-sensitivity-analysis.csv"  
+  
+  file-write "Sensitive variable name"  
+  file-write "Change from base value"
+  file-write "Year"  
+  file-write "Transmission rate mean"  
+  file-write "Transmission rate standard deviation"  
+  file-write "Transmission rate confidence interval lower bound"
+  file-write "Transmission rate confidence interval upper bound"
+  
+  file-print ""
+  
+  file-close
+  
+end

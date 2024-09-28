@@ -1,0 +1,34 @@
+
+;
+;to runExperimentHPV-HIV
+;;  setup-python
+;;  py:set "temp_num_risk" 3
+;;  py:run 
+;;  (
+;;      "collapsed_disease = {n:dict() for n in range(temp_num_risk)}"
+;;      "avg_degree_list = {n:dict() for n in range(temp_num_risk)}" 
+;;    )
+;   
+;  foreach [0 1 5 10 50 100 500 1000] 
+;  [x -> set multiplier x
+;    runExperimentHPV]
+;;   py:run 
+;;   (
+;;       ""
+;;
+;;
+;;   )  
+;;  ]
+;end
+
+; Output or write results final = 1 means True,
+to write-HPV-results [final]
+  py:set "final" final
+  (py:run 
+      "hpv.calc_debug_results()"
+      "hpv.calc_calibration_results()"
+      "if final == 1:"
+      "  hpv.calc_final_results()"
+      "hpv.dryrun += 1"
+    )
+end

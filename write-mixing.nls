@@ -1,0 +1,288 @@
+globals[
+  random_counter
+]
+to write-age-mixing-header
+  
+  file-open "AgeMixing_4_15_2020.csv"
+  
+  ;file-write "Run Stage"
+  
+  file-write "Current-Month (Ticks)"
+  
+  file-write "Risk Group"
+  
+  file-write "Total 13-17"
+  file-write "Total 18-24"
+  file-write "Total 24-29"
+  file-write "Total 30-34"
+  file-write "Total 35-39"
+  file-write "Total 40-44"
+  file-write "Total 45-64"
+  
+  file-write "Total Links"
+  
+  file-write "Age Mixing Mat"
+  
+;  file-write "Num Links 13 - 13"
+;  file-write "Num Links 13 - 18"
+;  file-write "Num Links 13 - 24"
+;  file-write "Num Links 13 - 30"
+;  file-write "Num Links 13 - 35"
+;  file-write "Num Links 13 - 40"
+;  file-write "Num Links 13 - 45"
+;  
+;  file-write "Num Links 18 - 18"
+;  file-write "Num Links 18 - 24"
+;  file-write "Num Links 18 - 30"
+;  file-write "Num Links 18 - 35"
+;  file-write "Num Links 18 - 40"
+;  file-write "Num Links 18 - 45"
+;  
+;  file-write "Num Links 24 - 24"
+;  file-write "Num Links 24 - 30"
+;  file-write "Num Links 24 - 35"
+;  file-write "Num Links 24 - 40"
+;  file-write "Num Links 24 - 45"
+;  
+;  file-write "Num Links 30 - 30"
+;  file-write "Num Links 30 - 35"
+;  file-write "Num Links 30 - 40"
+;  file-write "Num Links 30 - 45"
+;  
+;  file-write "Num Links 35 - 35"
+;  file-write "Num Links 35 - 40"
+;  file-write "Num Links 35 - 45"
+;  
+;  file-write "Num Links 40 - 40"
+;  file-write "Num Links 40 - 45"
+;  
+;  file-write "Num Links 45 - 45"
+  
+  file-print ""
+  file-close
+  
+end
+    
+to write-age-mixing [sex-ind]
+  
+  ;set age-group-lb [13 17 24 29 34 39 44]; used for age-mixing and lifetime partnership, and age-weighted-LTC  age-weighted-aware age-weighted-VLS
+  ;set age-group-ub [17 24 29 34 39 44 65]; used for age-mixing and lifetime partnership, and age-weighted-LTC  age-weighted-aware age-weighted-VLS
+  file-open "AgeMixing_4_15_2020.csv"
+  
+  file-write ticks
+  file-write sex-ind
+  
+  let count-age-mixing matrix:make-constant length(age-group-lb) length(age-group-ub) 0
+  
+  let i 0
+  while [i < length(age-group-lb)]
+  [
+    file-write count people with [infected? = true and dead = 0 and age > item i age-group-lb and age <= item i age-group-ub and sex = sex-ind]
+    
+    ask people with [infected? = true and dead = 0 and age > item i age-group-lb and age <= item i age-group-ub and sex = sex-ind]
+    [
+      let j 0
+      while [j < length(age-group-ub)]
+      [
+        ask my-links
+        [
+          ask other-end
+          [
+            if (breed =  people and infected? = true and dead = 0 and age > item j age-group-lb and age <= item j age-group-ub)[
+              matrix:set count-age-mixing i j (matrix:get count-age-mixing i j + 1)
+            ]
+          ]
+        ]
+        set j j + 1
+      ]
+    ]
+    set i i + 1
+  ]
+ 
+  file-write count links
+  
+  file-write count-age-mixing
+  
+  file-print ""
+  file-close
+end
+
+to write-risk-mixing-paper-header
+  
+  set random_counter 0
+  
+  file-open "RiskMixing_4_15_2020.csv"
+  
+  ;file-write "Counter"
+  
+  file-write "Current-Month (Ticks)"
+  
+  ;file-write "Num-Nodes"
+  ;file-write "PopSize"
+  
+  file-write "Total HETF PLWH"
+  file-write "Total HETM PLWH"
+  file-write "Total MSM PLWH"
+  
+  file-write "Total Links"
+   
+ 
+  file-write "Num Links HETF-HETM"
+  file-write "Num Links HETF-MSM"
+  file-write "Num Links MSM-HETF"
+  file-write "Num Links MSM-MSM"
+  
+  file-write "Total People Stage"
+  file-write "Total People Sex"
+  
+  file-write "Distribution of PLWH by risk group"
+  file-write "HETF"
+  file-write "HETM"
+  file-write "MSM"
+  
+  file-write ""
+  file-write "new infections by risk group"
+  file-write "HETF"
+  file-write "HETM"
+  file-write "MSM"
+  
+  file-write "Distribution of new infections by risk group"
+  file-write "HETF"
+  file-write "HETM"
+  file-write "MSM"
+  
+  file-write "new diagnosis by risk group"
+  file-write "HETF"
+  file-write "HETM"
+  file-write "MSM"
+  
+  file-write "Distribution of new diagnosis by risk group"
+  file-write "HETF"
+  file-write "HETM"
+  file-write "MSM"
+  
+  ;file-write "Prop Links HETM-HETF"
+  ;file-write "Prop Links HETM-MSM"
+  ;file-write "Prop Links MSM-HETF"
+  ;file-write "Prop Links MSM-MSM"
+  
+  file-print ""
+  file-close
+end
+
+to write-risk-group-mixing-paper
+  let people-2006 people
+  set random_counter random_counter + 1
+  
+  file-open "RiskMixing_4_15_2020.csv"
+  
+  let HETFpop count people with [infected? = true and dead = 0 and sex = 1]
+  let HETMpop count people with [infected? = true and dead = 0 and sex = 2]
+  let MSMpop count people with [infected? = true and dead = 0 and sex = 3]
+  
+  ;file-write random_counter
+  
+  file-write ticks
+  
+  ;file-write num-nodes
+  ;file-write PopSize
+  
+  file-write HETFpop
+  file-write HETMpop
+  file-write MSMpop 
+  
+  let totlinks sum [count my-links] of people with [dead = 0]
+  
+  file-write totlinks
+  
+  let HETF-HETM-link 0
+  let HETF-MSM-link 0
+  let MSM-HETF-link 0
+  let MSM-MSM-link 0
+  
+  ;ask people with [infected? = true and dead = 0][if sex = 1[ask my-links[ask other-end[if (sex = 3) [print "error"]]]]]
+  
+  ask people with [infected? = true and dead = 0]
+  [
+    if sex = 1[
+      ask my-links[
+        ask other-end[
+          ;if (breed = people and infected? = true and dead = 0 and sex = 2) [set HETM-HETF-link HETM-HETF-link + 1 ]
+          if (sex = 2) [set HETF-HETM-link HETF-HETM-link + 1 ]
+          ;if (breed = people and infected? = true and dead = 0 and sex = 3) [set HETM-MSM-link HETM-MSM-link + 1 ]
+          if (sex = 3) [set HETF-MSM-link HETF-MSM-link + 1 ]
+        ]
+      ]
+    ]
+    if sex = 3[
+      ask my-links[
+        ask other-end[
+          ;if (breed = people and infected? = true and dead = 0  and sex = 2) [set MSM-HETF-link MSM-HETF-link + 1 ]
+          if (sex = 1) [set MSM-HETF-link MSM-HETF-link + 1 ]
+          ;if (breed = people and infected? = true and dead = 0  and sex = 3) [set MSM-MSM-link MSM-MSM-link + 1 ]
+          if (sex = 3) [set MSM-MSM-link MSM-MSM-link + 1 ]
+        ]
+      ]
+    ]
+  ]
+
+  ; let MSM-HETF-link 0 let MSM-MSM-link 0 ask people with [infected? = true and dead = 0][if sex = 3[ask my-links[ ask other-end[ if (sex = 1) [set MSM-HETF-link MSM-HETF-link + 1 ] if (sex = 3) [set MSM-MSM-link MSM-MSM-link + 1 ]]]]] print MSM-HETF-link print MSM-MSM-link
+  
+  file-write HETF-HETM-link
+  file-write HETF-MSM-link
+  file-write MSM-HETF-link
+  file-write MSM-MSM-link
+  
+  ;file-write total-people-stage
+  ;file-write total-people-sex
+  
+  file-write ""
+  file-write ""
+  
+  file-write "Distribution of PLWH by risk group"
+  file-write HETFpop / (HETFpop + HETMpop + MSMpop)
+  file-write HETMpop / (HETFpop + HETMpop + MSMpop)
+  file-write MSMpop / (HETFpop + HETMpop + MSMpop)
+  
+  file-write ""
+  file-write "new infections by risk group"
+  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 1];; new infections
+  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 2];; new infections
+  file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 3];; new infections
+  
+  file-write "Distribution of new infections by risk group"
+  ifelse count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)] > 0 [
+    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 1]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)];; new infections
+    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 2]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)]
+    file-write count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = 3]/ count people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit)]
+  ]
+  [
+    file-write "HETF"
+    file-write "HETM"
+    file-write "MSM"
+  ]
+  
+  file-write "new diagnosis by risk group"
+  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 1]
+  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 2]
+  file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 3]
+  
+  file-write "Distribution of new diagnosis by risk group"
+  ifelse count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] > 0[
+   file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 1] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+   file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 2] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+   file-write count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = 3] /  count people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true] 
+ ]
+  [ file-write "HETF"
+    file-write "HETM"
+    file-write "MSM"
+  ]
+  ;file-write HETM-HETF-link / totlinks
+  ;file-write HETM-MSM-link / totlinks
+  ;file-write MSM-HETF-link / totlinks
+  ;file-write MSM-MSM-link / totlinks
+  
+  file-print ""
+  file-close
+  
+end

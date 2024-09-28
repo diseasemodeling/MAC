@@ -1,0 +1,1795 @@
+;;This file contains all the raw data input into the model that is common for all people (global variables)
+
+globals 
+[
+  optimizedCounter
+  notOptimizedCounter
+  ;; Not used
+  InititalINfections
+  FinalINfections 
+  count1
+  count2
+  numACTStable3
+  numTranstable3
+  numActsCasualMSM
+  numActsMainMSM
+  numActsConMSM
+  numActsMainHET
+  numActsConHET
+  initial-infection-percent
+  
+  ;; PATH 2.0 and 3.0 Model specific variables, tracking time and common variable length 
+  t-start
+  start-year
+  calibration-year
+  tick-start
+  ;sim-dry-run
+  tempRun
+  maxTicks
+  maxYear
+  caliMax
+  caliRun
+  num-sex
+  temp-num-sex ;set to 3 while only modelling sexual and not IDU
+  num-age
+  num-stage
+  num-ptnr-range
+  num-CD4
+  length-of-ptnr-distribution
+  length-of-linked-to-care
+  length-of-ptnr-type
+  age-group
+  PLWH   
+  age-UB
+  age-LB
+  CD4-UB
+  CD4-LB
+  ptnr-UB
+  ptnr-LB
+  
+  ;;PATH 2.0 and 3.0 Intermediate variables trakcing transmission rate and prevalence
+  count-trans-by-stage
+  count-trans-by-sex
+  count-trans-by-age
+  count-trans-by-ptnr-type  
+  count-person-years-by-stage
+  count-person-years-by-sex
+  count-person-years-by-age
+  prevalence
+  sharing-prevalence
+  IDU-prevalence
+  IDU-sharing-prevalence
+  total-transmissions
+  total-transmissions-quarter
+  population-time-on-salvage
+  population-time-on-ART
+  population-life-with-infection
+  zero-on-salvage
+  population-no-life-lost-from-infection
+  population-die-from-CD4-zero
+  countNewDiagnosis
+  total-people
+  total-pop
+  total-sharing
+  total-people-sex
+  total-people-stage
+  total-people-age
+  newly-dead
+  newly-infected
+  newly-infected-age
+  newly-infected-sex
+  newly-infected-stage
+  ptnrs-per-month
+  
+  ;; Cohort analysis for everyone infected 2015
+  cohort
+  cohort-VLS5
+  cohort-VLS10
+  cohort-VLS15
+  cohort-VLS20
+  VLS-accumulate
+  all-accumulate
+  avg-VLS
+  total-QALY
+  QALY-VLS5
+  QALY-VLS10
+  QALY-VLS15
+  QALY-VLS20
+  life-years-accumulate
+  life-years-VLS5
+  life-years-VLS10
+  life-years-VLS15
+  life-years-VLS20
+  life-years-2034
+  
+  total-life-years-VLS5
+  total-life-years-VLS10
+  total-life-years-VLS15
+  total-life-years-VLS20
+  total-life-years
+  num-cohort-trans
+  avg-trans-rate
+  perc-dead-VLS5
+  perc-dead-VLS10
+  perc-dead-VLS15
+  perc-dead-VLS20
+  perc-dead-2034
+  
+  avg-VLS-VLS5
+  avg-VLS-VLS10
+  avg-VLS-VLS15
+  avg-VLS-VLS20
+  avg-VLS-2034
+  
+  num-trans-VLS5
+  num-trans-VLS10
+  num-trans-VLS15
+  num-trans-VLS20
+  num-trans-2034
+  
+  trans-rate-VLS5
+  trans-rate-VLS10
+  trans-rate-VLS15
+  trans-rate-VLS20
+  trans-rate-2034
+  
+  ;; sensitivity analysis
+  sensitive-var-name
+  num-sensitive-var
+  sensitive-var-type
+  sensitive-var-base-val
+  sensitive-var-base-table
+  sensitive-var-table
+  sensitive-range-var
+  num-sensitive-range-var
+  
+  ;; Initialization variables for 2006 data
+  number-people
+  pop-by-age
+  HET-high-risk-factor
+  overall-prevalence
+  perc-HET-FEM
+  perc-HET-MEN
+  perc-MSM
+  perc-IDU-FEM
+  perc-IDU-MEN
+  perc-IDU-MSM
+  num-HET-FEM
+  num-HET-MEN
+  num-MSM
+  num-IDU-FEM
+  num-IDU-MEN
+  num-IDU-MSM
+  
+  sex-dist-target
+  cumulative-sex
+  ;cumulative-sex-HETMSM ;for only sexual not idu
+  cumulative-stage
+  age-initial 
+  cumulative-age1
+  cumulative-age2  
+  prop-unaware-new
+  prop-MSM-stage3-new
+  prop-MSM-stage4-new
+  actual-age-dist-PLWH
+  actual-age-dist-NewInfections
+  prop-new-infections
+  
+  age-weighted-LTC
+  age-weighted-aware
+  age-weighted-VLS
+  
+  ;; Viral load and CD4 data
+  viral-load-by-stage-mean
+  viral-load-by-stage-lb
+  viral-load-by-stage-ub
+  viral-load-by-stage-std
+  viral-load-salvage-add-mean
+  viral-load-salvage-AIDS-add-mean
+  viral-load-salvage-add-lb
+  viral-load-salvage-AIDS-add-lb
+  viral-load-salvage-add-ub
+  viral-load-salvage-AIDS-add-ub
+  viral-load-salvage-add-std
+  
+  CD4-decline-mean-month
+  CD4-decline-upper-bound-month 
+  CD4-decline-lower-bound-month 
+  CD4-decline-std-month 
+  
+  CD4-increment
+  ;CD4-increment-1
+  ;CD4-increment-2
+  ;CD4-increment-3
+  CD4-max-levels
+  
+  CD4-start-ART-guideline
+  CD4-start-ART-guideline1
+  CD4-start-ART-guideline2
+  CD4-start-ART-guideline3
+  CD4-count-stratum 
+  
+  CD4-upper-new-infection
+  CD4-lower-new-infection
+  unaware-CD4-upper
+  unaware-CD4-lower
+  unaware-CD4-prob
+  awareNoCare-CD4-lower
+  awareNoCare-CD4-upper
+  inCareNoART-CD4-lower
+  inCareNoART-CD4-upper
+  inCareNoART-CD4-prob
+  ART-CD4-lower
+  ART-CD4-upper
+  CD4-at-ART-lower
+  CD4-at-ART-upper
+  CD4-at-ART-prob
+  
+  prop-CD4-diagnosis-500
+  prob-CD4-diagnosis-200
+  prob-CD4-diagnosis-50
+  prob-CD4-at-care-200
+  
+  ;; Regimen
+  rebound-duration
+  viral-rebound-rate
+  viral-rebound-CD4-upper
+  viral-rebound-CD4-lower
+  viral-rebound-increase
+  probability-initial-suppression
+  num-regimen
+  
+  ;; IDU related variables
+  percent-IDU-sharing
+  percent-needles-shared
+  percent-needles-shared-original
+  percent-sharing-decline
+  min-IDU-ptnr
+  max-IDU-ptnr
+  max-IDU-concurrent
+  num-needles-max
+  num-needles-min
+  reduction-aware-needles 
+  reduction-ART-needles
+  reduction-noART-needles
+  reduction-VLS-needle-trans-rate
+  IDU-ptnr-type-mixing
+  IDU-sharing-ptnr-mixing
+  IDU-sex-ptnr-perc-IDU
+  num-needles-shared-casual-min
+  num-needles-shared-casual-max
+  
+  ;; OI and death variables
+  OI-risk-monthly
+  OI-probabilities
+  ;death-prob-sexual-no-AIDS
+  ;death-prob-sexual-AIDS
+  ;death-prob-idu-no-AIDS
+  ;death-prob-idu-AIDS 
+  ;death-rate-no-ART-sexual
+  ;death-rate-no-ART-idu
+  define-non-AIDS-death
+  mortality-risk-ART
+  mortality-risk-no-ART
+  death-reduction-factor
+  
+  ;; Transmission rate probabilities
+  trans-prob-vaginal
+  trans-prob-anal
+  trans-prob-vaginal-stage
+  trans-prob-anal-stage
+  trans-prob-vaginal-insertive
+  trans-prob-vaginal-receptive
+  trans-prob-anal-insertive
+  trans-prob-anal-receptive
+  trans-rate-needle
+  trans-rate-needle-dry-run
+  trans-rate-needle-after-dry-run
+  acute-rate-increase-base
+  ;acute-rate-increase-week
+  acute-rate-increase-week-MSM
+  acute-rate-increase-week-HET
+  reduction-VLS-trans-rate
+  
+  ;; Testing and dropping out variables
+  freq-MSM
+  freq-HET
+  freq-at-least-once
+  freq-no-test
+  prob-compliance
+  prob-no-test
+  test-min
+  test-1Q
+  test-median
+  test-3Q
+  test-max
+  test-freq-preCalibration
+  test-freq-postCalibration
+  test-freq-postCalibration-cohort
+  initial-drop-out
+  prob-reEnter
+  dropOut-rate
+  dropOut-rate-cohort
+  
+  ;; Cost variables
+  discount-rate
+  HIV-utilization-cost ;; inpatient + outpatient + ED costs: incurred from start of care for HIV
+  non-HIV-med-cost ;; non-HIV medication costs : incurredd from time of infection
+  std-not-in-care-cost  ;;non-HIV-med-cost
+  std-in-care-cost ;; non-HIV-med-cost + inpatient + outpatient + ED 
+  cost-testing
+  retention-care-cost
+  regimen-cost 
+  OI-cost  
+  CD4+rna-test-cost  
+  HIV-genotype-test-cost
+  QALY-val
+  
+  ;; Sexual ptnrships and behaviors
+  age-sexual-NHBS
+  age-sexual-NSSHB
+  main-ptnrs
+  main-ptnr-length
+  main-IDU-ptnrs
+  no-ptnrs
+  prob-casual
+  prob-casual-only
+  num-casual-only-min
+  num-casual-only-1Q
+  num-casual-only-median
+  num-casual-only-3Q
+  num-casual-only-90
+  num-casual-only-95
+  num-casual-main-min
+  num-casual-main-1Q
+  num-casual-main-median
+  num-casual-main-3Q
+  num-casual-main-90
+  num-casual-main-95
+  casual-sex-min
+  casual-sex-max
+  prop-concurrency
+  prop-concurrency-by-age
+  concurrency-lambda
+  prob-serosorting
+  prob-bisexual
+  bisexual-mix 
+  num-sex-acts-upper
+  num-sex-acts-lower
+
+  risk-risk-mixing ;percentiles of casual partners mixing
+  risk-test-mixing ;?
+  prop-anal-acts
+  prop-bisexual-anal
+  prop-insertive
+  condom
+  condom-use-main
+  condom-use-casual
+  condom-100perc
+  condom-use-main-increase
+  condom-use-casual-increase
+  reduction-unprotected-aware
+  
+  
+  ;; PLWH by care continuum and incidence by age distribution  
+  current-unaware
+  current-no-care
+  current-care-noART
+  current-ARTsuppressed
+  care-at-diag
+  ;care-at-diag-ByAge
+  actual-age-dist-incidence
+  
+  matrix_unaware
+  matrix_nocare
+  matrix_careNoART
+  matrix_ARTVLS
+  matrix_LinkageToCare
+  matrix_LinkageToCare_ByAge
+  matrix_ageDistIncidence
+  
+  ;; Molecular project variables
+  component-size ;; including only diagnosed within time-window
+  g-relaxed-cluster-size ;;including undiganosed and diagnosed outside time-window
+  g-relaxed-alive-cluster-size
+  g-cluster-size-with-undiagnosed ;; including both diagnosed and undiagnosed
+  g-alive-cluster-size
+  giant-component-size
+  giant-start-node
+  
+  cluster-counter 
+  intervention-cluster-counter
+  
+  g-early-diagnosis-counter
+  g-no-diagnosis-alive-counter
+  g-relaxed-no-diagnosis-alive-counter
+  
+  g-early-infection-counter
+  g-acute-infection-counter
+  g-chronic-infection-counter
+  
+  g-early-infection-early-diagnosis-counter
+  g-acute-infection-early-diagnosis-counter
+  g-chronic-infection-early-diagnosis-counter
+  
+  g-early-infection-no-diagnosis-alive-counter
+  g-acute-infection-no-diagnosis-alive-counter
+  g-chronic-infection-no-diagnosis-alive-counter
+  
+  g-early-infection-relaxed-no-diagnosis-alive-counter
+  g-acute-infection-relaxed-no-diagnosis-alive-counter
+  g-chronic-infection-relaxed-no-diagnosis-alive-counter  
+  
+  intervention-infection-counter
+  
+  current-time
+  time-window
+  intervention-threshold-time-window 
+  intervention-threshold 
+  evolution-time-window
+  
+  acute-infection-period 
+  recent-infection-period 
+  early-diagnosis-period 
+  
+  total-diagnosed-within-time-window
+  total-cluster
+  total-node-cluster
+  total-intervention-cluster
+
+  cluster-node-undiagnosed
+  
+  cluster-diagnosis 
+  cluster-infection 
+  cluster-previous-node-aware
+  cluster-previous-node-diagnosis ; diag_N
+  cluster-previous-node-infection ; inf_N
+  Ptree-starting-node 
+  
+  completeness  
+  ;; Output variables related to number of ptnrs
+
+  medianNumPtnrs
+  minNumPtnrs
+  maxNumPtnrs
+  meanNumPtnrs
+  medianNumPtnrsMSM
+  minNumPtnrsMSM
+  maxNumPtnrsMSM
+  meanNumPtnrsMSM
+  medianNumPtnrsHET
+  minNumPtnrsHET
+  maxNumPtnrsHET
+  meanNumPtnrsHET
+  
+  numByPtnrs
+  percByPtnrs
+  numByMainPtnrs
+  percByMainPtnrs
+  numByCasualSexualPtnrs
+  percByCasualSexualPtnrs
+  numByCasualIDUPtnrs
+  percByCasualIDUPtnrs
+  numByPtnrsMSM
+  percByPtnrsMSM
+  numByPtnrsHET
+  percByPtnrsHET
+  percByPtnrsMSM1
+
+  percByMain
+  percByConcrt  
+  percByCasual
+  percByMainMSM
+  percByConcrtMSM
+  percByCasualMSM
+  percByMainHET
+  percByConcrtHET
+  percByCasualHET
+  
+  numPtnrsByCareCont
+  numPtnrsByCareContMSM
+  numPtnrsByCareContHET
+  
+  ;; Output variables related to PLWH
+  totalPopulation
+  numBySex
+  percBySex
+  numByStage
+  percByStage
+  
+  numByAge 
+  percByAge
+  
+  totalCost
+  utilizationCost
+  regimenCost
+  OICost
+  careServiceCost
+  testingCost
+  
+  linkedToCare
+
+  ;; Output variables related to new infections
+  
+  totalNewInfection
+  totalNewDeath
+  totalNewDeathLife
+  totalNewDeathCD4
+  totalNewDeathHIV
+  zAlpha
+  numNewInfBYSex
+  numNewInfViaSex
+  percNewInfBySex
+  percNewInfViaSex
+  numNewInfViaStage
+  percNewInfViaStage
+  personYearsBySex
+  transRateBySex
+  personYearsByAge
+  transRateByAge
+  personYearsByStage
+  transRateByStage  
+  numNewInfByPtnrType
+  overallTransRate
+  
+  numNewInfByCD4
+  percNewInfByCD4
+  numMSMByCD4
+  percMSMByCD4
+  numHETByCD4
+  percHETByCD4
+  
+  numNewInfByAge
+  numNewInfViaAge
+  percNewInfByAge
+  percNewInfViaAge
+  
+  countCD4Diag
+  meanCD4Diag
+  medianCD4Diag
+  countCD4DiagMSM
+  meanCD4DiagMSM
+  medianCD4DiagMSM
+  countCD4DiagHET
+  meanCD4DiagHET
+  medianCD4DiagHET
+  
+  acuteByCD4
+  nonAcuteByCD4
+  awareByCD4
+  inCareByCD4
+  onARTByCD4
+  reboundByCD4
+  salvageByCD4
+  VLSByCD4
+  
+  countCD4ART
+  meanCD4ART
+  medianCD4ART
+  countCD4ARTMSM
+  meanCD4ARTMSM
+  medianCD4ARTMSM
+  countCD4ARTHET
+  meanCD4ARTHET
+  medianCD4ARTHET
+  
+  ; matrix for output calculations
+  rowSum
+  rowSum1
+  rowSum2
+  rowSum3
+  rowSum4
+  rowSum5
+  rowSum6
+  rowSum7
+  
+  initial-age-distribution
+  age-transition-rate
+  sum-of-each-age-group
+  movement-from-age-group 
+  movement-to-age-group
+  new-num-in-age-group
+  age-out-deaths-counter 
+  age-mixing-mat
+  age-mixing-mat-HETM
+  age-mixing-mat-HETF
+  age-mixing-mat-MSM
+  cumulative-age-mixing-matrix
+  cumulative-age-mixing-matrix-HETM
+  cumulative-age-mixing-matrix-HETF
+  cumulative-age-mixing-matrix-MSM
+  birth-rate
+  PopSize
+  number-births
+  PLWH-dist-2006
+  PLWH-start-year
+  total-US-pop-start-year
+  
+  lifetime-partner-dist ;msm
+  lifetime-ptnr-dist-HETMale
+  lifetime-ptnr-dist-HETFemale
+  age-group-lb
+  age-group-ub
+  
+  ; temporary
+  neighbors-link-active-age;; Determine link active age of neighbor
+  nodes-link-active-age ;; Determine link active age of new infected node
+  nodes-link-active-age-end ;; Determine link active age of new infected node
+  time-link-active-begin ;; Determine Time-LInk-Active
+  time-link-active-end
+  age-of-neighbors ;;DETERMINE age of neighbor
+  age-hold
+  neighbor-sex-list
+  
+  ;sexual risk group mixing
+  risk-group-mixing
+  cumulative-risk-group-mixing
+]
+
+to setup-intermediate-globals
+  
+  set count1 0
+  set count2 0
+  set numACTStable3 n-values num-stage [0]
+  set numTranstable3 n-values num-stage [0]
+  set numActsCasualMSM 0
+  set numActsMainMSM 0
+  set numActsConMSM 0
+  set numActsMainHET 0
+  set numActsConHET 0
+  
+  set total-people-stage n-values num-stage [0]
+  set total-people-sex n-values num-sex [0]
+  set total-people-age n-values num-age [0]
+  
+  set newly-infected-stage n-values num-stage [0]
+  set newly-infected-sex n-values num-sex [0]
+  set newly-infected-age n-values num-age [0]
+  
+  set count-trans-by-stage n-values num-stage [0];; disease stage
+  set count-trans-by-sex n-values num-sex [0]
+  set count-trans-by-age n-values num-age [0]
+  
+  ;  1. Persons infected in past month and have multiple ptnrs in same month
+  ;The below are persons infected anywhere before the past month and during a one-month period have
+  ;2. Only one ptnr: he/she is a main ptnr and is uninfected
+  ;3. Only one ptnr: he/she is a casual ptnr and is uninfected
+  ;4. Two main ptnrs (no casual ptnrs): at least one is uninfected  (we model at most 2 main ptnrs)
+  ;5. Two or more casual ptnrs (no main ptnrs): at least one is uninfected
+  ;6. Two or more ptnrs (at least one is main AND at least one is casual): at least one is uninfected
+  set count-trans-by-ptnr-type [0 0 0 0 0 0 0];;main ;concurrent ; casual; needle sharing
+ 
+  set count-person-years-by-stage n-values num-stage [0]
+  set count-person-years-by-sex n-values num-sex [0]
+  set count-person-years-by-age n-values num-age [0]
+  
+  set countNewDiagnosis [0 0 0 0 0 0]
+  
+  ;; prevalence and sharing prevalence (not currently used as IDU-mixing is dictating the sharing behaviors)
+  set prevalence n-values num-sex [0]   
+  set sharing-prevalence n-values num-sex [0]
+  
+  set total-transmissions-quarter 0
+  
+  set PLWH 2
+  
+  ; proportion of population in age group
+  ;                              14-17 18-24 25-34 35-44 45-64 
+  ;set initial-age-distribution [ 0.058 0.099 0.134 0.148 0.247 ] ; for 5 age groups
+  ;                              14-17 18-24 25-29 29-34 35-39 40-44 45-64 
+  set initial-age-distribution [ 0.058 0.099 0.067 0.067 0.074 0.074 0.247] ;for 7 age groups
+                                                                            ; note does not add to 1 as not including all ages. So PopSize should be totalpoplation over all ages
+  
+end
+
+to setup-static-globals
+  
+  ; care continuum distribution for bucket approach
+  setData
+  ;; proportions in 2008
+  ; set base-case-nocare 0.49 ;(proportion of those aware no care)
+  ; set base-case-ART 0.35 ;(proportion of those aware on ART suppressed or unsuppressed)
+  ; set base-case-unaware [0.197332107 0.249774572 0.22137931 0.136798906 0.144486692 0.122040073]; [HET-female het-male MSM IDU-female IDU-male IDU-MSM]
+  ; set prop-unsuppressed 0.23 ;; proportion on ART and viral not suppressed 
+   
+  ;;2006 values. Parameters used in simulation. Gets overs written for years 2008 and further
+  set current-unaware matrix:get-row matrix_unaware 0;[0.211700545  0.268269231  0.234774436 0.136798906 0.144486692 0.122040073]; [HET-female het-male MSM IDU-female IDU-male IDU-MSM]
+  set current-no-care matrix:get-row matrix_noCare 0;0.39
+  set current-care-noART matrix:get-row matrix_careNoART 0;0.16
+  set current-ARTsuppressed matrix:get-row matrix_ARTVLS 0;0.19
+  ;set actual-age-dist-incidence matrix:get-row matrix_ageDistIncidence 0
+  set care-at-diag  matrix:get-row matrix_LinkageToCare 0;0.77 
+ ;set care-at-diag-ByAge  matrix:get-row matrix_LinkageToCare_ByAge 0;0.77 
+  
+  ; age and CD4 upper and lower bound for reporting
+  set age-LB 
+  [13 25 35 45 55]
+  set age-UB 
+  [25 35 45 55 100] 
+    
+  set CD4-LB 
+  [0 51 201 351 501]
+  set CD4-UB 
+  [50 200 350 500 2000]
+  
+  set ptnr-LB
+  [0 1 2 5 10]
+  set ptnr-UB
+  [0 1 4 9 100]
+  
+  ; proportion of total US population in age 13 - 70
+  set pop-by-age
+  [
+    0.0180 0.0180 ; 13-14
+    0.0192 0.0192 0.0192 0.0192 0.0192 0.0188 0.0188 0.0188 0.0188 0.0188 ; 15-24
+    0.0184 0.0184 0.0184 0.0184 0.0184 0.0174 0.0174 0.0174 0.0174 0.0174 ; 25-34
+    0.0176 0.0176 0.0176 0.0176 0.0176 0.0182 0.0182 0.0182 0.0182 0.0182 ; 35-44
+    0.0198 0.0198 0.0198 0.0198 0.0198 0.0194 0.0194 0.0194 0.0194 0.0194 ; 45-54
+    0.0171 0.0171 0.0171 0.0171 0.0171 0.0146 0.0146 0.0146 0.0146 0.0146 ; 55-64
+    0.0108 0.0108 0.0108 0.0108 0.0108 ; 65-69
+    0.0081 ; 70
+  ]
+  
+  ;;Number of HET female,-male, and MSM in total population assuming 97% are hetrosexual and rest MSM. Of hetrosexual half are male and rest half female.
+  ;;469.4 is the rate of PLWH per 100,000 US population in 2008
+  set HET-high-risk-factor 0.50; assuming 50% of population is high risk
+  set overall-prevalence 447.8 / 100000 ; 2006 overall prevalence in general population, for 2012 prevalence per 100,000 is 573, for 2008 it is 470 
+  set perc-MSM 0.025 * (1 - 0.07) ; 0.025, 0.07
+  set perc-IDU-FEM 0.012
+  set perc-IDU-MEN 0.018
+  set perc-IDU-MSM 0.025 * 0.07
+  
+  set-num-population
+  
+  set-cumulative-sex 
+  ;set-cumulative-sex-HETMSM
+  ;set cumulative-sex [0 0 1 1 1 1 1]
+  
+  set age-group 
+ ; [12 24 34 44 54 70]
+ ; set age-groupM 
+  [12 15 20 24 34 44 54 70]
+  if first-year = 2010[
+ ; set actual-age-dist-PLWH [0.109345441	0.178584941	0.254634885	0.307415815	0.150018918] ;2010;   [0.051 0.161 0.353 0.304 0.131];[0.101 0.161 0.353 0.385 0] ;2006 ; corresponding to age-group
+  set actual-age-dist-PLWH [0.012517602	0.032632352	0.0641954861	0.178584941	0.254634885	0.307415815	0.150018918] ;2010;   [0.051 0.161 0.353 0.304 0.131];[0.101 0.161 0.353 0.385 0] ;2006 ; corresponding to age-group
+ 
+  set prop-new-infections [0.147559591	0.147559591	0.147559591	0.147559591	0.147559591	0.147559591];2010;[0.156022442 0.156022442 0.156022442 0.156022442 0.156022442 0.156022442];2006; proporition of PLWH in 2006 who are new infections- those infected in 2004, 2005 , or 2006- using overall for all 6 risk groups
+  set actual-age-dist-NewInfections [0.361538462	0.292307692	0.180769231	0.126923077	0.038461538];2010;[0.211	0.3	0.27	0.175	0.044];2006 corresponding to age-group
+  ]
+  
+  if first-year = 2006[
+   ; set actual-age-dist-PLWH [0.051 0.161 0.353 0.304 0.131];[0.101 0.161 0.353 0.385 0] ;2006 ; corresponding to age-group
+   ; set actual-age-dist-PLWH_mod [0.002650833	0.003464128	0.003213766	0.12263886	0.374543602	0.340943332	0.119774318]; from cumulative-age2 below
+   set actual-age-dist-PLWH [0.002098444	0.009777047	0.030716223	0.147102916	0.33366527	0.322655229	0.117590718]; https://www.cdc.gov/hiv/pdf/library/reports/surveillance/cdc-hiv-surveillance-report-2007-vol-19.pdf
+
+    set prop-new-infections [0.156022442 0.156022442 0.156022442 0.156022442 0.156022442 0.156022442];2006; proporition of PLWH in 2006 who are new infections- those infected in 2004, 2005 , or 2006- using overall for all 6 risk groups
+   ; set actual-age-dist-NewInfections [0.211	0.3	0.27	0.175	0.044];2006 corresponding to age-group
+    set actual-age-dist-NewInfections [0.000 0.041 0.17	0.3	0.27	0.175	0.044];2006 corresponding to age-group
+  ]
+  
+  ;;
+  set age-weighted-LTC [0.948616601	0.948616601	0.988142292	0.988142292	1.014492754	1.014492754	1.048748353];[.72 .72 .75 .75 .77 .77 .796] / .759 ;uses age-group-lb and age-group-ub ; proportion linking to care within 1 month of diagnosis by age-groups
+  set age-weighted-aware [.49 .49 .71 .71 .85 .85 .93]; uses  age-group-lb and age-group-ub ; proportion diagnosed by age-groups
+  set age-weighted-VLS [0.512 .512 0.542 .542 0.577 .577 0.626];uses  age-group-lb and age-group-ub ; proportion with VLS by age-groups
+  
+  set age-group-lb [12 17 24 29 34 39 44]; used for age-mixing and lifetime partnership, and age-weighted-LTC  age-weighted-aware age-weighted-VLS
+  set age-group-ub [17 24 29 34 39 44 65]; used for age-mixing and lifetime partnership, and age-weighted-LTC  age-weighted-aware age-weighted-VLS
+  
+  set cumulative-stage 
+  [
+    [0.0066	0.2117 0.6059	0.7635 0.8108	1.0000]
+    [0.0057	0.2683 0.6341	0.7805 0.8244	1.0000]
+    [0.0068	0.2348 0.6174	0.7704 0.8163	1.0000]
+    [0.0040	0.1368 0.5684	0.7410 0.7928	1.0000]
+    [0.0032	0.1445 0.5722	0.7433 0.7947	1.0000]
+    [0.0046	0.1220 0.5610	0.7366 0.7893	1.0000]
+  ]  
+  
+  set age-initial
+  [13 15 20 25 30 35 40 45 50 55 60 65 71]
+  set cumulative-age1 ;;age dist of new infections- those infected in 2004, 2005 , or 2006
+  [    
+    ; 0.052 0.212 0.564 0.868 0.973 1 
+    ;0.001 0.041 0.211 0.361 0.511 0.661 0.781 0.891 0.956 0.996 1 1 ;; 2006 HET+MSM+IDU updated with new age group (updated with NHSS vol. 17 no.3)    
+     0.001  0.041  0.211  0.361  0.511  0.661  0.781  0.891  0.956  0.996  1  1 ;;2006 updated with new age group    
+    ; 0.001  0.041  0.211  0.361  0.511  0.661  0.781  0.891  0.956  0.996  1  1 ;;2008 updated with new age group
+  ]
+  set cumulative-age2 
+  [ 
+   ; 0.00261732 0.006823137 0.01342271 0.059541006 0.139662051 0.289628793 0.512083389 0.709279636 0.849658024 0.929011911 0.967894103 1 ;; HET+MSM+IDU 2006 updated with new age group        
+     0.002650833  0.006114961  0.009328727  0.053294498  0.131967587  0.28193364  0.506511189  0.705514223  0.847454521  0.927623856  0.967228839  1 ;; HET+MSM 2006 updated with new age group    
+    ; 0.002627447  0.006609129  0.012185525  0.057653337  0.137336816  0.287303349  0.510399493  0.708141744  0.848992135  0.928592446  0.967693063  1 ;; HET+MSM 2008 updated with new age group
+  ]  
+  set prop-unaware-new ;new infections- those infected in 2004, 2005 , or 2006
+  [0.712898298 0.479218799 0.609813512 0.661655027 0.493277501 0.736226832]
+  set prop-MSM-stage3-new 0.021174159
+  set prop-MSM-stage4-new 0.052935457
+  
+  ;;number of main and casual ptnrs per person per year in age group
+  ;HET age range 15�17  18�19  20�24    25�29  30�34  35�39  40�44 >44 (NSFG for HETs)
+  ;;MSM ptnrs by age 18-24  25-34  35-44  45-54  55-64 (NHBS)
+  ;;main ptnrs per year 1.89  1.76  1.7  1.66  1.61
+  ;; casual ptnrs per year 13.91  20.62  24.8  22.46  25.7
+  ;;min age in model is 13: using same number of ptnrs as lowest age group available
+  ;age range of below arrays for number ptnrs 13-14 15�17  18�19  20�24  25�29  30�34  35�39  40�44 45-54  55-64 65-70
+  ;
+  
+  ;; sexual behavior globals ;;  
+  ;;ADDED A LAST AGE GROUP 65- 70
+  set age-sexual-NHBS
+  [25 35 45 55 100] 
+  
+  ;; not used anymore
+  set main-ptnrs 
+  [
+    [1.29 1.31 1.29 1.23 1.22] ; NHBS HET4 female
+    [1.52 1.44 1.37 1.42 1.55] ; NHBS HET4 male
+    [1.66 1.52 1.39 1.32 1.28] ; NHBS HET4 male
+    [1.44 1.30 1.20 1.18 1.19] ; NHBS IDU4 female
+    [1.36 1.29 1.28 1.31 1.28] ; NHBS IDU4 male
+    [2.00 1.34 1.22 1.21 1.20] ; NHBS IDU4 male
+  ]
+  
+  set main-ptnr-length
+  [
+    [2.704283  5.154299  7.630033  9.511730 10.772492] ; NHBS HET4 female
+    [2.193486 4.247212 6.420037 8.397782 9.674982] ; NHBS HET4 male
+    [0.5787671 3.8203372 5.9871575 5.4027397 8.1272016] ; NHBS HET4 male msm?
+    [2.423744  4.660877  5.930636  9.206211 15.085214] ; NHBS IDU4 female
+    [2.691738  4.187939  6.055994  9.118010 13.320473] ; NHBS IDU4 male
+    [0.5787671 3.8203372 5.9871575 5.4027397 8.1272016] ; NHBS IDU4 male msm?
+  ]
+  
+  set main-IDU-ptnrs
+  [0 0 0 1.22 3.00 1.93]
+  
+  set no-ptnrs
+  [
+    [0.000000000 0.000000000 0.002298851 0.000000000 0.000000000] ;?
+    [0.004424779 0.003144654 0.007272727 0.007211538 0.012765957] ;?
+    [0.25000000 0.09090909 0.40000000 0.37500000 0.37500000] ; NHBS MSM4 percentage no main partners / percentage main only + main and casual ???
+    [0.03278689 0.05928854 0.12217195 0.27298050 0.48484848] ; NHBS IDU4 female percentage no main partners
+    [0.2149533 0.2339688 0.3016529 0.3847981 0.4646272] ; NHBS IDU4 male percentage no main partners
+    [0.25000000 0.09090909 0.40000000 0.37500000 0.37500000] ; MSM same as NHBS IDU4 male percentge no main partners
+  ] 
+  
+  set risk-risk-mixing ;behavioural mixing not risk group mixing
+  [
+    [0.2 0.4 0.6 0.8 1]
+    [0.2 0.4 0.6 0.8 1]
+    [0.2 0.4 0.6 0.8 1]
+    [0.2 0.4 0.6 0.8 1]
+    [0.2 0.4 0.6 0.8 1]
+  ]
+  
+  set risk-test-mixing
+  [
+    [0 0 0 1]
+    [0 0 1 1]
+    [0 1 1 1]
+    [1 1 1 1]
+    [1 1 1 1]
+  ]
+ 
+  ; set concurrency-length   [1 3 6 9 12 15 18 24 36 ]  
+  ; set concurrency-length-prob [0.31 0.5 0.61 0.7 0.74 0.77 0.79 0.84 0.89] ;;>0.89 will take length of normal ptnrship
+  set prop-concurrency
+  [0.09823667 0.1307616 0.1394358 0.07546287 0.07921734 0.1394358]
+  set prop-concurrency-by-age ; IDU4 percentage with main partners * percentage with concurrent partners
+  [  
+    [0.10023069 0.11352048 0.11288743 0.07462048 0.08386991]
+    [0.1338534 0.1433102 0.1224405 0.1247323 0.1269814]
+    [0.10000000 0.20689655 0.08823529 0.12250000 0.07142857]
+    [0.10081522 0.08913026 0.07884685 0.05358515 0.06836538]
+    [0.10371404 0.07908357 0.08219071 0.07482809 0.07500299]
+    [0.10000000 0.20689655 0.08823529 0.12250000 0.07142857]
+  ]
+  
+  set concurrency-lambda 
+  [0.78 0.78 1.55 0.78 0.78 1.55] ;; [HET-female HET-male MSM]: above distribution of concurrence is exponential, therefore using lambda to determine length of concurrency
+   ;; <= 1 months are considered casual. SInce MSM casual is modeled separately, excluding that category for MSM and re-estimating for other
+;    1.89  1.89  1.89  1.89  1.76  1.76  1.7  1.7  1.66  1.61  1.61  ;;NHBS MSM
+;    1.89  1.89  1.89  1.89  1.76  1.76  1.7  1.7  1.66  1.61 1.61  ;;IDU male
+;    1.89  1.89  1.89  1.89  1.76  1.76  1.7  1.7  1.66  1.61 1.61  ;;IDU female
+;    1.89  1.89  1.89  1.89  1.76  1.76  1.7  1.7  1.66  1.61 1.61  ;;IDU MSM
+;  ]
+  
+  set prob-casual 
+  [
+    [0.4723837 0.5045135 0.4941860 0.5027933 0.4841270]
+    [0.7164366 0.6771574 0.6478873 0.6344464 0.6508172]    
+    [0.6923077 0.8225806 0.8275862 0.7681159 0.6666667]
+    [0.5704225 0.5077821 0.4824356 0.4283439 0.2794760]
+    [0.6824926 0.6178808 0.5217391 0.5177549 0.4149888]
+    [0.6923077 0.8225806 0.8275862 0.7681159 0.6666667]
+  ]
+  set prob-casual-only 
+  [
+    [0.04505814 0.09628887 0.11307738 0.17225326 0.15476190]
+    [0.1505702 0.1760893 0.1796935 0.2529607 0.2640070]
+    [0.07692308 0.27258065 0.28160920 0.23478261 0.26666667]
+    [0.03891143 0.04658634 0.09026051 0.13265978 0.02517339]
+    [0.11929490 0.12423811 0.13686648 0.16491528 0.06711609]
+    [0.07692308 0.27258065 0.28160920 0.23478261 0.26666667]
+  ]
+  
+  set num-casual-only-min 
+  [1 1 1 1 1 1]
+  set num-casual-only-1Q
+  [1 2 3 1 1 3]
+  set num-casual-only-median 
+  [3 3 7 3 3 7]
+  set num-casual-only-3Q 
+  [5 7 25 12 5 25]
+  set num-casual-only-90
+  [11 15 50 57 10 50]
+  set num-casual-only-95
+  [30 30 100 135 20 100]
+  set num-casual-main-min 
+  [1 1 1 1 1 1]
+  set num-casual-main-1Q 
+  [1 1 2 1 1 2]
+  set num-casual-main-median 
+  [2 3 6 2 2 6]
+  set num-casual-main-3Q 
+  [3 6 19 6 4 19]
+  set num-casual-main-90
+  [6 13 81 24 9 81]
+  set num-casual-main-95
+  [11 22 196 50 17 196]
+
+  set casual-sex-min 1
+  set casual-sex-max 1
+  set prob-serosorting .15
+  set reduction-unprotected-aware .28;.53;
+  
+  ;set casual-ptnrs  ;;for MSM and IDU's only
+  ;[1.8 1.8 1.8 1.8 4.4 4.4 4.4 4.4 4.4 2.6 2.6 ;;lower 95% CI
+  ;  4.1 4.1 4.1 4.1 5.8 5.8 5.8 5.8 5.8 5.4 5.4  ;;upper 95% CI
+    ;2.8 2.8 2.8 2.8 5.0 5.0 5.0 5.0 5.0 4.0 4.0 ; median
+  ;]
+  
+;  set casual-ptnrs  [0 0 0 0 0 0 0 0 0 0  0
+;    0 0 0 0 0 0 0 0 0 0  0
+;    13.91  13.91  13.91  13.91  20.62  20.62  24.8  24.8  22.46  25.7  0;;NHBS MSM
+;    13.91  13.91  13.91  13.91  20.62  20.62  24.8  24.8  22.46  25.7  0
+;    13.91  13.91  13.91  13.91  20.62  20.62  24.8  24.8  22.46  25.7  0
+;    13.91  13.91  13.91  13.91  20.62  20.62  24.8  24.8  22.46  25.7  0
+;  ] 
+  
+;  set prop-low-risk-MSM [
+;     0.05  0.05  0.05  0.05  0.05  0.15   0.15  0.28  0.28  0.28  0.28 ;;proportion having only 1 casual ptnr per year (columns are age group)
+;     0.20 0.20 0.20 0.20  0.30  0.70   0.70 0.56  0.56  0.56  0.56  ;; proportion having 2-3 casual ptnrs per year (columns are age group)
+;  ]
+  
+;    age group  18-24  25-29  30-39  >=40
+;# casual ptnrs  1  5  5  15  28
+;  2 to 3  15  25  55  28
+;  >=4  80  70  30  44
+  
+  ;; Proportion of MSM who are bisexuals
+  set prob-bisexual 0.14 ;used to be around 0.20 in path 2.0?
+  ;; Proportion of sexual acts with female for bisexuals
+  ;;set bisexual-mix 0.50 ;; moved to riskGroupPreference.nls
+  ;; Proportion of sexual acts that are anal sex among MSM who are bisexual and have sex with females
+  set prop-bisexual-anal 0.05  
+  ;; For MSM, 50% insertive and 50% receptive anal sex  
+  set prop-insertive 0.50
+  ;; Condom efficacy
+  set condom 0.8
+  ;; Proportion of MSM individuals using condoms 100% of time among PLWH who are aware
+  set condom-100perc 0.18
+
+  
+;  let sex-risk-factor [0.25 0.5 1 2]
+;  
+;  let k 0
+;  while [k < num-sex]
+;  [
+;    set num-sex-acts-1 replace-item k num-sex-acts-1 (map [i -> (1 + item 0 sex-risk-factor) * i] item k num-sex-acts)
+;    set num-sex-acts-2 replace-item k num-sex-acts-2 (map [i -> (1 + item 1 sex-risk-factor) * i] item k num-sex-acts)
+;    set num-sex-acts-3 replace-item k num-sex-acts-3 (map [i -> (1 + item 2 sex-risk-factor) * i] item k num-sex-acts)
+;    set num-sex-acts-4 replace-item k num-sex-acts-4 (map [i -> (1 + item 3 sex-risk-factor) * i] item k num-sex-acts)
+;    set k k + 1
+;  ]
+  
+  set age-sexual-NSSHB
+  [14 18 25 30 35 40 45 50 55 60 65 71]
+    
+  ;Testing
+  set num-sex-acts-upper 
+  [													
+    [41 127 127 127 108 93 93 86 86 73 73 62 62]
+    [60 119 119 119 110 104 104 95 95 73 73 67 67]
+    [60 119 119 119 110 104 104 95 95 73 73 67 67]
+    [	127	127	127	127	108	93	93	86	86	73	73	62	62]
+    [	119	119	119	119	110	104	104	95	95	73	73	67	67]
+    [	119	119	119	119	110	104	104	95	95	73	73	67	67]
+  ]													
+  set		num-sex-acts-lower											
+  [													
+    [20  68 73 62 51 48 48 40 40 32 32 35 35]
+    [30  68 68 63 59 52 52 39 39 36 36 24 24]
+    [30  68 68 63 59 52 52 39 39 36 36 24 24]
+    [	73	73	73	62	51	48	48	40	40	32	32	35	35]
+    [	68	68	68	63	59	52	52	39	39	36	36	24	24]
+    [	68	68	68	63	59	52	52	39	39	36	36	24	24]
+  ]															
+
+  ;PATH3 and 2
+;  set num-sex-acts-upper
+;  [
+;    [41 41 127 127 108 93 93 86 86 73 73 62 62]
+;    [60 60 119 119 110 104 104 95 95 73 73 67 67]
+;    [60 60 119 119 110 104 104 95 95 73 73 67 67]
+;    [41 41 127 127 108 93 93 86 86 73 73 62 62]
+;    [60 60 119 119 110 104 104 95 95 73 73 67 67]
+;    [60 60 119 119 110 104 104 95 95 73 73 67 67]
+;  ]
+;  set num-sex-acts-lower
+; [
+;    [20 20 73 62 51 48 48 40 40 32 32 35 35]
+;    [30 30 68 63 59 52 52 39 39 36 36 24 24]
+;    [30 30 68 63 59 52 52 39 39 36 36 24 24]
+;    [20 20 73 62 51 48 48 40 40 32 32 35 35]
+;    [30 30 68 63 59 52 52 39 39 36 36 24 24]
+;    [30 30 68 63 59 52 52 39 39 36 36 24 24]
+;  ]
+  ;; For heterosexual IDU and non-IDU
+  
+  set condom-use-main 
+  [
+    [0.513 0.513 0.269 0.269 0.184 0.124 0.124 0.101 0.101 0.070 0.070 0.038 0.038]
+    [0.765 0.765 0.231 0.231 0.185 0.142 0.142 0.126 0.126 0.016 0.016 0.020 0.020]
+    [0.281 0.281 0.281 0.281 0.250 0.222 0.222 0.217 0.217 0.213 0.213 0.201 0.201];PATh 3
+  ;  [0.38 0.38 0.35 0.32 0.35 0.35 0.34 0.34 0.41 0.41 0.41 0.41 0.41]; PATH 2 -NHBS 2011
+    [0.513 0.513 0.269 0.269 0.184 0.124 0.124 0.101 0.101 0.070 0.070 0.038 0.038]
+    [0.765 0.765 0.231 0.231 0.185 0.142 0.142 0.126 0.126 0.016 0.016 0.020 0.020]
+    [0.281 0.281 0.281 0.281 0.250 0.222 0.222 0.217 0.217 0.213 0.213 0.201 0.201]
+  ]
+  
+  set condom-use-main-increase 1
+  
+  set condom-use-casual 
+  [
+    [0.721 0.721 0.417 0.417 0.393 0.249 0.249 0.184 0.184 0.149 0.149 0.174 0.174]
+    [0.844 0.844 0.489 0.489 0.496 0.489 0.489 0.306 0.306 0.208 0.208 0.125 0.125] 
+    ;[0.613 0.613 0.613 0.613 0.545 0.484 0.484 0.473 0.473 0.466 0.466 0.438 0.438];PATH 3
+    [0.54 0.54 0.54 0.54 0.54 0.54 0.53 0.53 0.52 0.52 0.52 0.52 0.52];PATH 2 (NHBS 2011)
+   ; [0.43 0.43 0.43 0.43 0.43 0.43 0.43 0.43 0.43 0.43 0.43 0.43 0.43];Testing
+    [0.721 0.721 0.417 0.417 0.393 0.249 0.249 0.184 0.184 0.149 0.149 0.174 0.174]
+    [0.844 0.844 0.489 0.489 0.496 0.489 0.489 0.306 0.306 0.208 0.208 0.125 0.125] 
+    [0.613 0.613 0.613 0.613 0.545 0.484 0.484 0.473 0.473 0.466 0.466 0.438 0.438]
+  ]
+  
+  set condom-use-casual-increase 1
+  
+  set prop-anal-acts
+  [
+    [0.045 0.045 0.045 0.064 0.064 0.050 0.050 0.077 0.077 0.063 0.063 0.063 0.063]
+    [0.046 0.046 0.046 0.061 0.061 0.069 0.069 0.080 0.080 0.067 0.067 0.067 0.067]
+    [0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50]
+    [0.05 0.05 0.05 0.07 0.07 0.08 0.08 0.07 0.07 0.04 0.04 0.04 0.04]
+    [0.10 0.10 0.10 0.06 0.06 0.09 0.09 0.11 0.11 0.06 0.06 0.06 0.06]
+    [0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50 0.50]
+  ]
+  ;; Number of QUARTERS of life remaining starting from age 10 to 100
+  ;set define-non-AIDS-death 
+  ;[
+  ;  273 269 266 262 258 254 250 246 242 238  
+  ;  234 231 227 223 219 216 212 208 204 200  
+  ;  159 155 152 148 144 141 137 133 130 126  
+  ;  123 119 116 113 109 106 103  99  96  93  
+  ;   89  86  83  80  77  74  71  68  65  62  
+  ;   59  57  54  51  49  46  44  41  39  37  
+  ;   35  33  31  29  27  26  24  22  21  20  
+  ;   18  17  16  15  14  13  12  11  10  10  
+  ;    9
+  ;]
+  
+  ;; Number of MONTHS life remaining starting from age 10 to 100
+  set define-non-AIDS-death 
+  [
+    834	822	810	798	786	774	762	751	739	728; 10-19
+    716	705	693	682	670	659	648	636	625	614; 20-29
+    602	591	579	568	556	545	534	522	511	500; 30-39
+    488	477	466	455	444	433	423	412	402	391; 40-49
+    380	370	360	349	339	329	319	309	299	289; 50-59
+    280	270	261	252	242	233	224	215	206	197; 60-69
+    188	180	172	164	156	148	140	133	125	118; 70-79
+    110	104	98	92	86	80	75	70	65	60; 80-89
+    55	52	48	45	42	38	36	34	32	30; 90-99
+    28; 100
+  ]
+  ;set non-AIDS-death item (min-age - 10) define-non-AIDS-death
+  set discount-rate 0.03
+  
+  ;testing; Not used in Base PATH 4.0- where testing is calibrated to surveillance care continuum distribution; useful for testing interventnions 
+  set freq-MSM 1
+  set freq-HET 5
+  set test-min [1 1 1 1 1 1]
+  set test-1Q [7 10 8 7 8 7]
+  set test-median [30 59 36 24 35 25]
+  set test-3Q [102 138 89 65 98 88]
+  set test-max [174 217 142 106 162 150]
+  set test-freq-preCalibration 60
+  set test-freq-postCalibration 100 ; base 100
+  set test-freq-postCalibration-cohort 100
+  set freq-at-least-once 2
+  set freq-no-test 10
+  set prob-compliance 0.4
+  set prob-no-test 0.1
+  
+  set dropOut-rate 0.04 ; base 3%
+  set dropOut-rate-cohort 0.04;
+  
+  set all-accumulate n-values 20 [0]
+  set VLS-accumulate n-values 20 [0]
+  set avg-VLS n-values 20 [0]
+  set life-years-accumulate 0
+  set num-cohort-trans n-values 20 [0]
+  set avg-trans-rate n-values 20 [0]  
+  
+  ;;Unit of measure for belo viral load values is log10 copies/ml
+  
+  set viral-load-by-stage-mean 
+  [5.3 4.5 4.5 4.5 3.7 1.3]
+  set viral-load-by-stage-lb 
+  [4.4 4.0 4.0 4.0 3.1 1.0]
+  set viral-load-by-stage-ub 
+  [6.2 5.0 5.0 5.0 4.5 2.7]
+  set viral-load-by-stage-std 
+  [0.459 0.255 0.255 0.255 0.357 0.434]  
+  set viral-load-salvage-add-mean 0.8 ;; additional viral load above set-point when no AIDS
+  set viral-load-salvage-AIDS-add-mean 1 ;; additional viral load above set-point when no AIDS
+  set viral-load-salvage-add-lb 0 
+  set viral-load-salvage-AIDS-add-lb 0
+  set viral-load-salvage-add-ub 1.5
+  set viral-load-salvage-AIDS-add-ub 2.0
+  set viral-load-salvage-add-std 0.383
+  
+  ;;CD4 declines based on vairal load: lower bound of viral load (copies/ml) for CD4-decline-per-quarter: 0 501 2001 3,001 10,001 30,001 40,000 
+  ;set CD4-decline-per-quarter [-5.10 -9.90 -12.00 -12.00 -14.10 -14.10 -19.50]
+  ;CD4-decline-per-month
+  set CD4-decline-mean-month 
+  [-1.7 -3.3 -4 -4 -4.7 -4.7 -6.5]
+  set CD4-decline-upper-bound-month 
+  [-0.8 -2.4 -3.3 -3.3 -3.9 -3.9 -5.7]
+  set CD4-decline-lower-bound-month 
+  [-2.6 -4.1 -4.6 -4.6 -5.4 -5.4 -7.3]
+  set CD4-decline-std-month 
+  [0.46 0.43 0.33 0.33 0.38 0.38 0.41]
+  ;; Increases in CD4 count after ART
+  set CD4-increment
+  [
+    [12.5 11.7 11.7 13.3 8.3]
+    [7.5 5 4.17 7.5 5]
+    [3.75 5 4.17 1.15 0.5]
+    [2.26 1.31 1.19 1.15 0.5]
+  ]
+  ;set CD4-increment-1 (68 / 3)* 12 / time-unit;; CD4-increment-for quarter 1-2 is 68 per quarter
+  ;set CD4-increment-2 (40 / 3) * 12 / time-unit ;; CD4-increment-for quarter 3-12
+  ;set CD4-increment-3; 0 ;; CD4-increment-for quarter 12+
+  
+  set CD4-max-levels 
+  [850 780 620 500 500] ; for baseline CD4 counts , i.e., counts at start of tretament at >500 >350 >200 > 50 <50
+  
+  set CD4-upper-new-infection 
+  [900 880.5 880.5 880.5]
+  set CD4-lower-new-infection 
+  [900 880.5 880.5 880.5]
+  ;[750 576 725 725]
+  
+  set unaware-CD4-upper 
+  [200 500 725]
+  set unaware-CD4-lower 
+  [36 201 501]
+  set unaware-CD4-prob 
+  [0.24 0.4]
+  set awareNoCare-CD4-upper 725
+  set awareNoCare-CD4-lower 101
+  set inCareNoART-CD4-upper 
+  [500 600 725]
+  set inCareNoART-CD4-lower 
+  [350 501 601]
+  set inCareNoART-CD4-prob 
+  [0.10 0.80]
+  set ART-CD4-lower 550 
+  set ART-CD4-upper 800
+  set CD4-at-ART-lower 
+  [36 201 351]
+  set CD4-at-ART-upper 
+  [200 350 500]
+  set CD4-at-ART-prob 
+  [0.3 0.9]
+  
+  set CD4-start-ART-guideline1 350
+  set CD4-start-ART-guideline2 500
+  set CD4-start-ART-guideline3 1000
+  set CD4-start-ART-guideline CD4-start-ART-guideline3
+  
+  set CD4-count-stratum 
+  [0 200 350 500];PATH 3
+  ;[0 50 100 200 300 500];; PATH 2;lower bound of CD4 count to determin CD4 stratum each quarter
+  
+  set prop-CD4-diagnosis-500 
+  [0.9 0.9 0.75 0.9 0.9 0.75];;proportion diagnosing below 500 (used for indexpatients only)
+  set prob-CD4-diagnosis-200 0.24
+  set prob-CD4-diagnosis-50 0.43
+  set prob-CD4-at-care-200 0.9
+   
+  set initial-drop-out 0.5
+  set rebound-duration 6 * time-unit / 12; one quarter for viral load rebound
+  set viral-rebound-rate 
+  [0.045 0.02 0.013 0.010 0.009]
+  set viral-rebound-CD4-upper 
+  [100 200 300 400 1000]
+  set viral-rebound-CD4-lower 
+  [0 100 200 300 400]
+  set viral-rebound-increase 0 ; 0.18
+  set probability-initial-suppression 
+  [0.774 0.79 0.84] ;stratified by CD4 count at ART <=50  50-200  >200 ;; [0.8 0.8 0.8] 
+  set prob-reEnter 0.45 ; 0.45
+  set num-regimen 4
+
+  ;;Regimen  cost per quarter in  regimen = 0  1  2  3  4  10  40
+  ;set regimen-cost [0  3490  4858  4677  0 7403  0] ;; from Gebo et. al., AIDS 2010
+  ;;Regimen  cost per month in  regimen = 0  1  2  3  4  10  40
+  ;;NOTE: When num-regimen above is set to 3 the 4th regimen cost is not going to apply anywhere.
+  set regimen-cost 
+  [0 1163 1619 1559 0 2468 0]
+  
+ ; One time cost of testing for HIV
+  if goal = 1
+  [
+    set cost-testing 14845;
+    set retention-care-cost 0;
+  ]
+  
+  if goal = 2 
+  [
+    set cost-testing 16145 ;;(increased testing );;14845;
+    set retention-care-cost 0;
+  ]
+  
+  if goal = 3 
+  [
+    set cost-testing 14845 
+    set retention-care-cost 817 / 12 ;0;(assuming services given once per year. Split cost into monthly)
+  ]
+  
+  if goal = 4 
+  [
+    set cost-testing 14845 + 817 ;;(testing + linkgae to care);;14845;
+    set retention-care-cost  0 
+  ]
+  
+  if goal = 5 
+  [
+    set cost-testing 16145 + 817 ;;(testing + linkgae to care);;14845;
+    set retention-care-cost 817 / 12 ;0;( assuming services given once per year. Split cost into monthly)
+  ]  
+  ;; in 2010 dollars of (14845 in 2010$ from Ram Shrestha's expanded testing expenditure paper for base case and 16145 for NHAS goal + 817 for ARTAS linkage to care);;
+ ;  set cost-testing 2497;; from PATH 1 ED; 
+  
+  set min-IDU-ptnr 0
+  set max-IDU-ptnr 0
+  set max-IDU-concurrent 5
+  set num-needles-max 630
+  set num-needles-min 40
+  set reduction-aware-needles 0
+  set reduction-noART-needles 0
+  set reduction-ART-needles 0.12
+  set reduction-VLS-needle-trans-rate 1.0
+  set trans-rate-needle trans-rate-needle-dry-run
+  set percent-needles-shared percent-needles-shared-original
+  
+  ; sexual only, idu-only, both
+  set IDU-ptnr-type-mixing ; -50% both, because some idu partner may not share
+  [
+    [0.500 0.400 0.100]
+    [0.343 0.600 0.055]
+    [0.40325 0.506 0.09075]
+  ]
+;  [
+;    [0.200 0.400 0.400] 
+;    [0.178 0.600 0.220]
+;    [0.131 0.506 0.363]
+;  ]
+
+  set IDU-sex-ptnr-perc-IDU
+  [0.40 0.40 0.40]
+  
+  set IDU-sharing-ptnr-mixing ; MSM 7% female 93% male
+  [
+    [0.20 0.78 0.02]
+    [0.40 0.58 0.02]
+    [0.07 0.63 0.30]
+  ]
+  set num-needles-shared-casual-min 1
+  set num-needles-shared-casual-max 5
+  
+;  set OI-risk-monthly  ;PATH 2
+;  [
+;    [0.00000 0.00000 0.00000 0.00000 0.00000 0.00000]
+;    [0.03700 0.03100 0.00960 0.00373 0.00085 0.00041]
+;    [0.01220 0.00375 0.00101 0.00022 0.00006 0.00006]
+;    [0.00270 0.00140 0.00067 0.00042 0.00009 0.00003]
+;    [0.01857 0.00523 0.00214 0.00058 0.00013 0.00006]
+;    [0.01123 0.00591 0.00135 0.00029 0.00028 0.00009]
+;    [0.03940 0.02460 0.00716 0.00224 0.00087 0.00047]
+;  ]
+  
+  set OI-risk-monthly ;PATH 3
+  [
+    [0.000000 0.000000 0.000000 0.000000]
+    [0.000833	0.000247 0.000141 0.000091]
+    [0.000664	0.000213 0.000097 0.000095]
+    [0.000385 0.000062 0.000031 0.000047]
+    [0.000553 0.000094 0.000047 0.000065]
+    [0.000212 0.000111 0.000065 0.000077]
+    [0.000268 0.000067 0.000039 0.000027]
+    [0.000125 0.000026 0.000009 0.000006]
+    [0.000291 0.000093 0.000061 0.000056]
+  ]
+  
+  set-OI-probabilities
+  
+  ;; Annual probabilities of dying when NOT on ART 
+  
+;startified by current CD4 0-40 50-199 200-349 350-499 500-649 >=650
+;  set death-rate-no-ART-sexual 
+;  [0.201 0.0308 0.0058 0.0032 0.002 0.0017]
+;  ;;startified by current CD4 0-199 200-349 >=350
+;  set death-rate-no-ART-idu 
+;  [0.1661 0.0599 0.043]
+   
+  ;;Probabilities of dying when on ART. Startified by age and CD4 count at start of ART
+  ;;5- year probability *100 of survival
+  
+  ;  Source:  A prognostic model for clinical progression up to five years after initiation of highly active antiretroviral therapy                
+  ;    The Antiretroviral Therapy (ART) Cohort Collaboration*                
+  ;    *All members of study groups are listed at end of paper                
+  ;    VERSION 15/5/06                
+  ;    SUPPLEMENTARY TABLES                
+  ;    Please see published paper AIDS 2007 21: 1185-1197                
+  ;                    
+  ;                    
+  ;                    
+  ; From ART Cohort Collaboration      5 year probability of survival after initation of HAART              
+  ;                            age/CD4  <25  25-49  50-99  100-199  200-349  > 350
+  ;                    
+  ;  NO IDU    No clinical AIDS   0     5  4.1  4.1  3.4  2.5  1.8
+  ;                              30     6.3  5.2  5.2  4.3  3.1  2.3
+  ;                              40     8.3  6.9  6.9  5.7  4.1  3
+  ;                              50     15  13  13  11  7.7  5.6
+  ;      Clinical AIDS              
+  ;                               0     10  8.7  8.6  7.2  5.2  3.8
+  ;                              30     13  11  11  9  6.5  4.8
+  ;                              40     17  14  14  12  8.6  6.3
+  ;                              50     30  25  25  21  16  12
+  ;                    
+  ;  IDU    No clinical AIDS      0     14  12  12  10  7.3  5.3
+  ;                              30     18  15  15  12  9.1  6.7
+  ;                              40     23  19  19  16  12  8.8
+  ;                              50     39  33  33  28  21  16
+  ;                    
+  ;      Clinical AIDS            0     28  24  24  20  15  11
+  ;                              30     34  29  29  25  18  14
+  ;                              40     43  37  37  31  24  18
+  ;                              50     65  58  58  51  40  31
+
+  ;  set death-prob-sexual-no-AIDS 
+;  [
+;    [5.0 4.1 4.1 3.4 2.5 1.8]
+;    [6.3 5.2 5.2 4.3 3.1 2.3]
+;    [8.3 6.9 6.9 5.7 4.1 3.0]
+;    [15.0 13.0 13.0 11.0 7.7 5.6]
+;  ]
+;  
+;  set death-prob-sexual-AIDS 
+;  [
+;    [10.0 8.7 8.6 7.2 5.2 3.8]
+;    [13.0 11.0 11.0 9.0 6.5 4.8]
+;    [17.0 14.0 14.0 12.0 8.6 6.3]
+;    [30.0 25.0 25.0 21.0 16.0 12.0]
+;  ]
+;  
+;  set death-prob-idu-no-AIDS 
+;  [
+;    [14.0 12.0 12.0 10.0 7.3 5.3]
+;    [18.0 15.0 15.0 12.0 9.1 6.7]
+;    [23.0 19.0 19.0 16.0 12.0 8.8]
+;    [39.0 33.0 33.0 28.0 21.0 16.0]
+;  ]
+;  
+;  set death-prob-idu-AIDS 
+;  [
+;    [28.0 24.0 24.0 20.0 15.0 11.0]
+;    [34.0 29.0 29.0 25.0 18.0 14.0]
+;    [43.0 37.0 37.0 31.0 24.0 18.0]
+;    [65.0 58.0 58.0 51.0 40.0 31.0]
+;  ]
+  
+  set mortality-risk-ART
+  [17.2 7.6 5.5 4.4]
+  set mortality-risk-no-ART
+  [46.5 17.7 12.6 6.9]
+  
+  set death-reduction-factor 0.75
+  set mortality-risk-ART map [i -> death-reduction-factor * i] mortality-risk-ART
+  set mortality-risk-no-ART map [i -> death-reduction-factor * i] mortality-risk-no-ART
+  
+  ;;transmission probabilities: columns represent risk type of positive person 
+  ;;[female male MSM IDUfemale IDUmale IDUMSM]
+  
+  set trans-prob-vaginal-insertive 10 / 10000;8 / 10000;( 1 + random-float 13) / 10000;  4.7 / 10000; 4, 1-14 (PATH 2: 8; PATH 3: 4.7)
+  set trans-prob-vaginal-receptive 8 / 10000;( 6 + random-float 5) / 10000 ;7 / 10000; 8, 6-11 (PATH 2: 8; PATH 3: 7)
+  set trans-prob-anal-insertive 20 / 10000; 20 / 10000;( 4 + random-float 24) / 10000;20 / 10000;11;10 / 10000; 11, 4-28
+  set trans-prob-anal-receptive 138 / 10000;158 / 10000;( 102 + random-float 84) / 10000;158 / 10000;138;115 / 10000; 138, 102-186
+  
+
+
+  set reduction-VLS-trans-rate 1
+  set acute-rate-increase-base 12;8.1
+  ; set acute-rate-increase-week 
+  ; [8.1 8.1 8.1 8.1 8.1 8.1 8.1 6.75 5.4 4.05 2.7 1.35]
+  set acute-rate-increase-week-MSM
+  [1.0 6.5 12.0 9.8 7.6 5.4 3.2 1 1 1 1 1]
+  ;[12.0 12.0 12.0 12.0 11.4 9.2 5.8 1.5 1.0 1.0 1.0 1.0]
+  set acute-rate-increase-week-HET 
+  [1.0 4.8 8.5 7.0 5.5 4 2.5 1 1 1 1 1]
+  
+  set-trans-rate
+  
+  ;Quarterly rates  of HIV transmission for incidence by prevalence analysis
+  ;set saa 0.1834
+  ;set sau 0.1834
+  ;set snu  0.0226
+  ;set snan  0.0097
+  ;set snatn  0.0097
+  ;set snats  0.0010
+  ;  
+  ;set iaa  0.3343
+  ;set iau  0.3343
+  ;set inu  0.0413
+  ;set inan  0.0177
+  ;set inatn  0.0177
+  ;set inats  0.0018
+  ;Quarterly rates  of HIV transmission                      
+  ;0.1834  0.1834  0.0226  0.0097  0.0097  0.0010    0.3343  0.3343  0.0413  0.0177  0.0177  0.0018
+  ;saa  sau  snu  snan  snatn  snats    iaa  iau  inu  inan  inatn  inats
+    
+  ;;Costs on 2010 dollars
+  ;;OI prophylaxis + inpatient + outpatient + ED costs: incurred from start of care for HIV
+  ;;quaterly
+  ;set HIV-utilization-cost [6024 2667 1271 860 697] ;; startified by CD4 count lower bound[ 0 51 201 351 501]
+  ;;monthly
+  set HIV-utilization-cost 
+  [2008 889 424 287 232]
+  
+  ;; non-HIV medication costs : incurredd from time of infection 
+  ;quarterly
+  ;set non-HIV-med-cost [583 566 523 532 594] ;; startified by CD4 count defined in CD4-count-stratum above 
+  ; monthly
+  set non-HIV-med-cost 
+  [194 189 174 177 198] 
+  
+  ;quarterly
+  ;set std-not-in-care-cost [49 29 22 21 20] ;;standard deviation non-HIV-med-cost
+  ;monthly
+  set std-not-in-care-cost 
+  [17 10 8 7 7]
+  
+  ;quarterly
+  ;set std-in-care-cost [467 171 92 54 41];; standard deviation non-HIV-med-cost + OI prophylaxis + inpatient + outpatient + ED 
+  ;monthly
+  set std-in-care-cost 
+  [161 59 32 19 14]
+  ;;one time costs of OI at quarter of occurence: 
+  ;;OI-type:   PCP  MAC  Toxoplasmosis  Cytomegalovirus  Fungal infection  Other
+  ;;;OI-type index    1  2  3  4  5  6
+  set OI-cost 
+  [9044 3611 21243 5620 6154 4121]
+  
+  set CD4+rna-test-cost 148 ;; test used every quarter 
+  set HIV-genotype-test-cost 439 ;; one time cost at beginning of new regimen 
+  
+  set QALY-val [0.935 0.818 0.702] ; QALY by CD4 count > 350, 200 - 350, < 200
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;Collecting population information;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  set population-time-on-salvage 0
+  set population-time-on-ART 0
+  set population-life-with-infection  0
+  
+  set zero-on-salvage 0
+  set population-no-life-lost-from-infection 0
+  set population-die-from-CD4-zero 0
+  
+  ; set discount-life-if-no-HIV 0
+  ; set-discount-life-if-no-HIV     
+  
+ ;;; related to ageing of susceptible compartmental model ;;;
+   set birth-rate 0.2175
+  
+ ;set age-transition-rate [0.2 0.143 0.1 0.1 0.05] ;for 5 age groups
+  set age-transition-rate [0.2 0.143 0.2 0.2 0.2 0.2 0.05 ] ;for 7 age groups
+  set age-out-deaths-counter [0 0 0 0 0 0] ;for all 6 risk groups (jan 2020 only using sexual risk groups aka first 3)
+  
+ ;;; Age mixing matrices for each risk group ;;;
+   set age-mixing-mat-HETM matrix:from-row-list[	;HETM
+    [	91.05	4.24	1.12	1.12	1.12	1.12	0	]	;13-17;actual started from 14
+    [	2.3	92.1	1.12	1.12	1.12	1.12	1.12	]	;18-24
+    [	6.76	6.76	82	1.12	1.12	1.12	1.12	]	;25-29
+    [	14.04666667	14.04666667	14.04666667	54.5	1.12	1.12	1.12	]	;30-34
+    [	5.39	5.39	5.39	5.39	76.2	1.12	1.12	]	;35-39
+    [	4.536	4.536	4.536	4.536	4.536	76.2	1.12	]	;40-44
+    [	3.966666667	3.966666667	3.966666667	3.966666667	3.966666667	3.966666667	76.2	]	 ;>45-64
+  ]									
+  									
+  set cumulative-age-mixing-matrix-HETM matrix:from-row-list [ ;HETM	
+    [	91	95	96	98	99	100	100	]	;13-17
+    [	2	94	96	97	98	99	100	]	;18-24
+    [	7	14	96	97	98	99	100	]	;25-29;;changed
+    [	14	28	42	97	98	99	100	]	;30-34
+    [	5	11	16	22	98	99	100	]	;35-39;;changed
+    [	5	9	14	18	23	99	100	]	;40-44
+    [	4	8	12	16	20	24	100	]	;>45-64						
+ ]		
+  
+  set age-mixing-mat-HETF matrix:from-row-list[	;HETF
+    [	91.05	4.24	1.12	1.12	1.12	1.12	0	]	;13-17;actual started from 14
+    [	4.4	90	1.12	1.12	1.12	1.12	1.12	]	;18-24
+    [	18.91	18.91	57.7	1.12	1.12	1.12	1.12	]	;25-29
+    [	14.04666667	14.04666667	14.04666667	54.5	1.12	1.12	1.12	]	;30-34
+    [	3.99	3.99	3.99	3.99	81.8	1.12	1.12	]	;35-39
+    [	3.416	3.416	3.416	3.416	3.416	81.8	1.12	]	;40-44
+    [	3.033333333	3.033333333	3.033333333	3.033333333	3.033333333	3.033333333	81.8	]	 ;>45-64
+   ]									
+  									
+  set cumulative-age-mixing-matrix-HETF matrix:from-row-list [ ;HETF							
+    [	91	95	96	98	99	100	100	]	;13-17
+    [	4	94	96	97	98	99	100	]	;18-24
+    [	19	38	96	97	98	99	100	]	;25-29;;changed
+    [	14	28	42	97	98	99	100	]	;30-34
+    [	4	8	12	16	98	99	100	]	;35-39;;changed
+    [	3	7	10	14	17	99	100	]	;40-44
+    [	3	6	9	12	15	18	100	]	;>45-64
+  ]		
+  
+  set age-mixing-mat-MSM matrix:from-row-list[	;MSM	
+    [	91.05	4.24	1.12	1.12	1.12	1.12	0	]	;13-17;actual started from 14
+    [	46.4	48	1.12	1.12	1.12	1.12	1.12	]	;18-24
+    [	19.81	19.81	55.9	1.12	1.12	1.12	1.12	]	;25-29
+    [	18.8775	18.8775	12.585	46.3	1.12	1.12	1.12	]	;30-34
+    [	14.18666667	14.18666667	7.093333333	7.093333333	55.2	1.12	1.12	]	;35-39
+    [	12.48	12.48	6.24	6.24	6.24	55.2	1.12	]	;40-44
+    [	11.2	11.2	5.6	5.6	5.6	5.6	55.2	]	 ;>45-64
+   ]									
+  									
+  set cumulative-age-mixing-matrix-MSM matrix:from-row-list [ ;MSM							
+    [	91	95	96	98	99	100	100	]	;13-17
+    [	46	94	96	97	98	99	100	]	;18-24
+    [	20	40	96	97	98	99	100	]	;25-29;;changed
+    [	19	38	50	97	98	99	100	]	;30-34
+    [	14	28	35	43	98	99	100	]	;35-39;;changed
+    [	12	25	31	37	44	99	100	]	;40-44
+    [	11	22	28	34	39	45	100	]	;>45-64
+  ]		
+  
+;  set age-mixing-mat matrix:from-row-list[									
+;    [	91.05	4.24	1.12	1.12	1.12	1.12	0	]	;13-17;actual started from 14
+;    [	41.65	52.75	1.12	1.12	1.12	1.12	1.12	]	;18-24
+;    [	18.26	18.26	59	1.12	1.12	1.12	1.12	]	;25-29
+;    [	13.81333333	13.81333333	13.81333333	55.2	1.12	1.12	1.12	]	;30-34
+;    [	9.6625	9.6625	9.6625	9.6625	56.1	2.625	2.625	]	;35-39
+;    [	8.255	8.255	8.255	8.255	8.255	56.1	2.625	]	;40-44
+;    [	7.316666667	7.316666667	7.316666667	7.316666667	7.316666667	7.316666667	56.1	]	 ;>45-64
+;  ]									
+;  									
+;  set cumulative-age-mixing-matrix matrix:from-row-list [									
+;    [	91	95	96	98	99	100	100	]	;13-17
+;    [	42	94	96	97	98	99	100	]	;18-24
+;    [	18	37	96	97	98	99	100	]	;25-29;;changed
+;    [	14	28	41	97	98	99	100	]	;30-34
+;    [	10	19	29	39	95	97	100	]	;35-39;;changed
+;    [	8	17	25	33	41	97	100	]	;40-44
+;    [	7	15	22	29	37	44	100	]	;>45-64
+;  ]									
+
+;  set age-mixing-mat matrix:from-row-list[									
+;    [	91.05	2.24	1.12	1.12	1.12	1.12	2.24	]	;13-17;actual started from 14
+;    [	2.24	91.05	1.12	1.12	1.12	1.12	2.24	]	;18-24
+;    [	9.46	9.46	62.18	4.725	4.725	4.725	4.725	]	;25-29
+;    [	6.306666667	6.306666667	6.306666667	62.18	6.301666667	6.301666667	6.301666667	]	;30-34;modified
+;    [	5.52	5.25	2.625	2.625	79	2.625	2.625	]	;35-39
+;    [	5.52	5.25	1.708	1.708	1.708	79	5.25	]	;40-44
+;    [	5.25	5.25	2.625	2.625	2.625	2.625	79	]	 ;>45-64
+;  ]									
+;  									
+;  set cumulative-age-mixing-matrix matrix:from-row-list [									
+;    [	91	93	94	96	97	98	100	]	;13-17
+;    [	2	93	94	96	97	98	100	]	;18-24
+;    [	9	19	81	86	91	95	100	]	;25-29;;changed
+;    [	6	13	19	81	87	94	100	]	;30-34
+;    [	6	11	13	16	95	98	100	]	;35-39;;changed
+;    [	6	11	12	14	16	95	100	]	;40-44
+;    [	5	11	13	16	18	21	100	]	;>45-64
+;  ]									
+  ;;; Lifetime number of partners distributions for each age group ;;;
+ set lifetime-partner-dist matrix:from-row-list [ ;for MSM using source 2
+    ;cols from bins 0 to 256
+    [0	1	0.361973775	0.217089834	0.12278375	0.065487529	0.034292406	0.01727721	0.008727137	0.004414698	0.004414698	0.004414698]	;13-17;	assuming	same	as	18-24
+    [0	1	0.72394755	0.434179668	0.2455675	0.130975057	0.068584811	0.034554419	0.017454273	0.008829396	0.008829396	0.008829396]	;18-24				
+    [0	1	0.852311939	0.753237483	0.649378752	0.563446712	0.459518234	0.394910558	0.313939697	0.26832144	0.26832144	0.26832144]	;25-29				
+    [0	1	0.94478951	0.925767309	0.873656289	0.851655329	0.821378387	0.777555927	0.730794681	0.731598777	0.731598777	0.731598777]	;30-34				
+    [0	1	0.97515528	0.965432854	0.940737121	0.925941043	0.920274339	0.890448637	0.85957925	0.869739816	0.869739816	0.869739816]	;35-39				
+    [0	1	1	1	1	1	1	1	1	1	1	1]	;40-44				
+    [0	1	1	1	1	1	1	1	1	1	1	1]	;>45
+  ]
+  
+  set lifetime-ptnr-dist-HETMale matrix:from-row-list [ ;for HETMale using source 2 (medians)
+    [0 0	0.352087411	0.216675518	0.120919154	0.064199289	0.033569479	0.017448086	0.008776847	0.004425575	0.00215591	0.000973366	0.000509179	0.000241776] ;13-17 ;assuming same as 18-24
+    [0 1	0.704174821	0.433351036	0.241838307	0.128398577	0.067138957	0.034896172	0.017553693	0.008851149	0.00431182	0.001946731	0.001018357	0.000483552] ;18-24
+    [0 1	0.867579909	0.792140202	0.723973658	0.605219454	0.502209801	0.457828543	0.358360562	0.294785215	0.240414756	0.182685362	0.134687315	0.284598396] ;25-29
+    [0 1	0.890737117	0.831864047	0.777357433	0.678386714	0.591901729	0.568039137	0.466020479	0.396283716	0.347963863	0.280488117	0.251407898	0.504884343] ;30-34
+    [0 1	0.950424005	0.923738715	0.8979263	0.844128114	0.813011829	0.777689126	0.739756928	0.694155844	0.622017658	0.619465264	0.68271664	0.71250494] ;35-39
+    [0 1	1	1	1	1	1	1	1	1	1	1	1	1] ;40-44
+    [0 1	1	1	1	1	1	1	1	1	1	1	1	1] ;>45    
+  ]
+  
+  set lifetime-ptnr-dist-HETFemale matrix:from-row-list [ ;for HETFemale using source 2 (medians)
+    [0 0	0.409234329	0.233489283	0.126819127	0.070848709	0.03763933	0.01884307	0.008396052	0.004045954	0.002004768	0.000975927	0.000551791	0.000274614] ;13-17 ;assuming same as 18-24
+    [0 1	0.818468658	0.466978566	0.253638254	0.141697417	0.07527866	0.03768614	0.016792103	0.008091908	0.004009536	0.001951854	0.001103581	0.000549227] ;18-24
+    [0 1	0.958140513	0.871939941	0.827046827	0.764944649	0.690162081	0.625945017	0.544457471	0.486713287	0.458035327	0.526913902	0.457802176	0.586401546] ;25-29
+    [0 1	1	1	1	1	1	1	1	1	1	1	1	1] ;30-34
+    [0 1	1	1	1	1	1	1	1	1	1	1	1	1] ;35-39
+    [0 1	1	1	1	1	1	1	1	1	1	1	1	1] ;40-44
+    [0 1	1	1	1	1	1	1	1	1	1	1	1	1] ;>45
+  ]
+ 
+end
+
+to set-num-population
+  
+  set perc-HET-FEM 0.5 * HET-high-risk-factor * (1 - (perc-IDU-FEM + perc-IDU-MEN + perc-MSM + perc-IDU-MSM))
+  set perc-HET-MEN perc-HET-FEM
+  set number-people 1000
+  set num-HET-FEM (perc-HET-FEM * number-people / overall-prevalence)
+  set num-HET-MEN num-HET-FEM
+  set num-MSM (perc-MSM * number-people / overall-prevalence) ;; assuming 2% of US population are MSM
+  set num-IDU-FEM (perc-IDU-FEM * number-people / overall-prevalence)
+  set num-IDU-MEN (perc-IDU-MEN * number-people / overall-prevalence)
+  set num-IDU-MSM (perc-IDU-MSM * number-people / overall-prevalence)
+  
+end
+
+;; calculating cumulative distribution of sexual risk groups 
+to set-cumulative-sex
+ 
+  set cumulative-sex n-values num-sex [0] 
+  let sex-ind 0
+  let temp 0
+  while [sex-ind < num-sex]
+  [
+    set temp temp + item sex-ind sex-dist-target
+    set cumulative-sex replace-item sex-ind cumulative-sex temp
+    set sex-ind sex-ind + 1
+  ]
+  set cumulative-sex replace-item (num-sex - 1) cumulative-sex 1
+  
+end
+
+to set-OI-probabilities
+  
+  let num-OI-CD4-strat length CD4-count-stratum
+  let num-OI-type 9;7;PATH2; 9;PATH 3
+  set OI-probabilities n-values num-OI-type [n-values num-OI-CD4-strat [0]]
+
+  ; convert risk to probabilities per time-unit
+  let i 0
+  while [i < num-OI-CD4-strat]
+  [
+    let j 0
+    while [j < num-OI-type]
+    [
+      let val item i (item j OI-risk-monthly) 
+      set OI-probabilities (replace-item j OI-probabilities (replace-item i (item j OI-probabilities) (1 - exp(- val * 12 / time-unit))))
+      set j j + 1
+    ]
+    set i i + 1    
+  ]  
+  
+  set i 0
+  while [i < num-OI-CD4-strat]
+  [
+    let j 1
+    while [j < num-OI-type]
+    [
+      let val item i (item j OI-probabilities) 
+      let val2 item i (item (j - 1) OI-probabilities)
+      set OI-probabilities (replace-item j OI-probabilities (replace-item i (item j OI-probabilities) (val + val2)))
+      set j j + 1
+    ]
+    set i i + 1
+  ]  
+  
+  ;print OI-probabilities
+  
+  ;Cumulative probability of developing Opportunistic Infections (OIs) based on CD4 count (CD stratum) - QUARTERLY (assume one OI per period)          oii, oi1-oi6    
+  ;OI index  Description  0-50 (1)  51-100 (2)  101-200 (3)  201-300 (4)  301-500 (5)  >500 (6)
+  ;1         PCP           0.0000  0.0000  0.0000  0.0000  0.0000  0.0000
+  ;2         MAC           0.1069  0.0901  0.0285  0.0111  0.0025  0.0012
+  ;3  Toxoplasmosis        0.1431  0.1014  0.0316  0.0118  0.0027  0.0014
+  ;4  Cytomegalovirus      0.1512  0.1055  0.0336  0.0131  0.0030  0.0015
+  ;5  Fungal infection     0.2059  0.1212  0.0400  0.0148  0.0034  0.0017
+  ;6        Other          0.2392  0.1388  0.0440  0.0157  0.0042  0.0019
+  ;0        None           0.3528  0.2108  0.0653  0.0224  0.0068  0.0033
+  
+end
+
+to set-trans-rate
+;  set trans-prob-vaginal-insertive ( 1 + random-float 13) / 10000; 8 / 10000; 4.7 / 10000; 4, 1-14 (PATH 2: 8; PATH 3: 4.7)
+;  set trans-prob-vaginal-receptive ( 6 + random-float 5) / 10000 ;8 / 10000;7 / 10000; 8, 6-11 (PATH 2: 8; PATH 3: 7)
+;  set trans-prob-anal-insertive ( 4 + random-float 24) / 10000;20 / 10000;20 / 10000;11;10 / 10000; 11, 4-28
+;  set trans-prob-anal-receptive ( 102 + random-float 84) / 10000;158 / 10000;158 / 10000;138;115 / 10000; 138, 102-186
+  
+  ;;transmission probabilities: columns represent risk type of positive person [female male MSM IDUfemale IDUmale IDUMSM] first 6 for vaginal sex 7-12 for anal sex
+  ;;rows represent disease stage of person
+  
+  set trans-prob-vaginal n-values num-sex [0]
+  set trans-prob-anal n-values num-sex [0]
+  let i 0
+  ;; vaginal sex probabilities (for MSM, ananl insertive)
+  set trans-prob-vaginal replace-item 0 trans-prob-vaginal trans-prob-vaginal-insertive
+  set trans-prob-vaginal replace-item 1 trans-prob-vaginal trans-prob-vaginal-receptive
+  set trans-prob-vaginal replace-item 2 trans-prob-vaginal trans-prob-anal-receptive
+  set trans-prob-vaginal replace-item 3 trans-prob-vaginal trans-prob-vaginal-insertive
+  set trans-prob-vaginal replace-item 4 trans-prob-vaginal trans-prob-vaginal-receptive
+  set trans-prob-vaginal replace-item 5 trans-prob-vaginal trans-prob-anal-receptive
+  ;; anal sex per act probability
+  set trans-prob-anal replace-item 0 trans-prob-anal trans-prob-anal-insertive
+  set trans-prob-anal replace-item 1 trans-prob-anal trans-prob-anal-receptive
+  set trans-prob-anal replace-item 2 trans-prob-anal trans-prob-anal-insertive
+  set trans-prob-anal replace-item 3 trans-prob-anal trans-prob-anal-insertive
+  set trans-prob-anal replace-item 4 trans-prob-anal trans-prob-anal-receptive
+  set trans-prob-anal replace-item 5 trans-prob-anal trans-prob-anal-insertive
+  
+  set trans-prob-vaginal-stage n-values num-stage [n-values num-sex [0]]
+  set trans-prob-anal-stage n-values num-stage [n-values num-sex [0]]
+ 
+  ;; acute stage values (stage 1)
+  set i 0  
+  while [i < num-sex]
+  [
+    set trans-prob-vaginal-stage (replace-item 0 trans-prob-vaginal-stage (replace-item i (item 0 trans-prob-vaginal-stage) ((item i trans-prob-vaginal) * acute-rate-increase-base)))
+    set trans-prob-anal-stage (replace-item 0 trans-prob-anal-stage (replace-item i (item 0 trans-prob-anal-stage) ((item i trans-prob-anal) * acute-rate-increase-base)))
+    set i i + 1
+  ]
+  
+  ;; non-acute and non-VLS stage values (stage 2 to 5)
+  let j 1
+  while [j < num-stage - 1]
+  [
+    set i 0 
+    while [i < num-sex]
+    [
+      set trans-prob-vaginal-stage (replace-item j trans-prob-vaginal-stage (replace-item i (item j trans-prob-vaginal-stage) (item i trans-prob-vaginal)))
+      set trans-prob-anal-stage (replace-item j trans-prob-anal-stage (replace-item i (item j trans-prob-anal-stage) (item i trans-prob-anal)))
+      set i i + 1
+    ]
+    set j j + 1
+  ]
+  
+  ;; VLS stage values (stage 6)
+  set i 0
+  while [i < num-sex]
+  [
+    set trans-prob-vaginal-stage (replace-item 5 trans-prob-vaginal-stage (replace-item i (item 5 trans-prob-vaginal-stage) ((item i trans-prob-vaginal) * (1 - reduction-VLS-trans-rate))))
+    set trans-prob-anal-stage (replace-item 5 trans-prob-anal-stage (replace-item i (item 5 trans-prob-anal-stage) ((item i trans-prob-anal) * (1 - reduction-VLS-trans-rate))))
+    set i i + 1
+  ]  
+  
+end

@@ -1,0 +1,71 @@
+;;Used in PATH 4.0
+to set-CD4-diagnosis ;; determining CD4 count at diagnosis for those diagnosed prior to entering simulation 
+    
+  ifelse random-float 1 <= prob-CD4-diagnosis-200
+  [ifelse random-float 1 <= prob-CD4-diagnosis-50
+    [set CD4-diagnosis 4 + random 46]
+    [set CD4-diagnosis 50 + random 150]
+  ]
+  [ifelse random-float 1 <= (1 - item (sex - 1) prop-CD4-diagnosis-500) / (1 - prob-CD4-diagnosis-200) ;; 76% above 200
+    [set CD4-diagnosis 501 + random 300]
+    [set CD4-diagnosis 200 + random 300]
+  ]
+  
+  ;set-testing-variables
+  ;set-ART-variables
+  
+end
+;;Used in PATH 2.0 and 3.0
+to update-next-test
+  
+  ifelse trans-year = termination-ticks / time-unit - calibration-year 
+  [
+    set next-test ticks + test-freq-postCalibration-cohort
+  ]
+  [
+    ifelse ticks < tick-start
+    [set next-test ticks + 1000 * time-unit]
+    [set next-test ticks + test-freq-postCalibration]
+  ]
+  
+end
+;;Used in PATH 2.0/3.0
+;; THIs is used if we want to keep a test frequency. In the NHAS goals paper people were diganosed to maintain x% unaware 
+;;But if needed can diagnosed based on frequency
+to set-next-test
+  ifelse index? = false and ticks >= tick-start - time-unit
+  [
+    let randnum random-float 1
+    ifelse randnum < item 0 (item (sexual-risk - 1) risk-test-mixing)
+    [set next-test ticks + item (sex - 1) test-min + random (item (sex - 1) test-1Q - item (sex - 1) test-min)]
+    [
+      ifelse randnum < item 1 (item (sexual-risk - 1) risk-test-mixing)
+      [set next-test ticks + item (sex - 1) test-1Q + random (item (sex - 1) test-median - item (sex - 1) test-1Q)]
+      [
+        ifelse randnum < item 2 (item (sexual-risk - 1) risk-test-mixing)
+        [set next-test ticks + item (sex - 1) test-median + random (item (sex - 1) test-3Q - item (sex - 1) test-median)]
+        [set next-test ticks + item (sex - 1) test-3Q + random (item (sex - 1) test-max - item (sex - 1) test-3Q)]
+      ]
+    ]
+  ]
+  [set next-test ticks + 1000 * time-unit]
+  
+end
+
+;to set-next-test
+;  ifelse (index? = true)
+;  [set next-test (1000 * time-unit)];  + random (test-frequency - 1))
+;  [set test-frequency freq-MSM * time-unit ;;       
+;    if (sex = 1 or sex = 2 or sex = 4 or sex = 5) and random-float 1 < 1 ;; assuming 
+;    [set test-frequency freq-HET * time-unit]
+;    ;;asigning compliance
+;    if random-float 1 <= (1 - prob-compliance) ;or (index-patient? = true and new-infections = 1)
+;    [ifelse random-float 1 < prob-no-test / (1 - prob-compliance)
+;      [set test-frequency (test-frequency + freq-no-test * time-unit)];; 10% never tested
+;      [set test-frequency (test-frequency + freq-at-least-once * time-unit)];; proportion tested at least once
+;    ];   
+;      
+;    let delay 1
+;    set next-test (ticks + delay) + random (test-frequency - 1)
+;  ]
+;end

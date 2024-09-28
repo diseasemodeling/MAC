@@ -1,0 +1,260 @@
+;;this file contains all variables that each person will be assigned. 
+;;The procedures here are called when a person  gets newly infected and inital variables are set
+;__includes [];["global-initialization.nls" "people-initialization.nls"]
+
+breed [people person]
+
+people-own [
+  
+  ;; basic attributes
+  age; 13-70
+  age-index
+  sex; 1-HET female; 2-HET male; 3-MSM; 4-PWID female; 5-PWID male; 6-PWID MSM
+  stage; 1-unaware ACute; 2-unaware chronic; 3-aware not in care; 4-not on ART; 5-not VLS; 6-VLS
+  infected?
+  index?; 1-infected initially; 0-not infected or infected later
+  dead; 0-not dead; 1-dead
+  drop-out?; whether or not this person has dropped out before
+  aware?; aware of infection
+  
+  ;; sexual behaviors and preferences
+  counter-ptnr; number of partners in a year; vector of length four, main 0, main 1, casual sexual 3, casual IDU 4
+  num-ptnr; number of main partners, used as a "rate" for generating main partnership length
+  num-IDU-ptnr
+  no-ptnr; probability of having a partner in this particular time-unit
+  casual-sexual-ptnr; number of casual sexual partner
+  casual-IDU-ptnr; number of casual IDU partner
+  num-acts-yearly
+  prob-anal-sex; proportion of sexual acts that are anal
+  protected-acts-unaware; proportion of sexual acts with main partner that are protected before diagnosis
+  protected-acts-casual-unaware; proportion of sexual acts with casual partner that are protected before diagnosis
+  protected-acts-casual; proportion of sexual acts with main partner that are protected
+  protected-acts; proportion of sexual acts with casual partner that are protected
+  num-sexual-acts; number of sexual acts
+  num-sexual-acts-casual; number of casual sexual acts
+  num-casual; number of casual sexual partners
+  serosorting; probability of serosorting
+  in-concurrency; whether or not in concurrent partnerships
+  mix?; whether or not mixing with female (not currently used)
+  bi-sexual?; whether or not MSM is bisexual
+  sexual-risk
+
+  ;; needle-sharing behaviors and preferences
+  trans-rate-vaginal; per-act transmission rate, vaginal sex (insertive anal for MSM)
+  trans-rate-anal; per-act transmission rate, anal sex (receptive anal for MSM)
+  trans-needle; per-act needle transmission rate
+  num-needles; number of needle injections
+  num-needles-shared; number of needles shared
+  num-needles-shared-casual; number of needles shared with casual partners
+  num-IDU; number of casual needle-sharing partners
+  
+  ;; PATH 2 and 3: main partner attributes
+  ptnr-array ; array of length 2 that takes binary values containing information of index person's ptnrs 
+             ; [one two]
+             ; one- first ptnr of index person; two- concurrent ptnr of index person;
+             ; e.g.: ptnr-array [1 0] implies person has only one ptnr; 
+             ; e.g.: ptnr-array [1 1] implies person has concurrent ptnrs
+  main-ptnr-type ; array of length 2, 0 - sexual only, 1 - IDU only, 2 - both  
+  main-ptnr-sex; sex/risk group of main partners
+  main-ptnr-sharing?; whether or not main partners are sharing needles
+  needle-sharing?; whether or not current agent is sharing needles
+  ptnr-length; total length of partnership
+  ptnr-counter; total - remaining length of partnership
+  ptnr-infected?; HIV status of main partner
+  num-trans-One; transmission to ptnr 1
+  num-trans-Two; transmission to ptnr 2 (when concurrency exists)
+  num-trans-Casual; transmission to casual sexual partners
+  num-trans-Needle; transmission to casual IDU partners
+  prev-num-trans; number of transmissions in previous year
+  num-trans-incprev; incremental transmissions?
+  new-infections; only index-patients newly diagnosed have value 1 rest 0
+  concurrent-partner   
+
+  ;; new agent-variables
+  infected-2013-2022? 
+  dummy; dummy variable used for redistributing of age
+  
+  ;; counters
+  trans-year; transmission year
+  time-at-infection
+  dead-year
+  acute-stg-length
+  count-casuals
+  casuals-monthly-counter
+  acts-monthly-counter
+  monthly-ptnr1
+  monthly-ptnr2
+  number-transmissions
+  life-time-transmissions
+  time-on-salvage
+  time-on-ART
+  onART-length
+  
+  ;; testing
+  test-frequency
+  next-test
+  
+  ;; infection related
+  age-at-infection
+  age-at-death
+  age-at-diagnosis
+  time-at-diagnosis
+  years-until-diagnosis
+  infected-previous-quarter?
+  aware-previous-quarter?
+  viral-load
+  viral-load-stratum
+  CD4-count-testing ;;MOVED TO PERSON_SPECIFIC FOR TESTIG PROJECT
+  CD4-diagnosis;; at actual diagnosis
+  CD4-count
+  prev-CD4-count
+  CD4-change
+  CD4-stratum
+  CD4-max
+  CD4-at-care
+  CD4-to-start-ART ;; set CD4 count at which ART should start
+  CD4-ART ;;CD4 count at which ART actually started : might be different from  CD4-to-start-ART because 
+          ;of CD4 decline might not exactly coincide with the required start
+  
+  ;; treatment realted
+  linked-to-care?
+  in-care?
+  quarter-linked-care
+  quarter-ART-start
+  age-ART-start
+  quarter-drop-out
+  retention-in-ART
+  initial-suppression-prob
+  rate-viral-rebound
+  regimen
+  prev-regimen
+  time-on-therapy
+  regimen1-dur
+  regimen2-dur
+  regimen3-dur
+  regimen4-dur
+  next-regimen
+  total-regimen
+  prev-total-regimen
+  prev-onART?
+  prev-VLS?
+  on-treatment?
+  prev-on-treatment?
+  prev-prev-on-treatment?
+  
+  ;; OI and death
+  dead-reason
+  non-AIDS-death
+  quarter-nonAIDS-death
+  death-with-ART
+  death-without-ART
+  prev-dead
+  time-diag-to-death; check if this variable is used
+  discounted-life
+  OI-type
+  prev-OI-type
+  OI?
+  prev-OI?
+  prev-AIDS?
+  AIDS?
+  clinical-AIDS; check if this variable is used; takes values 1 or 2 only
+  
+  ;; QALYS
+  discount-factor
+  discount-rate-factor
+  QALYs
+  sum-QALYS
+  discounted-QALYs
+  life-years
+  sum-life-years
+  costs
+  discounted-costs
+  life-with-infection
+  life-lost-to-infection
+  no-life-lost-from-infection?
+  disc-life-lost-to-infection 
+  disc-QALYs-lost
+  discount-life-if-no-HIV
+  time-onset-AIDS
+  die-from-CD40?
+  TOTAL-COSTS
+  TOTAL-QALYs
+  undiscounted-Total-costs
+  total-utilization-cost ;; inpatient + outpatient (incurred from start of care for HIV) + ED costs (incurred from start of HIV)
+  total-regimen-cost 
+  total-OI-cost
+  yearly-cost
+  util-cost
+  test-cost
+  care-service-cost 
+  regimen-cost-quarter
+  oi-cost-quarter
+  
+  ;; PATH 4 cluster analysis 
+  clone-id ;; 
+  detected
+  actual-CLuster-Size
+  actual-intervention-cluster?
+  actual_old_priority?
+  detected_nodes_trans_rate
+  all_nodes_trans_rate  
+  explored? ;; being traversed before
+  counted? ;; being counted for statistic output
+  PTree-counted?;; being examined for creating PTree
+  relaxed-counted?
+  worthy-start?
+  
+  cluster-size
+  cluster-size-with-undiagnosed
+  relaxed-cluster-size
+  relaxed-alive-cluster-size
+  alive-cluster-size
+  cluster-intervention-size
+  undiagnosed-size
+  
+  in-cluster?
+  in-intervention-cluster?
+  relaxed-in-cluster?
+  intervention-cluster?
+  cluster-id
+  source-of-infection
+  
+  early-diagnosis-counter
+  no-diagnosis-alive-counter
+  relaxed-no-diagnosis-alive-counter
+  
+  early-infection-counter
+  acute-infection-counter
+  chronic-infection-counter
+  
+  early-infection-early-diagnosis-counter
+  acute-infection-early-diagnosis-counter
+  chronic-infection-early-diagnosis-counter
+  
+  early-infection-no-diagnosis-alive-counter
+  acute-infection-no-diagnosis-alive-counter
+  chronic-infection-no-diagnosis-alive-counter
+  
+  early-infection-relaxed-no-diagnosis-alive-counter
+  acute-infection-relaxed-no-diagnosis-alive-counter
+  chronic-infection-relaxed-no-diagnosis-alive-counter
+  
+  ;;ECNA
+  time-infected
+  desired-degree
+  degree
+  partners-per-month
+  time-of-infection
+  time-of-diagnosis
+  
+  ;dynamicparthers and behavior
+  number-of-exposures
+  ;prop-acts-condom-protected
+  
+  ;aids counters
+  AIDS-at-diagnosis?
+  AIDS-within-6mon?
+ 
+]
+
+

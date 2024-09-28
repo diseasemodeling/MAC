@@ -1,0 +1,459 @@
+ globals[
+  num-disease-state
+  death-state-multi-disease
+  count-error
+  num-age-group
+  num-degree-bin
+  num-risk-group
+  base-disease-id
+  modeling-disease-id
+  count-ineligible
+  age-group-lb-multi-disease
+  age-group-ub-multi-disease
+  count-total-initial 
+  random_seed
+]
+
+turtles-own[
+  multi-disease-state
+  prev-multi-disease-state
+  base-disease-state
+  prev-base-disease-state
+  second-disease-state
+  prev-second-disease-state
+  updated 
+]
+
+; import necessary packages from Python
+to setup-python
+  py:setup py:python3
+  (py:run 
+    "import numpy as np"
+    "import pandas as pd"
+    "import pickle"
+    "from Multiple_disease.Multiple_disease_module.agents import Agents"
+   )
+end
+
+; Interface for connecting variables from python to NetLogo
+to setup-static-data-2netlogo
+  set num-disease-state py:runresult "d2.num_disease_state" ; 
+  set num-degree-bin py:runresult "d2.num_degree_bin"
+  set num-age-group py:runresult "d2.num_age_group"
+  set num-risk-group py:runresult "d2.num_risk_group"
+  set age-group-lb-multi-disease py:runresult "d2.age_lb"
+  set age-group-ub-multi-disease py:runresult "d2.age_ub"
+  set death-state-multi-disease py:runresult "d2.death_state"
+  set modeling-disease-id py:runresult "d2.modeling_disease_id"
+  set base-disease-id py:runresult "d2.base_disease_id"
+end
+
+; Interface for connecting variables from NetLogo to Python 
+to setup-static-data-2python
+  py:set "initial_year" first-year ; in interface
+  py:set "simulation_step" simulation-years ; in interface
+  py:set "increased_risk" increased-risk; modeling increased risk of HIV on HPV or not 
+  py:set "mode" "netlogo"
+  py:set "model_screening" model-screening
+  py:set "model_vaccine" model-vaccine
+  py:set "num_nodes" num-nodes
+  py:set "time_unit" temp-time-unit
+  py:set "random_seed" random_seed
+
+  (py:run 
+    "kwargs = {'mode':mode,"
+    "          'time_unit': time_unit,"
+    "          'increased_risk':increased_risk,"
+    "          'initial_year': initial_year,"
+    "          'simulation_step': simulation_step,"
+    "          'model_screening': model_screening,"
+    "          'model_vaccine': model_vaccine,"
+    "          'random_seed':random_seed"
+    "           }"
+  )
+  py:run "d2 = Agents(**kwargs)"
+  
+end
+
+
+; run HIV + multi-disease
+to runExperiment-multi-disease
+  let run_num 1
+  reset-timer
+  while [run_num <= maxRun] [
+    clear
+    reset-ticks
+    file-close-all
+    set random_seed 5000  * run_num
+    random-seed random_seed
+    print random_seed
+    setupECNA
+    repeat termination-ticks[
+      runECNA
+      let index first-year - 2006
+      if ticks = (termination-ticks - (simulation-years - index) * time-unit)[setup-multi-disease]
+      if ticks > (termination-ticks - (simulation-years - index) * time-unit)[run-multi-disease]
+      ]
+    write-multi-disease 1 
+    print (list "completed run" run_num "of"  maxRun "; timer" timer)
+    set run_num run_num + 1
+  ]
+end
+
+
+to runMultiDisease
+  runECNA
+  let index first-year - 2006
+  if ticks = (termination-ticks - (simulation-years - index) * time-unit)[setup-multi-disease]
+  if ticks > (termination-ticks - (simulation-years - index) * time-unit)[run-multi-disease]
+  if ticks = termination-ticks [stop]
+  ;write-multi-disease 1
+end
+
+to setup-multi-disease
+  setup-python 
+  setup-static-data-2python
+  setup-static-data-2netlogo
+  dryrun-multi-disease
+  assign-agent-multi-disease-state
+end
+
+; run the simulation of multiple disease part
+to run-multi-disease
+  if ticks mod (12 / temp-time-unit) = 0[
+    go-multi-disease
+    output-variables
+    ;collect-avg-degree
+  
+  ]
+  update-agents
+  ;check-population
+  remove-people
+end
+
+to remove-people ; for computational efficienty - only for multiple disease model 
+  ask people with [dead = 1 or age > 100][die]
+end
+
+to output-variables
+  py:set "list1" write-HIV-results 1
+  py:run "d2.write_HIV_results(list1)"
+  py:run "d2.output_variables()"
+end
+
+to go-multi-disease
+  ask people with [sex = 1 or sex = 2][set prev-multi-disease-state multi-disease-state]
+  py:set "number_births" number-births
+  py:run "d2.go(number_births)"
+  multi-disease-progression
+  ask people with [sex = 1 or sex = 2] [set updated False]
+end
+
+; dry run of multi disease to stablize disease distirbution among population
+to dryrun-multi-disease
+  (py:run 
+    "d2.dryrun()")
+  ;print "dry run finished"
+end
+
+to assign-agent-multi-disease-state
+  ask turtles
+   [set multi-disease-state [-1 -1] 
+    set prev-multi-disease-state multi-disease-state]
+  ask people with [sex = 1 or sex = 2]
+   [set-multi-disease-state 
+    collect-agents-info
+    set prev-multi-disease-state multi-disease-state]
+  (py:run 
+  "d2.disease_state_assignment(num_nodes)"
+  "d2.update_nonagents_matrix()"
+  )
+  init-multi-disease-state
+  ask people with [sex = 1 or sex = 2]
+  [;set prev-multi-disease-state multi-disease-state
+   set updated False
+  ]
+  ;print "initialization done"
+end
+
+to-report write-HIV-results [sexInd]
+  let people-2006 people
+  let newly-infected-people people-2006 with [infected? = true  and (time-at-infection > ticks - 1 * time-unit) and sex = sexInd];; new infections
+  let newly-diagnosed-people people-2006 with [infected? = true and dead = 0 and (time-at-diagnosis >= ticks - 1 * time-unit) and aware? = true and sex = sexInd]
+  report list count newly-infected-people count newly-diagnosed-people
+end
+
+; Output or write results final = 1 means True,
+to write-multi-disease [final]
+  py:set "final" final
+  (py:run 
+      "d2.output.output_results(random_seed, time_unit, increased_risk, model_screening, model_vaccine, write=final)"
+    )
+end
+
+
+; Collect info of agents when initialization
+to collect-agents-info
+  py:set "degree" desired-degree
+  py:set "risk" sex - 1
+  py:set "jur_ind" LocationID
+  py:set "base_state" item base-disease-id multi-disease-state
+  py:set "age" age
+  py:run "d2.collect_agents_info(age, degree, risk, jur_ind, base_state)"
+
+end
+  
+
+;; set HIV state of agents: HIV-susceptible =  1,  HIV-infected person according to their CD4 count = 2 to 5, HIV-dead persons = 6
+to set-multi-disease-state
+
+  set prev-multi-disease-state multi-disease-state
+ 
+  ifelse CD4-count >= 500 [set multi-disease-state replace-item base-disease-id  multi-disease-state 1]
+  [
+    ifelse CD4-count >= 350 [set multi-disease-state replace-item base-disease-id  multi-disease-state 2]
+    [
+      ifelse CD4-count >= 200 [set multi-disease-state replace-item base-disease-id  multi-disease-state 3]
+     [set multi-disease-state replace-item base-disease-id  multi-disease-state 4]
+    ]  
+  ]
+    if dead = 1 [set multi-disease-state replace-item base-disease-id  multi-disease-state 5]
+ 
+end
+
+; Initialize disease state based on the disease distribution among nonagents
+to init-multi-disease-state
+  let d1-state-num -1
+  let d2-state-num -1
+  let sexInd  1
+  while [sexInd  <= num-risk-group]
+    [let age-group-num 0
+      while [age-group-num < num-age-group]
+      [let degree-bin-num 0 
+        while [degree-bin-num < num-degree-bin]
+        [let jur-ind 0
+          while [jur-ind < num-jurisdictions]
+            [determine-multi-disease-transition sexInd age-group-num degree-bin-num d2-state-num d1-state-num jur-ind
+             set jur-ind jur-ind + 1]
+      set degree-bin-num degree-bin-num + 1]; end for degreebin-num
+    set age-group-num age-group-num + 1];end for age group num
+  set sexInd sexInd + 1]; end for sexInd   
+end
+
+
+to update-multi-disease-state [disease-id]
+  ;HIV or d2 state changes
+  if item disease-id multi-disease-state != item disease-id prev-multi-disease-state
+  [ py:set "age" age
+    py:set "d1_state" item base-disease-id prev-multi-disease-state
+    py:set "degree" desired-degree
+    py:set "risk" sex - 1
+    py:set "d2_state" item modeling-disease-id prev-multi-disease-state
+    py:set "new_state" item disease-id multi-disease-state
+    py:set "jur_ind" LocationID
+    py:set "disease_id" disease-id
+    py:run "d2.update_multi_disease_state(d1_state, age, degree, risk, jur_ind,  d2_state, disease_id, new_state)"
+  
+  ]
+end
+
+
+
+to multi-disease-progression
+  ; Loop through sexual risk groups, states, age groups, degree bins, and HPV states
+  foreach (range 1 (num-risk-group + 1)) [currentSexGroup ->
+    foreach (range 0 num-age-group) [currentAgeGroup ->
+      foreach (range 0 num-degree-bin) [currentDegreeBin ->
+        foreach (range 0 (item (currentSexGroup - 1) item modeling-disease-id num-disease-state - 1)) [currentD2State ->
+          ; Exclude the 'death' state in the iteration
+          foreach (range 0 num-jurisdictions) [currentJurisdiction ->
+            foreach (range 1 (item (currentSexGroup - 1) item base-disease-id num-disease-state)) [currentD1State ->
+              ; Exclude the 'death' state in the iteration
+              determine-multi-disease-transition currentSexGroup currentAgeGroup currentDegreeBin currentD2State currentD1State currentJurisdiction
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+end
+
+
+to determine-multi-disease-transition [sexInd ageInd degreeInd d2-ind d1-ind jurInd]
+ 
+  let new-state-num-list request-disease-transition sexInd ageInd degreeInd d2-ind d1-ind jurInd
+  let new-state-ind-list item 0 new-state-num-list
+  set new-state-num-list item 1 new-state-num-list
+  let num-change length new-state-num-list
+  
+
+  if num-change > 0 [
+    let complete-set no-turtles
+    let eligible-set find-agentset sexInd ageInd degreeInd d2-ind d1-ind
+    
+    let i 0
+    repeat num-change [
+      let new-state item i new-state-ind-list
+      let new-num item i new-state-num-list
+      let eligible-set-count count eligible-set
+
+      if eligible-set-count < new-num [
+        if d2-ind != -1 [
+          py:set "eligible_count" eligible-set-count
+          py:set "new_state" new-state
+          py:set "new_num" new-num
+          py:run "d2.model_change[sex_ind][d1_state, age_ind, degree_ind, jur_ind, d2_state, new_state] = eligible_count"
+          py:run "d2.model_change[sex_ind][d1_state, age_ind, degree_ind, jur_ind, d2_state, d2_state] += new_num - eligible_count"         
+        ]
+        set count-ineligible count-ineligible + 1
+        set new-num eligible-set-count
+      ]
+
+     
+      ask n-of new-num eligible-set [
+        set complete-set (turtle-set complete-set self)
+        set multi-disease-state replace-item modeling-disease-id multi-disease-state new-state
+        set updated True
+        update-multi-disease-state modeling-disease-id
+        if item modeling-disease-id multi-disease-state =  item ( sex - 1 ) item modeling-disease-id death-state-multi-disease [set dead  1]
+      ]
+
+      set eligible-set eligible-set with [not member? self complete-set]
+      set i i + 1
+    ]
+  ]
+
+end
+
+to-report request-disease-transition [sexInd ageInd degreeInd d2-ind d1-ind jurInd]
+  py:set "age_ind" ageInd
+  py:set "sex_ind" sexInd - 1
+  py:set "degree_ind" degreeInd
+  py:set "d2_state" d2-ind
+  py:set "d1_state" d1-ind
+  py:set "jur_ind" jurInd
+  report py:runresult "d2.determine_multi_disease_transition(sex_ind, age_ind, degree_ind, d2_state, d1_state, jur_ind)"
+end
+
+
+to-report find-agentset [sexInd ageInd degreeInd d2-ind d1-ind]  
+  let eligible-people people with [sex = sexInd and desired-degree > item (degreeInd - 1) degree-dist-Bin-all and desired-degree <= item degreeInd degree-dist-Bin-all]
+  
+  ifelse d2-ind = -1 
+  [ifelse ageInd = 0 [set eligible-people eligible-people with [age  <= item ageInd age-group-ub-multi-disease]]
+   [ifelse ageInd = (length age-group-lb-multi-disease - 1)[set eligible-people eligible-people with [age  > item ageInd age-group-lb-multi-disease]]
+   [set eligible-people eligible-people with [age > item ageInd age-group-lb-multi-disease and age <= item ageInd age-group-ub-multi-disease]]]
+    report eligible-people with [item modeling-disease-id multi-disease-state = d2-ind]
+  ]
+  
+  [ifelse ageInd = 0 [set eligible-people eligible-people with [(age - (1 / time-unit))  <= item ageInd age-group-ub-multi-disease]]
+   [ifelse ageInd = (length age-group-lb-multi-disease - 1)[set eligible-people eligible-people with [age  > item ageInd age-group-lb-multi-disease]]
+   [set eligible-people eligible-people with [age > item ageInd age-group-lb-multi-disease and age  <= item ageInd age-group-ub-multi-disease]]]
+  report eligible-people with [item base-disease-id multi-disease-state = d1-ind and item modeling-disease-id multi-disease-state = d2-ind and updated = False]
+  ]
+end  
+
+
+to detemine-newly-infected-disease-state
+  py:set "sexInd" sex - 1
+  py:set "age" age
+  py:set "degree" desired-degree
+  py:set "jur_ind" LocationID
+  py:set "death" dead
+  (py:run "d2_state = d2.determine_newly_infected_disease_state(sexInd, age, degree, jur_ind, death)")
+  set multi-disease-state replace-item modeling-disease-id multi-disease-state py:runresult "d2_state"
+  set-multi-disease-state
+end
+
+
+; update Python side for everything happened in NetLogo 
+to update-agents
+  ; update existing agents (either existing immediate contacts of HIV-infected persons or HIV-infected persons)
+  ask people with [(sex = 1 or sex = 2)and infected? = true][
+   ifelse time-infected != 0 [
+    if dead = 0 [update-aging]
+    set-multi-disease-state
+    update-multi-disease-state base-disease-id]
+  [detemine-newly-infected-disease-state]
+  ]
+end
+
+to update-aging
+  let old-age age
+  set age (age + (1 / time-unit))
+  let new-age age
+  
+;  let old-age age - (1 / time-unit)
+;  let new-age age
+  
+  if old-age <= item (length age-group-lb-multi-disease - 1) age-group-lb-multi-disease [
+    let old-age-index return-age-index-multi-disease old-age
+    let new-age-index ifelse-value (new-age > item (length age-group-lb-multi-disease - 1) age-group-lb-multi-disease) 
+      [length age-group-lb-multi-disease - 1]
+      [return-age-index-multi-disease new-age]
+      
+    py:set "old_age_index" old-age-index
+    py:set "new_age_index" new-age-index
+    py:set "d1_state" item base-disease-id multi-disease-state
+    py:set "d2_state" item modeling-disease-id multi-disease-state
+    py:set "degree" desired-degree
+    py:set "sexInd" sex - 1
+    py:set "jur_ind" LocationID
+    
+    ;update aging 
+    if old-age-index != new-age-index [
+      py:run "d2.update_aging(sexInd,  d1_state, d2_state, degree, jur_ind, old_age_index, new_age_index)"
+    ]
+  ]
+end
+
+to-report return-age-index-multi-disease [age-num]
+  let val 0
+  let done false
+  foreach (range (length age-group-lb-multi-disease)) [ i ->
+    if not done and age-num > item i age-group-lb-multi-disease and age-num <= item i age-group-ub-multi-disease [
+      set val i
+      set done true
+    ]
+  ]
+ 
+  if age-num > item (length age-group-ub-multi-disease - 1) age-group-ub-multi-disease [
+    set val (length age-group-ub-multi-disease - 1)
+  ]
+  
+  report val 
+end
+
+
+to collect-avg-degree
+ let sexInd 1
+  while [sexInd <= num-risk-group][
+    let d1-ind 0
+    while [d1-ind < item (sexInd - 1) item base-disease-id num-disease-state][
+      let d2-ind 0 
+      while [d2-ind < item (sexInd - 1) item modeling-disease-id num-disease-state][
+         process-groups sexInd d1-ind d2-ind
+        set d2-ind d2-ind + 1]
+     set d1-ind d1-ind + 1]
+  set sexInd sexInd + 1]
+  
+end
+
+
+to process-groups [sexInd d1-ind d2-ind]
+  let total-links sum [desired-degree] of turtles with [(breed = susceptibles or breed = people) and sex = sexInd and multi-disease-state = list d1-ind d2-ind]
+  let total_agents count turtles with [(breed = susceptibles or breed = people) and sex = sexInd and multi-disease-state = list d1-ind d2-ind]
+
+  if total-links > 0 [
+    py:set "total_agents" total_agents
+    py:set "total_links" total-links
+    py:set "sexInd" sexInd - 1
+    py:set "d1_ind" d1-ind
+    py:set "d2_ind" d2-ind 
+   
+    (py:run 
+      "time = d2.time - d2.dryrun_step * d2.time_unit - 1"
+      "d2.output.total_links[sexInd][time, d1_ind, d2_ind], d2.output.total_agents[sexInd][time, d1_ind, d2_ind] = total_links, total_agents"
+    )
+  ]
+end

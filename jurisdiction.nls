@@ -1,0 +1,80 @@
+globals[
+  ;location-mixing
+  location-list
+  
+  HM_PWH_by_juri
+  HF_PWH_by_juri
+  MSM_PWH_by_juri
+  PWH_by_juri
+  
+  HF_juri_mix
+  HM_juri_mix
+  MSM_juri_mix
+  
+  matrix_unaware_juri
+  matrix_VLS_juri
+]
+
+to set_juri_globals [juri_model]
+  set num-jurisdictions 1;50;
+  set jurisdiction-mixing-within 0.77
+  set_care_continuum_fixed
+  setup-location-globals
+end
+ 
+to setup-location-globals
+  let num-location num-jurisdictions
+  let within-location jurisdiction-mixing-within
+  let location-mixing matrix:make-constant num-location num-location 0
+  
+  set location-list []
+  ifelse num-location > 1 
+  [set location-mixing matrix:make-constant num-location num-location ((1 - within-location) / (num-location - 1))]
+  [set location-mixing matrix:make-constant num-location num-location 1]  ;70% mixing within jurisdictoonm te remianing equally distributed
+  let i 0
+  while [i < num-location][
+    matrix:set location-mixing i i within-location
+    set location-list lput i location-list
+    set i i + 1]
+  set HF_juri_mix  matrix:copy location-mixing;matrix:make-constant num-jurisdictions num-jurisdictions 0
+  set HM_juri_mix  matrix:copy location-mixing;matrix:make-constant num-jurisdictions num-jurisdictions 0
+  set MSM_juri_mix  matrix:copy location-mixing;matrix:make-constant num-jurisdictions num-jurisdictions 0
+ 
+  ;;equal weight in assigning location ID
+  set HF_PWH_by_juri []
+  set HM_PWH_by_juri []	
+  set MSM_PWH_by_juri []	
+  set PWH_by_juri [	]
+  
+  set i 0
+  while [i < num-location][
+    
+    set HF_PWH_by_juri lput 1 HF_PWH_by_juri
+    set HM_PWH_by_juri lput 1 HM_PWH_by_juri
+    set MSM_PWH_by_juri lput 1 MSM_PWH_by_juri
+    set PWH_by_juri lput 1 PWH_by_juri 
+    
+    set i i + 1]
+  
+end
+
+to set_care_continuum_fixed
+  let juri_data-unaware csv:from-file "data/unaware_juri-to-national_ratio_2017.csv"
+  set matrix_unaware_juri matrix:from-row-list juri_data-unaware
+  
+  let juri_data-VLS csv:from-file "data/VLS_juri-to-national_ratio_2017.csv"
+  set matrix_VLS_juri matrix:from-row-list juri_data-VLS
+
+  ;overwritten with same weight  
+  let i 0
+  while [i < length (matrix:get-column matrix_unaware_juri 0)][
+    let j 0
+    while [j < length (matrix:get-row matrix_unaware_juri 0)][
+      matrix:set matrix_VLS_juri i j 1
+      matrix:set matrix_unaware_juri i j 1
+      set j j + 1
+    ]
+    set i i + 1
+  ]
+
+end

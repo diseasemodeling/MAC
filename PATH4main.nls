@@ -1,0 +1,315 @@
+to setupECNA 
+  ;clear
+  ;reset-ticks
+  ;file-close-all
+  ;random-seed random_seed
+  
+  ;carefully [file-delete "TransmissionClusters.csv"] []
+  ;write-cluster-statistics-header ;in write-network-report.nls
+  ;carefully [file-delete "TransmissionClustersShort.csv"] []
+  ;write-cluster-header-Short ;in write-ECNA-clusters.nls
+  ;write-cluster-statistics-header-FULL; in  write-network-report.nls
+   
+;  write-EpidemicFeatures-Header;in output-epidemic-features.nls
+  ;write-EpidemicFeatures-Header-test;in tes-output-epidemic-features.nls
+  ;write-NetworkFeatures-Header;in output-epidemic-features.nls
+  ;write-age-mixing-header ;in write-mixing.nls
+  ;write-risk-mixing-header ;in write-mixing.nls
+  ;write-risk-mixing-header-test ;in tes-write-mixing.nls
+  
+  carefully [file-delete "ECNAdata.csv"][] 
+  get-mats ;Stores all matrices for NN ;in ECNA.nls
+  
+  initialize-output ;procedure in write-output.nls
+  setup-intermediate-globals ;procedure in global-initialization.nls
+  setup-riskGroupPreference ; riskGroupPreference.nls to determine what risk groups to model
+  setup-static-globals ;procedure in global-initialization.nls
+  set_juri_globals juri_model_num ;procedure in jurisdiction.nls
+  
+  set giant-start-node person 0
+  
+   
+  setup-ECNA-globals ;in ECNA.nls
+  setup-ECNA-people ;in initial-people-ECNA.nls
+end
+
+to runECNA
+  ;write-partnership-behavior-header ask people with [infected? = true and dead = 0][if sex = 1[ask my-links[ask other-end[if (sex = 3) [print "before"]]]]]
+
+  tick
+  ;if count people >=  termination-node [ask people with [ AIDS? = true or CD4-count <= 200 and time-at-diagnosis <= ticks + 6 ][ set AIDS-within-6mon? true] changeLinks stop]; stopping conditon
+  if ticks > termination-ticks [ask people with [ AIDS? = true or CD4-count <= 200 and time-at-diagnosis <= ticks + 6 ][set AIDS-within-6mon? true]  stop] ; stopping conditon
+  if count people with [dead = 0] = 0 [ask people with [ AIDS? = true or CD4-count <= 200 and time-at-diagnosis <= ticks + 6 ][set AIDS-within-6mon? true]  stop] ; stopping conditon
+  if count non-agent-susceptibles < 1000 [create-non-agent-susceptibles (termination-node)[  ] ]
+  set trans-year-threshold   termination-ticks / time-unit - (simulation-years + 4) ;(ticks / time-unit) - simulation-years
+  goECNA
+
+  ;;;;calculate infected people
+  ;write-partnership-behavior-output write-stage-proportion-output ask people with [infected? = true and dead = 0][if sex = 1[ask my-links[ask other-end[if (sex = 3) [print "after"]]]]]
+  ;print "done"
+end
+
+to clear 
+  clear-all
+  file-close-all 
+end
+
+to setup-ECNA-globals
+  
+  set track-num-receivers n-values maxDegree [0]
+  set termination-node 20000;                                      
+  ;set termination-ticks 240 ;- (first-year - 2006) * time-unit ;240
+  
+  ;set births to be conatnt from 2006. 
+  ;Set PopSize (denominator), and num-nodes (used when distributing susceptible non-agents)
+  let sexInd 1 ;1
+  set num-nodes [0 0 0 0 0 0]
+  set number-births [0 0 0 0 0 0]
+  let index first-year - 2006
+  
+  
+  while[ sexInd <= temp-num-sex ]
+  [
+    if ticks <= 0; termination-ticks - (simulation-years - index) * time-unit 
+    [
+    set num-nodes replace-item (sexInd - 1) num-nodes item (sexInd - 1) PopSize ;100000 ;1250000;100000;%1000000
+    ]                 
+    if ticks = 1 or ticks = termination-ticks - (simulation-years - index) * time-unit
+    [
+      ;print (item (sexInd - 1) PLWH-start-year)
+      ;print item (sexInd - 1) total-US-pop-start-year
+      set num-nodes replace-item (sexInd - 1) num-nodes (((count people with [dead = 0 and sex = sexInd] ) / (item (sexInd - 1) PLWH-start-year / item (sexInd - 1) total-US-pop-start-year )) - count susceptibles with [sex = sexInd and count my-links > 0])
+      set PopSize replace-item (sexInd - 1) PopSize (item (sexInd - 1) num-nodes +  count susceptibles with [sex = sexInd])
+    ]
+    
+    set number-births replace-item (sexInd - 1) number-births (item (sexInd - 1) PopSize * (12.4 / 1000)) ; ; 12.4 per 1000 people is number of births in 2015 ;why 
+    set sexInd sexInd + 1
+  ]
+  
+ 
+  ;set initial-infected 100;1200;1200 ;100 ;1000 ;5
+    
+  ;;lifetime-partner distribution
+  set lambda [1.55 1.38 1.3 0 0 0] ;HETF, HETM, MSMper risk group
+                                   ;set lambda [1.38 1.38 1.3] ;HETF, HETM, MSMper risk group
+  set avg_degree [0 0 0 0 0 0]
+; set avg_degree [2 2 2 0 0 0]
+  set miminum_degree 2
+  
+  set degree-dist-all matrix:from-row-list [;sex; 1-HET female; 2-HET male; 3-MSM; 4-PWID female; 5-PWID male; 6-PWID MSM
+    [0.         0.         0.26117854 0.22850951 0.17861853 0.13082169 0.09257068 0.06436169 0.04393936] ;Het Female ;[0.         0.         0.21125296 0.20189226 0.17472197 0.14279122 0.11320727 0.08837012 0.06776421] ; USe Het Male for Het female also
+    [0.         0.         0.21125296 0.20189226 0.17472197 0.14279122 0.11320727 0.08837012 0.06776421] ;Het Male
+    [0.         0.         0.1903825  0.18901156 0.17089934 0.14640433 0.12188192 0.0999917 0.08142865] ;MSM
+    [0.         0.         0.26117854 0.22850951 0.17861853 0.13082169 0.09257068 0.06436169 0.04393936] ; IDU Het Female
+    [0.         0.         0.21125296 0.20189226 0.17472197 0.14279122 0.11320727 0.08837012 0.06776421] ;IDU Het Male
+    [0.         0.         0.1903825  0.18901156 0.17089934 0.14640433 0.12188192 0.0999917  0.08142865] ;IDU MSM
+  ]
+ 
+  set degree-dist-Bin-all [0 1	2	4	8	16	32	64	128]; 256]; 512]; degree in each bin
+  
+  set degree-dist matrix:make-constant temp-num-sex length(degree-dist-Bin-all) 0
+  
+  set sexInd 0
+  while[sexInd < temp-num-sex]
+  [
+    normalizeDegreeDist sexInd ;in ECNA.nls
+    scaleDegreeDistToPop-matrix-version sexInd ;in age-functions.nls
+    set sexInd sexInd + 1
+  ]
+end
+
+to normalizeDegreeDist [sexInd]
+  ;;NORMALIZE DEGREE DIST TO MAX DEGREE BINS (make it sum to 1)
+  matrix:set-row degree-dist sexInd matrix:get-row degree-dist-all sexInd
+  set degree-dist-Bin degree-dist-Bin-all 
+  let totalBins round(ln maxDegree / ln 2) 
+  
+  let i  totalBins + 2
+  repeat (length(degree-dist-Bin-all) - totalBins - 2)[
+    matrix:set degree-dist sexInd i 0 
+    set degree-dist-Bin remove-item (length(degree-dist-Bin) - 1)  degree-dist-Bin 
+    set i i + 1
+  ]
+  
+  set i 0
+  let denominator 0
+  repeat totalBins + 2[
+    set denominator denominator + matrix:get degree-dist sexInd i
+    set i i + 1
+  ]
+  let temp-row [] ;list
+  set temp-row lput matrix:get-row degree-dist sexInd temp-row ;nested-list
+  set temp-row matrix:from-row-list temp-row ;matrix
+  set temp-row matrix:times-scalar temp-row (1 / denominator) ;matrix
+  matrix:set-row degree-dist sexInd matrix:get-row temp-row 0
+
+end
+
+to get-mats
+  ;let Scale-Free-Distribution csv:from-file "simulated_scale_free_dist_m5.csv" ;Theoretical scale-free distribution
+  ;set SF-Distribution matrix:from-row-list Scale-Free-Distribution ;Distribution as a matrix
+  
+  let w1 csv:from-file "./Neural Network Weights/w_pref_attach_l.csv"
+  set w matrix:from-row-list w1
+  
+  set xNN csv:from-file "./Neural Network Weights/x_pref_attach_l.csv"
+  set xNN matrix:from-row-list xNN
+  
+  set b1 csv:from-file "./Neural Network Weights/b1_pref_attach_l.csv"
+  set b1 matrix:from-row-list b1
+  
+  set b2 csv:from-file "./Neural Network Weights/b2_pref_attach_l.csv"
+  set b2 matrix:from-row-list b2
+  
+  set min_scale csv:from-file "./Neural Network Weights/min_pref_attach_l.csv"
+  set min_scale matrix:from-row-list min_scale
+  
+  set max_scale csv:from-file "./Neural Network Weights/max_pref_attach_l.csv"
+  set max_scale matrix:from-row-list max_scale
+  
+  set hidden_layer item 0 matrix:dimensions xNN
+  set input item 0 matrix:dimensions w
+  
+  
+end
+
+
+to check-degree ;Calculates the degree of each individual turtle
+  ask people[
+    set degree count (my-links)
+  ]
+  ask susceptibles[
+    set degree count (my-links)
+  ]
+end
+
+to goECNA
+  set total-people people with [dead = 0 and infected? = true] ;sets totalpeople as people that are infected and alive
+ ; ask susceptibles [set contacts? false] ;set contacts? of all susceptibles to false
+  
+  if (ticks mod 12 = 0) [ 
+    age-population-yearly;;in age-functions.nls
+    
+    ask people with [infected? = true and dead = 0][update-behavior]  ;in transmissions-ECNA.nls ;calculates partner-month of links yearly, as well as exposures per year for each node
+    
+;    if ticks >= 0[; (termination-ticks - (simulation-years * time-unit) )[  
+;    write-EpidemicFeatures 0 ;HETF ;in write-epidemic-features-UI.nls
+;    write-EpidemicFeatures 1 ;HETM ;in write-epidemic-features-UI.nls
+;    write-EpidemicFeatures 2 ;MSM ;in write-epidemic-features-UI.nls
+;    write-EpidemicFeatures 3 ;HETF ;in write-epidemic-features-UI.nls
+;    write-EpidemicFeatures 4 ;HETM ;in write-epidemic-features-UI.nls
+;    write-EpidemicFeatures 5 ;MSM ;in write-epidemic-features-UI.nls
+;    ;write-risk-group-mixing ;in write-epidemic-features-UI.nls 
+;    ]
+;    
+;    ;write-NetworkFeatures ;in output-epidemic-features.nls
+;    write-age-mixing 1 ;in write-mixing.nls
+;    write-age-mixing 2 ;in write-mixing.nls
+;    write-age-mixing 3 ;in write-mixing.nls
+;    write-age-mixing 4 ;in write-mixing.nls
+;    write-age-mixing 5 ;in write-mixing.nls
+;    write-age-mixing 6 ;in write-mixing.nls
+  ] 
+  
+  ;; APPLY ECNA algorithm 
+
+  infect-population ;Bernoulli transmisison model in transmissions-ECNA.nls 
+  
+  calc-prop-infected
+  
+  determine-node-neighbors;ECNA-generateNetworkv2.nls
+
+  check-degree ;Calculates each turltes degree
+  
+  calc-avg-inf-degree ;Calculates average degree of newly infected agents]
+  
+  reset ;Updates values
+  
+  call-DiseaseProg-Demographics;PATH4mian.nls
+  
+end
+
+to call-DiseaseProg-Demographics
+  ;;reset 
+  if ticks = 0 [setup-ECNA-globals]; reset globals to maintain the denominators
+; if ticks = 1 [setup-ECNA-globals]; reset globals to maintain the denominators
+  let index first-year - 2006
+  if ticks = (termination-ticks - (simulation-years - index) * time-unit)  [setup-ECNA-globals]; reset globals to maintain the denominators
+  if ticks = (termination-ticks - (simulation-years - index) * time-unit) [ 
+    set trans-prob-vaginal-insertive 14 / 10000
+    set trans-prob-vaginal-receptive 11 / 10000
+    set trans-prob-anal-insertive 35 / 10000
+    set trans-prob-anal-receptive 175 / 10000
+    set-trans-rate
+  ]
+
+  ;;  PATH disease progression ;update-stage-props in main-code-helper-functions.nls
+  ifelse ticks < 0 [ manage-linkToCare manage-ART-postCalibration manage-dropOut-postCalibration]; rates based testing and care- used for dry run- could also use for intervention analyses post calibration period
+  [
+    ifelse ticks = 0 [update-stage-props 0]
+    [;let index first-year - 2006
+      ifelse ticks < (termination-ticks - (simulation-years - index) * time-unit)
+      [update-stage-props 0 + (index )];go back 'simulation-years' years from termination ticks. Everything before that is dryrun.
+      [update-stage-props ((ceiling((ticks - (termination-ticks - (simulation-years - index) * time-unit )) / time-unit )) + (index))] ;after dry run
+    ]                                                                                         ;update stage props to match surveillance data -  2006 to 2015
+    
+    set total-people people with [infected? = true and dead = 0]
+    set total-pop count total-people
+    
+    let i 0
+    repeat num-stage
+    [
+      set total-people-stage replace-item i total-people-stage total-people with [stage = i + 1]
+      set total-people-sex replace-item i total-people-sex total-people with [sex = i + 1]
+      set i i + 1
+    ]
+
+      set i 0
+    while [i < temp-num-sex]
+    [  
+      manage-undiag i
+      manage-no-care i
+      manage-care-noART i
+      manage-not-VLS-dropOut i
+      manage-VLS-dropOut i
+      set i i + 1
+    ]
+  ]
+  
+  ask total-people[
+    update-disease_progression
+  ]
+;  Natural_deaths_susceptibles
+  ask susceptibles[
+   ; set susceptible-age susceptible-age + 1
+   age-up-susceptibles
+  ]
+
+  
+  ask people with [ AIDS? = true or CD4-count <= 200 ][
+    if ticks = time-at-diagnosis[
+      set AIDS-at-diagnosis? true
+    ]
+    if ticks - 6 <= time-at-diagnosis[
+      set AIDS-within-6mon? true
+    ]
+  ]
+  
+  ;remove inactive links
+ 
+;  ask ECNA-links with [time_active-end < ticks][
+;    let delete  true
+;    ask both-ends [if breed = susceptibles [set delete false]]
+;    if delete = true [die]
+;  ]
+  
+    
+  ;;remove deaths for computational efficiency
+  if ticks < (termination-ticks - simulation-years * time-unit)[
+    ;ask people with [dead = 1][die]
+    ;ask links with [time_active-end < ticks][die]
+    ask susceptibles with [count my-links = 0] [die]
+   
+ ] 
+
+end

@@ -1,0 +1,21 @@
+to setData  
+  
+  ;;  ; rows: 2006 to 2018;
+  ;;  ;columns: female male MSM female-IDU male-IDU MSM-IDU
+  let data-unaware csv:from-file "data/data-unaware-upto 2018.csv"
+  set matrix_unaware matrix:from-row-list data-unaware
+  
+  let data-nocare csv:from-file "data/data-nocare-upto 2018.csv"   
+  set matrix_nocare matrix:from-row-list data-nocare
+   
+  let data-ARTVLS csv:from-file "data/data-ARTVLS-upto 2018.csv"  
+  set matrix_ARTVLS matrix:from-row-list data-ARTVLS
+  
+  let data-careNoART csv:from-file "data/data-careNoART-upto 2018.csv"  
+  set matrix_careNoART matrix:from-row-list data-careNoART
+
+  let data-LinkageToCare csv:from-file "data/data-LinkageToCare-upto 2018.csv"  
+  set matrix_LinkageToCare matrix:from-row-list data-LinkageToCare 
+
+
+end

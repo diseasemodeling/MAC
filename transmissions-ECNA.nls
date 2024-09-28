@@ -1,0 +1,171 @@
+;TRANSMISSION MODULE
+;SOURCE: PATH 4.0 Sonza et. al; 2021
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;PATH/ECNA 4.0 ;;;;;;;;;
+to infect-population ;
+  
+  ;ask people with [count link-neighbors with [breed = susceptibles] > 0 and dead = 0 and age < 65][
+  ;print "start"
+  ask people with [ dead = 0 and age < 65][
+    ;;track infected nodes features to use as source for susceptible neighbor is successful transmission 
+    let infected-node who  
+    let age-of-infected-node age
+    let source-infection-sex sex
+    
+    let current-month ticks mod 12
+    ; let receivers turtle-set [other-end] of my-links with [partnership-type = 1 or partner-month = current-month]; n-of partners-per-month link-neighbors;Selects a random contact of aware-distributor
+    let receivers turtle-set [other-end] of my-links with [ (ticks > time_active-start and ticks <= time_active-end) ]; counts active links
+    
+    if (count receivers > 0 ) [
+      set track-num-receivers replace-item (count receivers) track-num-receivers (item (count receivers) track-num-receivers + 1)
+      ; let exposures-per-partner exposures-per-month / count receivers;/ partners-per-month
+      ;let factor item stage [1 12 1 0.46 0.46 0.46 0.04] ;[1 5 1 0.46 0.46 0.46 0.04]; [1 1 1 1 1 1 1];
+      
+      set-transmission-rates ; sets transmisison probability by sex and stage, num-sexual-acts, protected-acts, protected-acts-casual
+      let exposures-per-partner num-sexual-acts / count receivers
+      
+      let protected-acts-in-month protected-acts
+      ifelse count receivers > 1
+      [set protected-acts-in-month protected-acts-casual]
+      [set protected-acts-in-month protected-acts]
+      
+      let prob-no-infection ((1 - trans-rate-vaginal) ^ (exposures-per-partner * (1 - prob-anal-sex) * (1 - protected-acts-in-month))) * ; vaginal unprotected
+        ((1 - (1 - condom) * trans-rate-vaginal) ^ (exposures-per-partner * (1 - prob-anal-sex) * protected-acts-in-month)) * ; vaginal protected
+        ((1 - trans-rate-anal) ^ (exposures-per-partner * prob-anal-sex * (1 - protected-acts-in-month))) *
+        ((1 - (1 - condom) * trans-rate-anal) ^ (exposures-per-partner * prob-anal-sex * protected-acts-in-month)) 
+        ; * ((1 - trans-needle) ^ num-needles-shared-main))
+     let prob-of-infection 1 - prob-no-infection
+
+      ask receivers[
+;
+        let random-float1 random-float 1
+        if (prob-of-infection > random-float1 and breed = people) [;track transmission chain - retransmission
+          ;;set source-of-infection infected-node
+          ask my-ECNA-links with [[who] of other-end = infected-node][set breed Ttree-links]; print "done1"]
+        ]
+        if (prob-of-infection > random-float1 and breed = susceptibles) [ ;Infects susceptible agents using the binomial distribution
+          let new-age susceptible-age 
+          let new-sex sex
+          if susceptible-age < item 0 age-LB [
+            set new-age item 0 age-LB
+          set count-error-age count-error-age + 1]
+          
+          set breed people
+          set source-of-infection infected-node
+          ask my-ECNA-links with [[who] of other-end = infected-node][set breed Ttree-links]; print "done 2"]
+          set age new-age
+          set sex new-sex
+          initializeTrans ; in initialize-transmissions.nls
+          
+        ]
+      ]
+    ]
+  ]
+ ; print "end"
+end
+
+;####PARTNERSHIP UPDATES
+to update-behavior  ;calculating yearly exposures
+  ; 13-14	15–17	18–19	20–24	25–29	30–34	35–39	40–44	45-49	50-54	55-59	60-64	65-70
+  ;; assigning sexual behaviors based on age
+  let i 0  
+  while [i < length age-sexual-NSSHB]
+  [
+    if age < item i age-sexual-NSSHB 
+    [
+      set num-acts-yearly item i (item (sex - 1) num-sex-acts-lower) + random (item i (item (sex - 1) num-sex-acts-upper) - item i (item (sex - 1) num-sex-acts-lower))
+      set prob-anal-sex item i (item (sex - 1) prop-anal-acts)
+      set protected-acts-unaware min (list (item i (item (sex - 1) condom-use-main) * condom-use-main-increase) 1)
+      set protected-acts-casual-unaware min (list (item i (item (sex - 1) condom-use-casual) * condom-use-casual-increase) 1)
+      set i length age-sexual-NSSHB
+    ]
+    set i i + 1
+  ]
+  
+  
+  ;; assign the proportion of PLWH who practice serosorting ;;note data only shows msm perform serosorting
+  ;; serosorting: selecting partners based on HIV status
+  ifelse sex = 3 or sex = 6
+  [set serosorting prob-serosorting]
+  [set serosorting 0]  
+  
+end
+
+to set-transmission-rates
+  ;set-trans-rate; global - adds randomness to transmission risk
+  ;; determine the number of total sexual acts per month
+  set num-sexual-acts num-acts-yearly / time-unit
+  ;; determine the number of casual sex per casual partner
+  set num-sexual-acts-casual casual-sex-min + random (casual-sex-max - casual-sex-min)
+
+  
+  ;; transmission rate varies by sex and stage: see global-initialization.nls for values
+  set trans-rate-vaginal item (sex - 1) (item (stage - 1) trans-prob-vaginal-stage)
+  set trans-rate-anal item (sex - 1) (item (stage - 1) trans-prob-anal-stage)
+ 
+  set-increase-condom-use ;in dynamic-partners.nls
+end
+
+;; determine the percentage of sexual acts that are protected by condom
+to set-increase-condom-use
+  
+  set protected-acts 0
+  set protected-acts-casual 0
+  ifelse stage >= 3 or aware? = true
+  [
+    ifelse random-float 1 <= condom-100perc and (sex = 3 or sex = 6)
+    [
+      set protected-acts 1
+      set protected-acts-casual 1
+    ]
+    [
+      ;set protected-acts 1 - (1 - protected-acts-unaware) * (1 - reduction-unprotected-aware);;
+      ;set protected-acts-casual 1 - (1 - protected-acts-casual-unaware) * (1 - reduction-unprotected-aware)
+      set protected-acts 1 - (1 - protected-acts-unaware) *(1 - (reduction-unprotected-aware - condom-100perc)/(1 - condom-100perc)); assume reduction-unprotected-aware is the weight average of those who use conodms 100% v those who do not.
+      set protected-acts-casual 1 - (1 - protected-acts-casual-unaware) *(1 - (reduction-unprotected-aware - condom-100perc)/(1 - condom-100perc))
+    ]  
+  ]
+  [
+    set protected-acts protected-acts-unaware
+    set protected-acts-casual protected-acts-casual-unaware 
+  ]
+  
+end
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;PATH/ECNA 4.0 ;;;;;;;;;
+to initializeTrans;; Use initializeTrans for PATH/ECNA 4.0 ;; Use initialize-transmissions for PATH 2.0 and 3.0; 
+  set-infected-variables ; in intial-people-ECNA.nls
+  set index? false
+  set stage 1
+  setDiagTime ;in initialize-transmissions.nls
+  update-behavior
+end
+
+
+to setDiagTime
+  let rand random-float 1
+  set time-of-diagnosis ticks + 3000;; letbucket approach assign diagnosis
+ ;set TimeToDiagnosis 10 ;IF SENSITIVITY TEST ON TIME AT DIAGNOSES
+;    ifelse rand < 0.25[;<0.7 years
+;      set time-of-diagnosis round(ticks + random (0.7 * time-unit));TimeToDiagnosis
+;    ]
+;    [ifelse rand < 0.5[;0.7 to 3 years
+;      set time-of-diagnosis round(ticks + 0.7 * time-unit + random (3 * time-unit - 0.7 * time-unit)); TimeToDiagnosis
+;      ]
+;      [
+;        ifelse rand < 0.75[; 3 to 7.8 years
+;          set time-of-diagnosis round(ticks + 3 * time-unit + random (7.8 * time-unit - 3 * time-unit));TimeToDiagnosis
+;        ]
+;        [;7.8 to TimeToDiagnosis 
+;          set time-of-diagnosis round(ticks + 7.8 * time-unit + random (TimeToDiagnosis * time-unit - 7.8 * time-unit)); 
+;        ]
+;        
+;      ]
+;    ]
+  
+  set next-test time-of-diagnosis
+  
+  set color red
+  set label time-at-infection
+  set time-infected -1
+  set aware? false
+end

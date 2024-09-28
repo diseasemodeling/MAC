@@ -1,0 +1,139 @@
+
+;to setup-riskGroupPreference 
+;  set temp-num-sex  2 ;=3 if only sexual transmissions; =6 if sexual and PWID
+;  if first-year = 2006[
+;    set sex-dist-target ; 2006 distribution of PLWH by sexual risk groups
+;                        ;[0.1838 0.0948 0.4849 0.0666 0.1200 0.0500] ; for all 6 risjk groups
+;    [0.6597272080265895 0.340272792 0 0 0 0]
+;    set PLWH-start-year ;[0 0 532000 0 0 0] ; even if modeling only MSM set values for HetF and HETM else will create errors
+;    [201700 104000 0 0 0 0]
+;  ]
+;  
+;  if first-year = 2010[
+;    set sex-dist-target ; 2006 distribution of PLWH by sexual risk groups
+;                        ;[0.1838 0.0948 0.4849 0.0666 0.1200 0.0500] ; for all 6 risjk groups
+;    [0.227415504	0.108430707	0 0 0 0] ;if modelling only first 3
+;                                                ;[0 0 1 0 0 0];if modelling only MSM 
+;    
+;    set PLWH-start-year ;[0 0 532000 0 0 0] ; even if modeling only MSM set values for HetF and HETM else will create errors
+;    [181000	86300	0 0 0 0] 
+;  ]
+;  
+;  ;1-HET female; 2-HET male; 3-MSM; 4-PWID female; 5-PWID male; 6-PWID MSM
+;  ;calculated as initial infected/ prevalance per risk group in 2006 ;https://www.cdc.gov/mmwr/preview/mmwrhtml/mm5739a2.htm
+;  set PopSize ;[0 0 560000 0 0 0]
+;  [1400000 1344000 0 0 0 0]
+;  
+;  
+;  set total-US-pop-start-year; [0 0 7000000 0 0 0] ; even if modeling only MSM set values for HetF and HETM else will create errors
+;  [151000000 150000000 0 0 0 0] ;total people in the USA of each risk group (this actually 2010 val, assumed same for 2006)
+;  set risk-group-mixing matrix:from-row-list [
+;    ;	sex; 1-HET female; 2-HET male; 3-MSM; 4-PWID female; 5-PWID male; 6-PWID MSM 
+;    [0 1 0 0 0 0]
+;    [1 0 0 0 0 0]
+;    [0 0 1 0 0 0] ;[0.07 0 0.93 0 0 0] ;    [0 0 1 0 0 0] ;
+;    [0 0 0 0 0 0]
+;    [0 0 0 0 0 0]
+;    [0 0 0 0 0 0];0.340272792
+;  ]
+;  ;note we assume above (2,3) is 0 as chance of HETF to MSM comapred to MSM to MSM is ich lower, 
+;  ;but we can use clustering to try and estimate the proportion of mixing of HETFemale to MSM
+;  
+;  set cumulative-risk-group-mixing matrix:from-row-list [
+;    ;HM HF MSM IDUM IDUF IDUMSM
+;    [0 1 1 1 1 1]
+;    [1 1 1 1 1 1]
+;    [0 0 1 1 1 1] ;[0.07 0.07 1 1 1 1] ;   [0 0 1 1 1 1] ;
+;    [0 0 0 0 0 0]
+;    [0 0 0 0 0 0]
+;    [0 0 0 0 0 0]
+;  ]
+;  
+;  ;; Proportion of sexual acts with female for bisexuals
+;  set bisexual-mix 0.80 
+;end
+;transmisison-group (HETF,HETM, MSM, HETF_PWID,HETM_PWID, MSM_PWID) distributions and mixing
+to setup-riskGroupPreference 
+  set temp-num-sex 3 ;=3 if only sexual transmissions; =6 if sexual and PWID
+  if first-year = 2006[
+    set sex-dist-target ; 2006 distribution of PLWH by sexual risk groups
+                        ;[0.1838 0.0948 0.4849 0.0666 0.1200 0.0500] ; for all 6 risjk groups
+    [0.240733464	0.124165029	0.635101506 0 0 0] ;if modelling only first 3
+                                                ;[0 0 1 0 0 0];if modelling only MSM  
+
+    
+    set PLWH-start-year ;[0 0 532000 0 0 0] ; even if modeling only MSM set values for HetF and HETM else will create errors
+    [201700 104000 450600 0 0 0] ;532000 =MSM PLWH in 2006; 7M = MSM pop size- 
+                                 ;ATLAS numbers from 2010 do not match with the 2006 numbers from 2010 publication,
+                                 ;so extrapolating back from 2010 to calcualte 450600
+  ]
+  
+  if first-year = 2010[
+    set sex-dist-target ; 2006 distribution of PLWH by sexual risk groups
+                        ;[0.1838 0.0948 0.4849 0.0666 0.1200 0.0500] ; for all 6 risjk groups
+    [0.227415504	0.108430707	0.664153788 0 0 0] ;if modelling only first 3
+                                                ;[0 0 1 0 0 0];if modelling only MSM 
+    
+    set PLWH-start-year ;[0 0 532000 0 0 0] ; even if modeling only MSM set values for HetF and HETM else will create errors
+    [181000	86300	528600 0 0 0] ;532000 =MSM PLWH in 2006; 7M = MSM pop size- 
+                                 ;ATLAS numbers from 2010 do not match with the 2006 numbers from 2010 publication,
+                                 ;so extrapolating back from 2010 to calcualte 450600
+  ]
+  
+  ;1-HET female; 2-HET male; 3-MSM; 4-PWID female; 5-PWID male; 6-PWID MSM
+  ;calculated as initial infected/ prevalance per risk group in 2006 ;https://www.cdc.gov/mmwr/preview/mmwrhtml/mm5739a2.htm
+  set PopSize ;[0 0 560000 0 0 0]
+  [1400000 1344000  600000 0 0 0]; even if modeling only MSM set values for HetF and HETM else will create errors
+                                 ;set PopSize[0 0 600000 0 0 0] 
+                                 ;set prevalance-2006 [0 0 0.64 0 0 0];[0.12 0.24 0.64 0 0 0]
+  
+
+  
+  
+  set total-US-pop-start-year; [0 0 7000000 0 0 0] ; even if modeling only MSM set values for HetF and HETM else will create errors
+  [151000000 150000000 7000000 0 0 0] ;total people in the USA of each risk group (this actually 2010 val, assumed same for 2006)
+  set risk-group-mixing matrix:from-row-list [
+    ;	sex; 1-HET female; 2-HET male; 3-MSM; 4-PWID female; 5-PWID male; 6-PWID MSM 
+    [0 1 0 0 0 0]
+    [1 0 0 0 0 0]
+    [0.21 0 0.79 0 0 0] ;[0.07 0 0.93 0 0 0] ;    [0 0 1 0 0 0] ;
+    [0 0 0 0 0 0]
+    [0 0 0 0 0 0]
+    [0 0 0 0 0 0]
+  ]
+  ;note we assume above (2,3) is 0 as chance of HETF to MSM comapred to MSM to MSM is ich lower, 
+  ;but we can use clustering to try and estimate the proportion of mixing of HETFemale to MSM
+  
+  set cumulative-risk-group-mixing matrix:from-row-list [
+    ;HM HF MSM IDUM IDUF IDUMSM
+    [0 1 1 1 1 1]
+    [1 1 1 1 1 1]
+    [0.21 0.21 1 1 1 1] ;[0.07 0.07 1 1 1 1] ;   [0 0 1 1 1 1] ;
+    [0 0 0 0 0 0]
+    [0 0 0 0 0 0]
+    [0 0 0 0 0 0]
+  ]
+  
+  ;; Proportion of sexual acts with female for bisexuals
+  set bisexual-mix 0.80 
+end
+
+
+
+
+to-report get-sex-mixing [sex-of-infected-node]
+  let row-ind sex-of-infected-node - 1
+  let rand-num random-float 1
+  let temp -1
+  let flag 0
+  let i 0
+  while [i < temp-num-sex][
+    if (rand-num <= matrix:get cumulative-risk-group-mixing row-ind i and flag = 0)
+    [
+      set temp i + 1
+      set flag 1
+    ]
+    set i i + 1
+  ]
+  report temp
+end

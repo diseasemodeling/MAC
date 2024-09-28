@@ -1,0 +1,212 @@
+;; controlling proportion in the six care continuum stages(1: acute unaware; 2:nonacute unaware; 3:aware not in care; 4: incare no ART; 5: ART no VLS; ART VLS)
+
+to manage-undiag [i]
+ 
+  let total-unaware (item i total-people-sex) with [stage <= 2 and next-test > ticks  ]
+  let total-unaware-nonacute (item i total-people-sex) with [stage = 2 and next-test > 100 and next-test > ticks  ]
+  
+  ;;val is number of people to diagnose
+  let val (count total-unaware - (count (item i total-people-sex) * item i current-unaware)) 
+  if val > 0 
+  [
+    let total-num-unaware-nonacute count total-unaware-nonacute
+    if total-num-unaware-nonacute < val 
+    ;if count  people with [dead = 0 and infected? = true and stage = 2 and sex = j and index-patient? = true] < val 
+    [set val total-num-unaware-nonacute]
+
+    let agent-set-to-pick []
+    set agent-set-to-pick rnd:weighted-n-of val total-unaware-nonacute [ 
+      item (return-age-index age) age-weighted-aware] ;+ 1 / matrix:get matrix_unaware_juri locationID (sex - 1)] ;; weighting by jurisdition and age; shoudl work even if num-juris = 1 because then all will get same weight becasue of same locationID
+                                                                                                               ;age-weighted-aware ;surveillance; global-initialization.nls
+                                                                                                               ;matrix_unaware_juri value is 1 in default; jurisdiction.nls ; jurisditional sensitivity analyses
+    ask n-of (val) agent-set-to-pick
+    [
+      ; if new-infections = 0 
+      if new-infections = 0 and index? = true ;; indexpatients are those already infected at time zero (2006 population)
+      [
+        ifelse random-float 1 < prob-CD4-diagnosis-200 * item i prop-CD4-diagnosis-500
+        [set CD4-count 50 + random 150]
+        [set CD4-count 200 + random 300]
+      ]
+
+      set-testing-variables
+      set-ART-variables
+      set next-test ticks
+      ; print 1
+      ;;assigning costs because update-simulation was done earlier to this
+      set test-cost cost-testing
+      set costs costs + cost-testing
+      set undiscounted-Total-costs undiscounted-Total-costs + cost-testing
+      ;set discounted-costs cost-testing / discount-rate-factor
+      set TOTAL-COSTS TOTAL-COSTS  + discounted-costs    
+    ]
+  ]
+end
+
+to manage-no-care [i]
+  ;;If more people in stage >= 4 push them down to 3 (drop out of care), if more people in 3 push them up to 4 or 6
+  
+  let total-nocare (item i total-people-sex) with [stage = 3]
+  
+  let val count total-nocare - (count (item i total-people-sex) * item i current-no-care)  
+  if val > 0
+  [  
+    ask n-of (abs val) total-nocare 
+      [
+      if not linked-to-care? ;; if not linked to care originally link to care
+      [
+        set linked-to-care? true
+        set quarter-linked-care ticks
+        set in-care? true 
+        ;; in-care? is false either when 1) not linked to care originally or 2) linked and dropped out of care but may or maynot have entered back
+        ;;used to track how many drop out 
+      ]
+      
+      
+      set stage 4
+      
+    ]
+  ]
+
+   
+  
+end
+
+to manage-care-noART [i]
+  
+  let total-care-noART (item i total-people-sex) with [stage = 4]
+  let total-VLS (item i total-people-sex) with [stage = 6] 
+  
+  let val (count total-care-noART) - (item i current-care-noART * count (item i total-people-sex))
+  if val > 0
+  [
+    ;      if val > count people with [dead = 0 and infected? = true and stage = 4 and sex  = j] 
+    ;      [set val count people with [dead = 0 and infected? = true and stage = 4 and sex  = j] ]
+    let val2 (count total-VLS) - (item i current-ARTsuppressed * count (item i total-people-sex)) 
+    ifelse val2 < 0
+    [
+      let counter 0
+      foreach sort-by [[?1 ?2] -> [CD4-count] of ?1 < [CD4-count] of ?2] total-care-noART 
+      ;; move people from stage 4 to stage 6
+      [
+        [?] -> if counter < floor(val)
+        [
+          ask ?
+          [
+            set CD4-to-start-ART CD4-count
+            set-ART-variables
+            set-total-regimen
+            set-on-treatment?
+            set-regimen 
+            set-time-on-therapy
+            set stage 6
+            ;print regimen
+          ]
+          
+        ]
+        set counter counter + 1
+      ]
+    ]
+    [
+      ask n-of (val) total-care-noART
+      [
+        set-dropout-care ;in set-drop-out-care.nls
+        set stage 3
+      ]
+    ]  
+  ]
+
+end
+
+;; VLS drop out
+to manage-VLS-dropOut [i]
+  
+  ;;If more people in stage = 6 push them down to 3 (drop out of care)
+  let total-VLS (item i total-people-sex) with [stage = 6]
+  
+  let val (count total-VLS) - (item i current-ARTsuppressed * count (item i total-people-sex)) 
+  if val > 0
+  [
+    ask n-of (val) total-VLS 
+       [
+      set-dropout-care
+      set stage 3
+    ]
+  ]
+
+end
+
+;; not VLS drop out
+to manage-not-VLS-dropOut [i]
+  
+  let total-not-VLS (item i total-people-sex) with [stage = 5]
+  
+  let val (count total-not-VLS) - (1 - item i current-unaware - item i current-no-Care - item i current-care-NoART - item i current-ARTsuppressed) * count (item i total-people-sex) 
+  if val > 0
+  [
+    ask n-of (val) total-not-VLS 
+    [
+      set-dropout-care
+      set stage 3
+    ]
+  ]
+  
+end  
+
+;; Below procedures are useful if needed to simulate rate based testing and drop out (instead of calibrating to care continuum distributions- default PATH 4 method). IN default PATH 4.0 using it in dry run 1
+to manage-linkToCare
+  
+  ask total-people with [stage = 3 and CD4-count <= CD4-at-care and trans-year >= termination-ticks - ( calibration-year - start-year)]
+  [
+    set stage 4
+    if not linked-to-care? ;; if not linked to care originally link to care
+    [
+      set linked-to-care? true
+      set quarter-linked-care ticks
+      set in-care? true 
+    ]
+  ]
+end
+
+to manage-ART-postCalibration
+  
+  ask total-people with [stage = 4 and CD4-count <= CD4-to-start-ART]
+  [
+    set CD4-ART CD4-count
+    set-ART-variables ;in breed-people.nls
+    set-total-regimen ;in update-simulation.nls
+    set-on-treatment? ;in update-simulation.nls
+    set-regimen ;in update-simulation.nls
+    set-time-on-therapy ;in update-simulation.nls
+    set stage 6
+  ]
+  
+end
+
+to manage-dropOut-postCalibration
+  
+  let total-inCare total-people with [stage >= 5 and trans-year != termination-ticks - ( calibration-year - start-year) + 1 and dead = 0]
+  let total-inCare-cohort total-people with [stage >= 5 and trans-year = termination-ticks - (calibration-year - start-year) + 1 and dead = 0]
+  let dropOutFactor 0.5
+  
+  ask total-inCare
+  [
+    let dropOut-prob dropOut-rate / (1 + dropOutFactor * onART-length)
+    if random-float 1 <= dropOut-prob
+    [
+      set-dropout-care
+      set stage 3
+    ]
+  ]
+  
+  ask total-inCare-cohort
+  [
+    let dropOut-prob dropOut-rate-cohort / (1 + dropOutFactor * onART-length)
+    if random-float 1 <= dropOut-prob
+    [
+      set-dropout-care
+      set stage 3
+    ]
+  ]
+  
+end

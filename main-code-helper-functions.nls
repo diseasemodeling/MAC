@@ -1,0 +1,65 @@
+; Update the proportions of persons at stages along the HIV care continuum
+to update-stage-props [i]
+
+  set current-unaware matrix:get-row matrix_unaware i
+  set current-no-care matrix:get-row matrix_noCare i
+  set current-care-noART matrix:get-row matrix_careNoART i
+  set current-ARTsuppressed matrix:get-row matrix_ARTVLS i
+  set care-at-diag matrix:get-row matrix_LinkageToCare i
+  ;set care-at-diag-ByAge matrix:get-row matrix_LinkageToCare_ByAge i
+end
+
+;BELOW USED FOR PATH 2.0/3.0;; Used in PATH 3.0 for sensitivity analyses
+
+;; Initialize prevalence
+;to initialize-num-HIV
+;  
+;  set prevalence replace-item 0 prevalence (number-people * item 0 sex-dist-target / num-HET-FEM)
+;  set prevalence replace-item 1 prevalence (number-people * item 1 sex-dist-target / num-HET-MEN)
+;  set prevalence replace-item 2 prevalence (number-people * item 2 sex-dist-target / num-MSM)
+;  set prevalence replace-item 3 prevalence (number-people * item 3 sex-dist-target / num-IDU-FEM)
+;  set prevalence replace-item 4 prevalence (number-people * item 4 sex-dist-target / num-IDU-MEN)
+;  set prevalence replace-item 5 prevalence (number-people * item 5 sex-dist-target / num-IDU-MSM)
+;  
+;end
+;
+;;; Updates prevalence every year
+;to count-num-HIV
+;
+;  set prevalence replace-item 0 prevalence (count item 0 total-people-sex / num-HET-FEM)
+;  set prevalence replace-item 1 prevalence (count item 1 total-people-sex / num-HET-MEN)
+;  set prevalence replace-item 2 prevalence (count item 2 total-people-sex / num-MSM)
+;  set prevalence replace-item 3 prevalence (count item 3 total-people-sex / num-IDU-FEM)
+;  set prevalence replace-item 4 prevalence (count item 4 total-people-sex / num-IDU-MEN)
+;  set prevalence replace-item 5 prevalence (count item 5 total-people-sex / num-IDU-MSM)
+;
+;end
+
+;; Update number of persons sharing needles ;
+;to count-num-sharing-HIV 
+;
+;  set total-sharing people with [dead = 0 and infected? = true and needle-sharing? = true]
+;  if percent-IDU-sharing > 0
+;  [
+;    set sharing-prevalence replace-item 3 sharing-prevalence (count total-sharing with [sex = 4] / (num-IDU-FEM * percent-IDU-sharing))
+;    set sharing-prevalence replace-item 4 sharing-prevalence (count total-sharing with [sex = 5] / (num-IDU-MEN * percent-IDU-sharing))
+;    set sharing-prevalence replace-item 5 sharing-prevalence (count total-sharing with [sex = 6] / (num-IDU-MSM * percent-IDU-sharing))
+;    set IDU-sharing-prevalence (count total-sharing with [sex >= 4] / ((num-IDU-FEM + num-IDU-MEN + num-IDU-MSM) * percent-IDU-sharing))
+;  ]
+;
+;end
+
+
+
+;to dry-run-keep-prevalence
+;
+;  set num-HET-FEM count item 0 total-people-sex / item 0 prevalence
+;  set num-HET-MEN count item 1 total-people-sex / item 1 prevalence
+;  set num-MSM count item 2 total-people-sex / item 2 prevalence
+;  set num-IDU-FEM count item 3 total-people-sex / item 3 prevalence
+;  set num-IDU-MEN count item 4 total-people-sex / item 4 prevalence
+;  set num-IDU-MSM count item 5 total-people-sex / item 5 prevalence
+;  ;; for 2012 prevalence per 100,000 is 573;; for 2008 it is 470;; 2006 is 441
+;
+;end
+

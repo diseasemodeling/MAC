@@ -1,0 +1,214 @@
+to setup-test
+  setupECNA
+  repeat 108 [runECNA]
+  setup-multi-disease
+  check-inconsistency-model-matrix 
+  print "setup test done" 
+end
+
+to run-test
+  print ticks
+  if ticks mod (12 / temp-time-unit) = 0[
+    go-multi-disease]
+  update-agents
+  check-inconsistency-model-matrix 
+  print "run test done"
+end
+
+to run-multi-disease-test-only
+  let run_num 1
+  while [run_num <= 10][
+  random-seed 1076 + run_num
+  setup-test
+  repeat termination-ticks - 108
+  [tick
+   if ticks mod (12 / temp-time-unit) = 0[
+    go-multi-disease]
+   check-inconsistency-model-matrix 
+  ]
+   set run_num run_num + 1
+  ]
+end
+
+to runExperiment-test
+  let run_num 1
+  while [run_num <= maxRun][
+  setupECNA
+  repeat termination-ticks[
+      runECNA
+      let index first-year - 2006
+      if ticks = (termination-ticks - (simulation-years - index) * time-unit)[
+      setup-multi-disease
+    ]
+      if ticks > (termination-ticks - (simulation-years - index) * time-unit)[run-test]
+      ]
+   set run_num run_num + 1
+  ]
+end
+
+    
+to update-agents-test
+  ; update existing agents (either existing immediate contacts of HIV-infected persons or HIV-infected persons)
+  ask people with [infected? = true][
+   ifelse time-infected != 0[
+    if dead = 0 [update-aging]
+    set-multi-disease-state
+    update-multi-disease-state base-disease-id]
+  [detemine-newly-infected-disease-state]
+  ]
+end
+
+; for debugging synchronicity between Python and NetLogo
+to write-agents-info
+  py:set "age_l" []
+  py:set "degree_l" []
+  py:set "sex_l" []
+  py:set "d1_l" []
+  py:set "d2_l" []
+  py:set "tick" ticks
+  ask people[
+        py:set "age" age
+        py:set "deg" desired-degree
+        py:set "sex" sex - 1
+        py:set "d1_state" item base-disease-id multi-disease-state
+        py:set "d2_state" item modeling-disease-id multi-disease-state
+        py:run "if d2_state == -1: print(age, deg, sex, d1_state)"
+     (py:run 
+
+        "age_l.append(age)"
+         "sex_l.append(sex)"
+         "degree_l.append(deg)"
+         "d1_l.append(d1_state)"
+         "d2_l.append(d2_state)")
+     
+  ]
+  
+  (py:run 
+    "import pickle"
+    "dict = {'age': age_l, "
+    "        'deg': degree_l,"
+    "        'sex': sex_l,"
+    "        'd1':d1_l,"
+    "        'd2': d2_l,"
+    "        'model_change': d2.model_change,"
+    "        'transition_rate': d2.disease.transition_rate_matrix,"
+    "        'model':d2.model_matrix,"
+    "        'init_matrix':d2.init_agent_matrix,"
+    "        'state_assignment': d2.state_assignment}"
+    "with open('debug{0}.pkl'.format(tick),'wb') as f:"
+    "    pickle.dump(dict,f)")
+    
+end
+
+
+
+
+to check-inconsistency-model-matrix
+  ; Setup Python environment and variables
+  py:set "age_l" []
+  py:set "degree_l" []
+  py:set "sex_l" []
+  py:set "d1_l" []
+  py:set "d2_l" []
+
+  ; Gather data from agents
+  ask people[
+        py:set "age" age
+        py:set "deg" desired-degree
+        py:set "sex" sex - 1
+        py:set "d1_state" item base-disease-id multi-disease-state
+        py:set "d2_state" item modeling-disease-id multi-disease-state
+   
+     
+     (py:run 
+        "age_l.append(age)"
+         "sex_l.append(sex)"
+         "degree_l.append(deg)"
+         "d1_l.append(d1_state)"
+         "d2_l.append(d2_state)")
+     
+  ]
+  
+  ; Call Python function for consistency check
+  py:run "from debug import check_model_matrix_consistency"
+  let inconsistencies py:runresult "check_model_matrix_consistency(age_l, degree_l, sex_l, d1_l, d2_l, d2.model_matrix)"
+  
+  ; Process the results
+  let found-inconsistency false
+  foreach inconsistencies [current-item ->
+  if current-item = true [
+    set found-inconsistency true
+  ]
+]
+
+  
+  ; Display warning if inconsistency is found
+  if found-inconsistency [
+    write-agents-info
+    error "Warning: An inconsistency was detected in the model matrix."
+    ; Additional logic to handle the inconsistency or log more information
+   print "check inconsistency done"
+  ]
+end
+
+
+
+to debug-model-change
+  (py:run 
+    "import pickle"
+    "with open('debug_model_change.pkl','wb') as f:"
+    "    pickle.dump(d2.model_change,f)")
+  
+end 
+
+
+to debug-prop-infected
+ if ticks > 0
+ [let i 3
+ let num-inf count people with [sex = i]
+    print (num-inf / item (i - 1) num-nodes ) * 100]
+end
+
+to check-population
+  py:run "d2.check_population()"
+end
+
+;to collect-avg-degree
+; let sexInd 1
+;  while [sexInd <= num-risk-group][
+;    let d1-ind 0
+;    while [d1-ind < item base-disease-id num-disease-state][
+;      let d2-ind 0 
+;      while [d2-ind < item modeling-disease-id num-disease-state][
+;         let total-links 0
+;         ask turtles with [(breed = susceptibles or breed = people) and sex = sexInd and multi-disease-state = list d1-ind d2-ind][set total-links total-links + desired-degree]
+;         py:set "total_agents" count turtles with [(breed = susceptibles or breed = people) and sex = sexInd and multi-disease-state = list d1-ind d2-ind]
+;         py:set "total_links" total-links
+;         if total-links > 0
+;         [py:set "sexInd" sexInd - 1
+;         py:set "d1_ind" d1-ind
+;         py:set "d2_ind" d2-ind 
+;;         print "total links"
+;;         print total-links
+;;         print "total_agents"
+;;         print py:runresult "total_agents"
+;          py:run "d2.total_linksByTime[d2.index, sexInd, d1_ind, d2_ind], d2.total_agentsByTime[d2.index, sexInd, d1_ind, d2_ind] = total_links, total_agents"]
+;        set d2-ind d2-ind + 1]
+;     set d1-ind d1-ind + 1]
+;  set sexInd sexInd + 1]
+;  
+;end
+
+
+to convert-nonagents-matrix-2NetLogo
+  py:run "d2.update_nonagents_matrix()"
+  let len item 0 matrix:dimensions susceptible-degree-dist-mat-HETF
+  py:set "len" len
+  let temp-degree-list-HETF py:runresult "d2.nonagents_matrix[0][:len].tolist()"
+  let temp-degree-list-HETM py:runresult "d2.nonagents_matrix[1][:len].tolist()"
+  set susceptible-degree-dist-mat-HETF matrix:from-row-list temp-degree-list-HETF
+  set susceptible-degree-dist-mat-HETM matrix:from-row-list temp-degree-list-HETM
+  if temp-num-sex > 2[
+    let temp-degree-list-MSM py:runresult  "d2.nonagents_matrix[2][:len].tolist()"
+    set susceptible-degree-dist-mat-MSM matrix:from-row-list temp-degree-list-MSM]
+end

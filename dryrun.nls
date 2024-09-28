@@ -1,0 +1,36 @@
+to do-dry-run-network
+  
+  repeat dry_run_1_duration[
+   goECNA
+    if count non-agent-susceptibles < 8000 [
+      create-non-agent-susceptibles (termination-node)[]
+    ]
+  ]
+ 
+  setup-ECNA-globals ;reset compartmental susceptible ;in ECNA.nls
+ 
+  ask people [  ;OPTION 2
+    set dead 0
+    set index? true
+  ]
+  set-risk-group-ECNA ;; procedure in initial-people-ECNA.nls
+  
+  let sexInd 1
+  while [sexInd <= temp-num-sex][
+    set-initial-age-ECNA sexInd ;; procedure in initial-people-ECNA.nls
+    set-initial-stage-ECNA sexInd ;; procedure in initial-people-ECNA.nls
+    set sexInd sexInd + 1
+  ]
+ 
+  
+  ask people[
+    set-HIV-variables ;;in initial-people-ECNA.nls; sets CD4 count distributions to match 2006 population
+  ]
+  
+  ;write-EpidemicFeatures 0 
+;  write-EpidemicFeatures 1 
+;  write-EpidemicFeatures 2 
+;  write-risk-group-mixing
+
+end
+

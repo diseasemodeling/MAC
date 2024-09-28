@@ -1,0 +1,291 @@
+globals[]
+
+to scaleDegreeDistToPop-matrix-version [sexInd]
+  ;;  scale disribution to population numbers
+
+  let temp-degree-dist-mat matrix:make-constant length(matrix:get-column cumulative-age-mixing-matrix-HETM 0) length(degree-dist-Bin) 0 ;initializing susceptible degree dist matrix 5x9 all zeros - HAS TO BE INITIALIZED - 
+   
+  let k 0
+    while [k < length(matrix:get-column cumulative-age-mixing-matrix-HETM 0)][ ;5 age groups
+      let temp-variable item sexInd num-nodes * item k initial-age-distribution ;defined in setup-intermediate-globals in global-initialization.nls
+      let deg-dist-row [] ;list
+      set deg-dist-row lput matrix:get-row degree-dist sexInd deg-dist-row ;nested list
+      set deg-dist-row matrix:from-row-list deg-dist-row ;matrix
+      let temp-mat matrix:times deg-dist-row temp-variable ;reports (1 x no.of bins) matrix
+      let temp-list matrix:get-row temp-mat 0 ;converts matrix to list
+      matrix:set-row temp-degree-dist-mat k temp-list ;; determine number of persons in each bin -> 2nd argument has to be list not matrix
+      set k k + 1
+    ]
+    
+  ;following rounds off values in susceptible degree dist mat 
+  let i 0
+  while [i < length(matrix:get-column cumulative-age-mixing-matrix-HETM 0)]
+  [
+    let j 0
+    while [j < length(degree-dist-Bin)][  
+      matrix:set temp-degree-dist-mat i j round (matrix:get temp-degree-dist-mat i j)
+      set j j + 1
+    ]
+    set i i + 1
+  ]
+  
+
+  if sexInd = 0[set susceptible-degree-dist-mat-HETF temp-degree-dist-mat];HETFemale
+  if sexInd = 1[set susceptible-degree-dist-mat-HETM temp-degree-dist-mat];HETMale
+  if sexInd = 2[set susceptible-degree-dist-mat-MSM temp-degree-dist-mat] ;MSM
+
+  ;#### birth-cohort ########
+  create-birth-cohort sexInd
+end
+
+to create-birth-cohort [sexInd]
+  ;if future partners age of newly infected node is not in current cohort will be drawn from this 
+  let temp-birth-cohort matrix:make-constant 100 length(degree-dist-Bin) 0 ;initializing birth cohort - assuming 100 ages to go back 100 years
+  let k 0
+  while [k < 100][ ;100 age 
+    let temp-variable item (sexInd ) number-births ;number of births in each cohort kept constant
+    let deg-dist-row [] ;list
+    set deg-dist-row lput matrix:get-row degree-dist sexInd deg-dist-row ;nested list
+    set deg-dist-row matrix:from-row-list deg-dist-row ;matrix
+    let temp-mat matrix:times deg-dist-row temp-variable ;reports (1 x no.of bins) matrix
+    let temp-list matrix:get-row temp-mat 0 ;converts matrix to list
+    matrix:set-row  temp-birth-cohort k temp-list ;; determine number of persons in each bin -> 2nd argument has to be list not matrix
+    set k k + 1
+  ]
+  if sexInd = 0[set birth-cohort-HETF temp-birth-cohort];HETFemale
+  if sexInd = 1[set birth-cohort-HETM temp-birth-cohort];HETMale
+  if sexInd = 2[set birth-cohort-MSM temp-birth-cohort] ;MSM
+  
+end
+
+to-report return-random-degree-by-age
+ let index-of-age-group return-age-index age ;in age-functions.nls
+ let temp-mat susceptible-degree-dist-mat-HETM
+ if sex = 1[set temp-mat susceptible-degree-dist-mat-HETF]
+ if sex = 2[set temp-mat susceptible-degree-dist-mat-HETM]
+ if sex = 3[set temp-mat susceptible-degree-dist-mat-MSM]
+  
+  let numAgents sum matrix:get-row temp-mat index-of-age-group
+    let rand-degree random numAgents + 1
+    let i 1
+    let found false
+    let cumulative 0
+    while [i < (length degree-dist-Bin ) and found = false][
+      set cumulative cumulative + matrix:get temp-mat index-of-age-group i
+      if rand-degree <= cumulative [
+        report item (i - 1) degree-dist-Bin + 1 + random (item (i) degree-dist-Bin - item (i - 1) degree-dist-Bin)
+        set found true
+        matrix:set temp-mat index-of-age-group i ((matrix:get temp-mat index-of-age-group i) - 1)
+      ]
+      set i i + 1
+    ]
+end
+
+to-report random-age-list
+  ; let age-group-lb [13 17 24 29 34 39 44];; define in global-initialization
+  ; let age-group-ub [17 24 29 34 39 44 65]
+    
+  let random-age []
+    let j 0
+    while [j < length(age-group-lb)][
+       let d (item j age-group-lb + random (item j age-group-ub - item j age-group-lb) + 1) 
+    set random-age lput d random-age
+      set j j + 1
+    ]
+  report random-age
+end
+
+to-report random-age-for-index [index]
+  ; let age-group-lb [13 17 24 29 34 39 44];; define in global-initialization
+  ; let age-group-ub [17 24 29 34 39 44 65]
+  report item index age-group-lb + random (item index age-group-ub - item index age-group-lb) + 1
+  
+end
+
+to-report return-age-index [age-num]
+  let j 0
+  let val 0
+  let found false
+  while [j < length age-group-lb and found = false][
+    if age-num > item j age-group-lb and age-num <= item j age-group-ub[
+      set val j
+      set found true
+    ]
+    set j j + 1
+  ]
+  if age-num > item (j - 1) age-group-ub
+  [set val (length age-group-ub - 1)]
+
+  ;if persns as not yet aged-in will be assigned to birth-cohort (ages below 13)
+  if ticks > 1 and age-num <= item 0 age-group-lb[
+    set val round (age-num - item 0 age-group-lb - 1)  ;; age-below 13 will always be negative value
+  ]
+  report val 
+
+end
+
+to-report trackTotalPop
+  let totPop 0
+  let i 0
+  while [i < length(matrix:get-column susceptible-degree-dist-mat-MSM 0)][
+    let j 0 
+      while [j < length(matrix:get-row susceptible-degree-dist-mat-MSM 0)][
+      set totPop totPop + matrix:get susceptible-degree-dist-mat-MSM i j 
+      set j j + 1
+    ]
+    set i i + 1
+  ]
+  report totPop
+end
+
+;call every year
+to age-population-yearly
+  ; 1-HET female; 2-HET male; 3-MSM; 4-PWID female; 5-PWID male; 6-PWID MSM
+  let sexInd 0
+  let temp-mat-degree susceptible-degree-dist-mat-HETF
+  while [sexInd < temp-num-sex][ 
+      set movement-from-age-group matrix:make-constant length(matrix:get-column cumulative-age-mixing-matrix-HETM 0) length(degree-dist-Bin) 0
+  set movement-to-age-group matrix:make-constant length(matrix:get-column cumulative-age-mixing-matrix-HETM 0) length(degree-dist-Bin) 0
+  
+
+    if sexInd = 0[set temp-mat-degree susceptible-degree-dist-mat-HETF]
+    if sexInd = 1[set temp-mat-degree susceptible-degree-dist-mat-HETM]
+    if sexInd = 2[set temp-mat-degree susceptible-degree-dist-mat-MSM]
+    
+    let temp-birth-cohort birth-cohort-HETF
+    if sexInd = 0[set temp-birth-cohort birth-cohort-HETF ];HETFemale
+    if sexInd = 1[set temp-birth-cohort birth-cohort-HETM ];HETMale
+    if sexInd = 2[set temp-birth-cohort birth-cohort-MSM ] ;MSM
+    
+    let i 0
+    while [i < length(matrix:get-column cumulative-age-mixing-matrix-MSM 0)] [
+      let j 0
+      while [j < length(degree-dist-Bin)][
+        matrix:set movement-from-age-group i j (matrix:get temp-mat-degree i j * item i age-transition-rate) ;check if this needs to change?
+        if (i = 0)[
+          ; matrix:set movement-to-age-group i j (matrix:get susceptible-degree-dist-mat i j * birth-rate)
+         ; matrix:set movement-to-age-group i j (matrix:get degree-dist sexInd j * item sexInd number-births) ;check if birth rate needs to change?
+           matrix:set movement-to-age-group i j (matrix:get temp-birth-cohort 99 j) ;age-in from birth cohort 
+          ;if sexInd = 0[print matrix:get movement-to-age-group i j]
+        ] 
+        
+        set j j + 1
+      ]
+      set i i + 1
+      if (i != length(matrix:get-column cumulative-age-mixing-matrix-MSM 0))[
+        matrix:set-row movement-to-age-group i matrix:get-row movement-from-age-group (i - 1)
+      ]
+    ]
+    set age-out-deaths-counter replace-item sexInd age-out-deaths-counter (item sexInd age-out-deaths-counter + sum matrix:get-row movement-from-age-group (i - 1))
+    
+    let total-movement matrix:minus movement-to-age-group movement-from-age-group
+    set temp-mat-degree matrix:plus temp-mat-degree total-movement
+    if sexInd = 0[set susceptible-degree-dist-mat-HETF temp-mat-degree]
+    if sexInd = 1[set susceptible-degree-dist-mat-HETM temp-mat-degree]
+    if sexInd = 2[set susceptible-degree-dist-mat-MSM temp-mat-degree]
+
+    ;#### birth-cohort ########
+    age-birth-cohort sexInd
+    set sexInd sexInd + 1
+  ]
+
+  end
+to age-birth-cohort [sexInd]
+  ;if future partners age of newly infected node is not in current cohort will be drawn from this 
+  let temp-birth-cohort birth-cohort-HETF
+  if sexInd = 0[set temp-birth-cohort birth-cohort-HETF ];HETFemale
+  if sexInd = 1[set temp-birth-cohort birth-cohort-HETM ];HETMale
+  if sexInd = 2[set temp-birth-cohort birth-cohort-MSM ] ;MSM
+  let k 1
+  while [k < 100][ ;100 ages
+                   ;age-cohort down
+    matrix:set-row  temp-birth-cohort k (matrix:get-row temp-birth-cohort (k - 1)) ;; determine number of persons in each bin -> 2nd argument has to be list not matrix
+    set k k + 1
+  ]
+  
+  ;;fill in new cohort after aging all others
+  set k 0
+  let temp-variable item (sexInd ) number-births ;number of births in each cohort kept constant
+  let deg-dist-row [] ;list
+  set deg-dist-row lput matrix:get-row degree-dist sexInd deg-dist-row ;nested list
+  set deg-dist-row matrix:from-row-list deg-dist-row ;matrix
+  let temp-mat matrix:times deg-dist-row temp-variable ;reports (1 x no.of bins) matrix
+  let temp-list matrix:get-row temp-mat 0 ;converts matrix to list
+  matrix:set-row  temp-birth-cohort k temp-list
+  
+  if sexInd = 0[set birth-cohort-HETF temp-birth-cohort];HETFemale
+  if sexInd = 1[set birth-cohort-HETM temp-birth-cohort];HETMale
+  if sexInd = 2[set birth-cohort-MSM temp-birth-cohort] ;MSM
+  
+  
+end
+
+to-report return-chosen-Bin2 [chosen-degree age-num active-age sex-of-neighbor]
+  let index-of-age-group return-age-index age-num ;gets index of age group where age-num is age of the neighbor
+  
+  ;finds degree bin based on chosen-degree
+  let bin 0
+  let i 0
+  let found false ;flag to stop loop once bin is found
+  while [i < length degree-dist-Bin and found = false][
+    if chosen-degree <= item i degree-dist-Bin [
+      set bin i
+      set found true
+    ]
+    set i i + 1
+  ]
+let chosen-bin bin
+;  ;reinitialize the variables to zero
+;  set found false 
+;  let chosen-bin 0
+;  let temp-mat susceptible-degree-dist-mat-HETM
+;  if sex-of-neighbor - 1 = 0 [set temp-mat susceptible-degree-dist-mat-HETF];HETF
+;   if sex-of-neighbor - 1 = 1 [set temp-mat susceptible-degree-dist-mat-HETM];HETM
+;   if sex-of-neighbor - 1 = 2 [set temp-mat susceptible-degree-dist-mat-MSM]; MSM
+;  
+;  ;;if there is no one in chosen bin find closest bin.
+;   ifelse index-of-age-group >= 0 and (matrix:get temp-mat index-of-age-group bin + count-susceptible-agents3 bin age-num active-age sex-of-neighbor ) < 1
+;    [
+;      set i 1
+;      let chosenInd 0
+;      
+;      while [found = false and i < length degree-dist-Bin][
+;        let lower 0
+;        let upper 0
+;        carefully [set lower (matrix:get temp-mat index-of-age-group (bin - i) + count-susceptible-agents3 (bin - i) age-num active-age sex-of-neighbor)][set lower 0]
+;        carefully [set upper (matrix:get temp-mat index-of-age-group (bin + i) + count-susceptible-agents3 (bin + i) age-num active-age sex-of-neighbor)][set upper 0]
+;        ifelse random (lower + upper) + 1 <= lower [
+;          set chosenInd bin - i
+;           if (lower != 0 )[
+;          set found true
+;          set chosen-bin chosenInd
+;        ]
+;        ]
+;        [set chosenInd bin + i
+;           if (upper != 0)[
+;          set found true
+;          set chosen-bin chosenInd
+;        ]
+;        ]
+;        
+;;        if (lower != 0 or upper != 0)[
+;;          set found true
+;;          set chosen-bin chosenInd
+;;        ]
+;        set i i + 1
+;      ]
+;    ]
+;    [
+;      set chosen-bin bin
+;      set found true
+;    ]
+    report chosen-bin
+  
+end
+
+to age-up-susceptibles
+  set susceptible-age (susceptible-age + (1 / time-unit))
+  if susceptible-age > 65 [die]; not life-expectancy but maximum age for disease transmission; prevents infections after age 65
+      
+end
+

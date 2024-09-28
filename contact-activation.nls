@@ -1,0 +1,320 @@
+to link-activation-details [M V sex-of-infected-node]
+  ;set V matrix:transpose V
+  ;;V matrix after transpose: Age-group by Age-group matrix; Each row is age of neighbor, And each column is age of the newly infected node: Floating point numbers. Each column adds to the number of contacts the infected node should ahve in that age group. 
+  ;; A value x in each element has the number of contacts infected node has with person in age-group correspodning to that row
+  
+  ;;M matrix: rows are the age-group, columns are the neighbors. A value of 1 indicates that  that nieghbor is active at the  age-group correponding to row; Each column adds to 1
+  set neighbors-link-active-age [];; Determine link active age of neighbor
+                                  ; set neighbors-link-active-age-group []
+  set nodes-link-active-age [] ;; Determine link active age of new infected node
+  set nodes-link-active-age-end [] ;; Determine link active age of new infected node
+  
+  set time-link-active-begin [] ;; Determine Time-LInk-Active
+  set time-link-active-end []
+  set age-of-neighbors [];;DETERMINE age of neighbor
+  set age-hold [] ;;if current age of neighbor is less than 1, hold their age as 0, for x years until number becomes positive. 
+  
+  let j 1
+  while [j < item 1 (matrix:dimensions V)][
+    matrix:set-row V j matrix:get-row (matrix:submatrix V (j - 1) 0 j item 1 (matrix:dimensions V)  matrix:+ matrix:submatrix V j 0 (j + 1) item 1 (matrix:dimensions V)) 0 
+    set j j + 1
+  ]
+  
+  set j 0
+  while [j < item 1 (matrix:dimensions M)] [
+    
+    ;;; Determine link active age of neighbor
+    let m1  matrix:make-constant 1 item 0 (matrix:dimensions V) 0
+    let m2  matrix:make-constant item 0 (matrix:dimensions V) 1 0
+    
+    matrix:set-row m1 0 random-age-list;; generate a list of random age by picking an age randomly from the age-group
+    matrix:set-column m2 0 (matrix:get-column M j);; the neighbors index
+
+    let d matrix:get (matrix:times m1 m2) 0 0 ;; random age of the neighbor
+    ;print (list "d1=" d)
+    ifelse d = 0 [;; if optimization model did not fnd solution set age lowest age group 
+      set d (item 0 age-group-lb + random (item 0 age-group-ub - item 0 age-group-lb) + 1)
+      set notOptimizedCounter  notOptimizedCounter + 1 ] 
+    [set OptimizedCounter  OptimizedCounter + 1]
+    ;print (list "d2=" d)
+    set neighbors-link-active-age lput d neighbors-link-active-age
+    
+    ;; Determine link active age of new infected node;;
+    let index-age return-age-index item j neighbors-link-active-age ;; index-age is age of neighbor at which link is active
+    let rand random-float last (matrix:get-column V index-age); draw a random number between 0 ad lasst value of row
+    let d2_index random-age-for-index 0
+    let found false 
+    let k length (matrix:get-column V index-age) - 1
+    while [k >= 0 and found = false][
+      if rand > matrix:get V k index-age [
+        set d2_index (random-age-for-index k ) + (( random time-unit)/ time-unit)
+        set found true
+      ]
+      set k k - 1
+    ]
+    ;  let d2 random-age-for-index (last filter [ i -> i < rand ] matrix:get-column V index-age)
+    
+    ifelse random-float 1 <= item sex-of-infected-node prop-concurrency and concurrency-model 
+      [let length_concurrency random-exponential (item sex-of-infected-node concurrency-lambda) 
+        set nodes-link-active-age lput max( list (item 0 age-group-lb + 1) (d2_index - length_concurrency)) nodes-link-active-age];;add concurrency in years
+    [set nodes-link-active-age lput d2_index nodes-link-active-age]
+    
+    ;; Determine Time-LInk-Active-begin
+    set time-link-active-begin lput round((item j nodes-link-active-age - age) * time-unit + ticks) time-link-active-begin
+    
+    ;;DETERMINE age of neighbor
+    set age-of-neighbors lput (age + item j neighbors-link-active-age - item j nodes-link-active-age) age-of-neighbors
+    
+    set j j + 1
+  ]
+  
+   set j 0
+  while [j < item 1 (matrix:dimensions M)] [ 
+     ;; Determine Time-LInk-Active-end
+    let next-highest ( filter [ i -> i > item j nodes-link-active-age ] sort nodes-link-active-age)
+    ifelse length(next-highest) > 0
+    [
+      ifelse random-float 1 <= item sex-of-infected-node prop-concurrency and concurrency-model 
+      [let length_concurrency random-exponential (item sex-of-infected-node concurrency-lambda) 
+        set nodes-link-active-age-end lput ((item 0 next-highest) + length_concurrency) nodes-link-active-age-end];;add concurrency in years
+      [set nodes-link-active-age-end lput (item 0 next-highest)  nodes-link-active-age-end]
+    ]
+    [set nodes-link-active-age-end lput 65 nodes-link-active-age-end]
+    set time-link-active-end lput  ((item j nodes-link-active-age-end - age) * time-unit + ticks) time-link-active-end
+ 
+       set j j + 1
+    ]
+  
+end
+
+to-report initialize-contacts-neighbors [desired-degree-neighbors-list sex-of-infected-node]
+  ;create a binary matrix with each row correpsonding one neighbor of infected person; value 1 if neighbor in column i has a new contact in age-group (row) j
+  let Nmatrix matrix:make-constant num-new-contacts length(matrix:get-column cumulative-age-mixing-matrix-MSM 0) -1 ;Nmatrix initialization for optimization
+  ;determine risk group of partner by using mixing matrix
+  set bi-sexual? false
+  let temp-sex get-sex-mixing sex-of-infected-node ;breed susceptibles.nls
+  if sex-of-infected-node = 3 and temp-sex = 1 [ set bi-sexual? true]
+ 
+  let k 0
+  while [k < length (desired-degree-neighbors-list)][
+    
+    ;;;determine  degree bin
+    let column-bin 0
+    let flag 0
+    let i 0
+    while [i <= length(degree-dist-bin-all) and flag = 0][
+      ifelse item k desired-degree-neighbors-list <=  item i degree-dist-bin-all[
+        set column-bin i
+        set flag 1
+        set i i + 1
+      ]
+      [
+        set i i + 1
+      ]
+    ]
+    
+    ;;DETERMINE LIFETIME PARTNER DIST FOR THAT SPECIIFC DEGREE BIN and RISK GROUP
+    let vec1 0
+    if bi-sexual? = true [; bisexual MSM 
+      ifelse random-float 1 <= bisexual-mix 
+      [set temp-sex 1]; propotion of partners of bisexual MSM who are female
+      [set temp-sex 3]
+     ]
+    
+    if temp-sex - 1 = 0 [set vec1 matrix:get-column lifetime-ptnr-dist-HETFemale column-bin]
+    if temp-sex - 1 = 1 [set vec1 matrix:get-column lifetime-ptnr-dist-HETMale column-bin ]
+    if temp-sex - 1 = 2 [set vec1 matrix:get-column lifetime-partner-dist column-bin]
+    set neighbor-sex-list lput temp-sex neighbor-sex-list
+    
+    ;;DETERMINE LIFETIME PARTNER DIST FOR THAT SPECIIFC DEGREE BIN
+    ;let vec1 matrix:get-column lifetime-partner-dist column-bin
+    let templist []
+    set templist lput vec1 templist
+    let contacts-at-each-age matrix:from-row-list templist
+    let num-of-contacts-neighbor matrix:times item k desired-degree-neighbors-list contacts-at-each-age 
+    
+    let age-link-active-neighbors matrix:make-constant 1 length(vec1) -1
+    let tempmat matrix:make-constant 1 length(vec1) -1
+    set i 0
+    while [i < length(vec1)][
+      matrix:set num-of-contacts-neighbor 0 i ceiling(matrix:get num-of-contacts-neighbor 0 i)
+      ifelse i > 0
+      [matrix:set tempmat 0 i ceiling(matrix:get num-of-contacts-neighbor 0 i) - ceiling(matrix:get num-of-contacts-neighbor 0 (i - 1))] ;ceilimg]
+      [matrix:set tempmat 0 i ceiling(matrix:get num-of-contacts-neighbor 0 i)]
+      ifelse matrix:get tempmat 0 i > 0 
+      [matrix:set age-link-active-neighbors 0 i 1]
+      [matrix:set age-link-active-neighbors 0 i 0]
+      set i i + 1
+    ]
+    let templist2 matrix:get-row age-link-active-neighbors 0
+    matrix:set-row Nmatrix k templist2
+    set k k + 1
+  ]
+  report Nmatrix
+
+end
+
+to initialize-contacts
+  let column-bin 0
+  let flag 0
+  let i 0
+  while [i <= length(degree-dist-bin-all) and flag = 0][
+    ifelse desired-degree <=  item i degree-dist-bin-all[
+      set column-bin i
+      set flag 1
+      set i i + 1
+    ]
+    [
+      set i i + 1
+    ]
+  ]
+  
+  let vec1 0
+  ifelse sex = 1
+  [set vec1 matrix:get-column lifetime-ptnr-dist-HETFemale column-bin] 
+  [ifelse sex = 2 
+    [set vec1 matrix:get-column lifetime-ptnr-dist-HETMale column-bin]
+    [ifelse sex = 3
+      [set vec1 matrix:get-column lifetime-partner-dist column-bin]
+      [set vec1 0]
+    ]
+  ]
+  
+  let templist []
+  set templist lput vec1 templist
+  let contacts-at-each-age matrix:from-row-list templist
+  set num-of-contacts matrix:times desired-degree contacts-at-each-age 
+  
+  
+  set age-link-active matrix:make-constant 1 length(vec1) -1
+  let tempmat matrix:make-constant 1 length(vec1) -1
+  set i 0
+  while [i < length(vec1)][
+    matrix:set num-of-contacts 0 i ceiling(matrix:get num-of-contacts 0 i)
+    ifelse i > 0
+      [matrix:set tempmat 0 i ceiling(matrix:get num-of-contacts 0 i) - ceiling(matrix:get num-of-contacts 0 (i - 1))] ;ceilimg]
+    [matrix:set tempmat 0 i ceiling(matrix:get num-of-contacts 0 i)]
+    ifelse matrix:get tempmat 0 i > 0 
+      [matrix:set age-link-active 0 i 1]
+    [matrix:set age-link-active 0 i 0]
+    set i i + 1
+  ]
+  
+end
+
+to update-contacts [j]
+  ;;num-of-contacts is cumulative number of contacts. Update this by subtracting just added link starting from that age and above
+  let tempmat 0
+  let i j
+  while [i < length(matrix:get-row num-of-contacts 0)][
+    matrix:set num-of-contacts 0 i (matrix:get num-of-contacts 0 i) - 1; decrment by 1
+    if matrix:get num-of-contacts 0 i < 0 [ matrix:set num-of-contacts 0 i 0];; to compensate for when a solution is not found by optimization model. At that point, age link active is set to the lowest age. If there was n contact at that point this will become negative 
+    set i i + 1
+  ] 
+  
+  ;;also update age-link-active whihc is a binay vector of 1 if there is a new patnerhsip in that age
+  set i 0
+  while [i < length(matrix:get-row num-of-contacts 0)][
+    ifelse i > 0
+      [set tempmat  ceiling(matrix:get num-of-contacts 0 i) - ceiling(matrix:get num-of-contacts 0 (i - 1))] ;ceilimg]
+    [set tempmat  ceiling(matrix:get num-of-contacts 0 i)]
+    ifelse tempmat  > 0 
+      [matrix:set age-link-active 0 i 1]
+    [matrix:set age-link-active 0 i 0]
+    set i i + 1
+  ]
+end
+
+to-report return-Vmatrix-Dist [sex-of-infected-node]
+  ;;retuns partnership mixing matrix in actual numbers-   matrix size age-group by age-group; rows are age of infected node, columns are age of neighbors- 
+  ;;number of partenrs in age row mixing with neigbbors in age column 
+  ;print num-of-contacts
+  ;let Vmatrix matrix:make-constant length(matrix:get-row num-of-contacts 0) length(matrix:get-row age-mixing-mat 0) -1
+  ;let Vmatrix matrix:make-constant length(matrix:get-row age-mixing-mat 0) length(matrix:get-row age-mixing-mat 0) -1
+  ;let a 0
+  ;let mod-age-mix matrix:times 0.01 age-mixing-mat
+  ;let b 0
+  let Vmatrix matrix:make-constant length(matrix:get-row age-mixing-mat-MSM 0) length(matrix:get-row age-mixing-mat-MSM 0) 0
+  let a 0
+  let mod-age-mix 0
+  if sex-of-infected-node - 1 = 0[set mod-age-mix matrix:times 0.01 age-mixing-mat-HETF]
+  if sex-of-infected-node - 1 = 1[set mod-age-mix matrix:times 0.01 age-mixing-mat-HETM]
+  if sex-of-infected-node - 1 = 2[set mod-age-mix matrix:times 0.01 age-mixing-mat-MSM]
+  while [a < (length(matrix:get-column mod-age-mix 0))][
+    let temprow matrix:get-row mod-age-mix a
+    let templist []
+    set templist lput temprow templist
+    let tempmat1 matrix:from-row-list templist
+    let tempmat2 matrix:times (matrix:get num-of-contacts 0 a ) tempmat1
+    if a > 0
+    [set tempmat2 matrix:times (matrix:get num-of-contacts 0 a - matrix:get num-of-contacts 0 (a - 1)) tempmat1]
+    matrix:set-row Vmatrix a matrix:get-row tempmat2 0 
+    set a a + 1
+  ]
+  report Vmatrix
+  
+end
+
+to-report return-Vmatrix [sex-of-infected-node]
+  ;;retuns partnership mixing matrix in actual numbers-   matrix size age-group by age-group; rows are age of infected node, columns are age of neighbors- 
+  ;;number of partenrs in age row mixing with neigbbors in age column 
+  ;let Vmatrix matrix:make-constant length(matrix:get-row num-of-contacts 0) length(matrix:get-row age-mixing-mat 0) -1
+  
+  ;	sex; 1-HET female; 2-HET male; 3-MSM; 4-PWID female; 5-PWID male; 6-PWID MSM 
+  let Vmatrix matrix:make-constant length(matrix:get-row age-mixing-mat-MSM 0) length(matrix:get-row age-mixing-mat-MSM 0) 0
+  let a 0
+  let mod-age-mix 0
+  if sex-of-infected-node - 1 = 0 [set mod-age-mix matrix:times 0.01 age-mixing-mat-HETF]
+  if sex-of-infected-node - 1 = 1 [set mod-age-mix matrix:times 0.01 age-mixing-mat-HETM]
+  if sex-of-infected-node - 1 = 2 [set mod-age-mix matrix:times 0.01 age-mixing-mat-MSM]
+  ;let mod-age-mix matrix:times 0.01 age-mixing-mat-MSM
+  while [a < (length(matrix:get-column mod-age-mix 0))][;for each age-group of infected node
+    let temprow matrix:get-row mod-age-mix a ; get row corresponding to age-group
+    let temp_contacts matrix:get num-of-contacts 0 a ;get number of contacts infected node has in age-group
+    if a > 0
+    [set temp_contacts matrix:get num-of-contacts 0 a - matrix:get num-of-contacts 0 (a - 1)]; num-of-contacts is a culumative matrix, so substract preious row
+    
+    let indexList [0 1 2 3 4 5 6];; size correpsonding to size of age-mixing-mat
+    repeat temp_contacts[
+      let  l (map list indexList temprow) 
+      let index item 0 rnd:weighted-one-of-list l[[i] -> last i ]; index is randomly selected value from probability distribution
+      matrix:set Vmatrix a index matrix:get Vmatrix a index + 1
+    ]
+    
+    set a a + 1
+  ]
+
+  report Vmatrix
+  
+end
+
+to-report return-Mmatrix [V N]
+  ;;approxmate solver
+  let numAges length(matrix:get-column cumulative-age-mixing-matrix-MSM 0)
+  let M matrix:make-constant  numAges num-new-contacts 0
+  let VmatrixSum matrix:make-constant 1 numAges 0
+  let j 0
+  while [j < numAges][
+    matrix:set VmatrixSum 0 j sum (matrix:get-column V j) ;; each element of VmatrixSum contains the number of partners who are of age j needed for this infected node
+    set j j + 1
+  ]
+  let optVal 0  
+  set j 0
+  while [j < num-new-contacts][
+    let tempRow matrix:times-element-wise VmatrixSum (matrix:submatrix N j 0 (j + 1) numAges)
+    let k numAges - 1
+    let found false
+    while [k >= 0 and found = false][
+      if matrix:get tempRow 0 k > 0[
+        matrix:set M k j 1
+        matrix:set VmatrixSum 0 k (matrix:get VmatrixSum 0 k) - 1
+        set found true
+        set optVal optVal + 1
+      ]
+      set k k - 1
+    ]
+    set j j + 1
+  ]
+
+  report M
+end

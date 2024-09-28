@@ -1,0 +1,193 @@
+to override
+  set ART-CD4-lower 550
+  set ART-CD4-upper 800
+  set CD4+rna-test-cost 148
+  set CD4-LB [ 0 51 201 351 501 ]
+  set CD4-UB [ 50 200 350 500 2000 ]
+  set CD4-at-ART-lower 0.3
+  set CD4-at-ART-prob 0.07
+  set CD4-at-ART-upper 0.63
+  set CD4-count-stratum [ 0 50 200 300 400 500 ]
+  set CD4-decline-lower-bound-month [ 2.6 4.1 4.6 5.4 7.3 ]
+  set CD4-decline-mean-month [ 1.7 3.3 4 4.7 6.5 ]
+  set CD4-decline-std-month [ 0.46 0.43 0.33 0.38 0.41 ]
+  set CD4-decline-upper-bound-month [ 0.8 2.4 3.3 3.9 5.7 ]
+  set CD4-increment-1 68
+  set CD4-increment-2 40
+  set CD4-increment-3 0
+  set CD4-lower-new-infection [ 750 576 725 725 ]
+  set CD4-max-levels [ 870 780 660 548 410 ]
+  set CD4-start-ART-guideline1 350
+  set CD4-start-ART-guideline2 500
+  set CD4-start-ART-guideline3 1500
+  set CD4-upper-new-infection [ 900 880.5 880.5 880.5 ]
+  set HIV-genotype-test-cost 439
+  set HIV-utilization-cost [ 2008 889 424 287 232 ]
+  set IDU-mixing [ 0.3 0.47 0.23 ]
+  set OI-cost [ 9044 3611 212343 5620 6154 4124 ]
+  set OI-risk-monthly [
+    [ 0 0 0 0 0 0 ]
+    [ 0.037 0.031 0.0096 0.00373 0.00085 0.00041 ]
+    [ 0.0122 0.00375 0.00101 0.00022 6e-05 6e-05 ]
+    [ 0.0027 0.0014 0.00067 0.00042 9e-05 3e-05 ]
+    [ 0.01857 0.00523 0.00214 0.00058 0.00013 6e-05 ]
+    [ 0.01123 0.00591 0.00135 0.00029 0.00028 9e-05 ]
+    [ 0.0394 0.0246 0.00716 0.00224 0.00087 0.00047 ]
+  ]
+  set QALY-val [ 0.935 0.818 0.702 ]
+  set actual-age-dist-PLWH [ 0.051 0.161 0.353 0.304 0.131 ]
+  set acute-rate-increase-base 8.1
+  set acute-rate-increase-week-HET [ 1 6 8.5 8.5 8.1 6.5 4.1 1.1 1 1 1 1 ]
+  set acute-rate-increase-week-MSM [ 12 12 12 12 11.4 9.2 5.8 1.5 1 1 1 1 ]
+  set age-LB [ 13 25 35 45 55 ]
+  set age-UB [ 25 35 45 55 100 ]
+  set age-group [ 12 24 34 44 54 70 ]
+  set age-sexual [ 15 18 20 25 30 35 40 45 50 55 60 65 71 ]
+  set awareNoCare-CD4-lower 101
+  set awareNoCare-CD4-upper 725
+  set bisexual-mix 0.55
+  set concurrency-lambda [ 1.13 1.13 0.78 ]
+  set condom 0.8
+  set condom-100perc 0.18
+  set condom-use-MSM-casual [ 0.613 0.613 0.613 0.613 0.545 0.484 0.484 0.473 0.473 0.466 0.466 0.438 0.438 ]
+  set condom-use-MSM-main [ 0.281 0.281 0.281 0.281 0.25 0.222 0.222 0.217 0.217 0.213 0.213 0.201 0.201 ]
+  set condom-use-female-casual [ 0.721 0.721 0.417 0.417 0.393 0.249 0.249 0.184 0.184 0.149 0.149 0.174 0.174 ]
+  set condom-use-female-main [ 0.513 0.513 0.269 0.269 0.184 0.124 0.124 0.101 0.101 0.07 0.07 0.038 0.038 ]
+  set condom-use-male-casual [ 0.844 0.844 0.489 0.489 0.496 0.489 0.489 0.306 0.306 0.208 0.208 0.125 0.125 ]
+  set condom-use-male-main [ 0.765 0.765 0.231 0.231 0.184 0.142 0.142 0.126 0.126 0.016 0.016 0.02 0.02 ]
+  set cost-testing 14845
+  set cumulative-age1 [ 0.001 0.041 0.211 0.361 0.511 0.661 0.781 0.891 0.956 0.996 1 1 ]
+  set cumulative-age2 [ 0.0026 0.0068 0.0134 0.0595 0.1397 0.2896 0.5121 0.7093 0.8497 0.929 0.9679 1 ]
+  set cumulative-stage [
+    [ 0.0066 0.2117 0.6059 0.7635 0.8108 1 ]
+    [ 0.0057 0.2683 0.6341 0.7805 0.8244 1 ]
+    [ 0.0068 0.2348 0.6174 0.7704 0.8163 1 ]
+    [ 0.004 0.1368 0.5684 0.741 0.7928 1 ]
+    [ 0.0032 0.1445 0.5722 0.7433 0.7947 1 ]
+    [ 0.0046 0.122 0.561 0.7366 0.7893 1 ]
+  ]
+  set death-prob-idu-AIDS [
+    [ 28 24 24 20 15 11 ]
+    [ 34 29 29 25 18 14 ]
+    [ 43 37 37 31 24 18 ]
+    [ 65 58 58 51 40 31 ]
+  ]
+  set death-prob-idu-no-AIDS [
+    [ 14 12 12 10 7.3 5.3 ]
+    [ 18 15 15 12 9.1 6.7 ]
+    [ 23 19 19 16 12 8.8 ]
+    [ 39 33 33 28 21 16 ]
+  ]
+  set death-prob-sexual-AIDS [
+    [ 10 8.7 8.6 7.2 5.2 3.8 ]
+    [ 13 11 11 9 6.5 4.8 ]
+    [ 17 14 14 12 8.6 6.3 ]
+    [ 30 25 25 21 16 12 ]
+  ]
+  set death-prob-sexual-no-AIDS [
+    [ 5 4.1 4.1 3.4 2.5 1.8 ]
+    [ 6.3 5.2 5.2 4.3 3.1 2.3 ]
+    [ 8.3 6.9 6.9 5.7 4.1 3 ]
+    [ 15 13 13 11 7.7 5.6 ]
+  ]
+  set death-rate-no-ART-idu [ 0.1661 0.0599 0.043 ]
+  set death-rate-no-ART-sexual [ 0.201 0.0308 0.0058 0.0032 0.002 0.0017 ]
+  set define-non-AIDS-death [ 819 807 798 786 774 762 750 738 726 714 702 693 681 669 657 648 636 624 612 600 591 579 567 555 543 534 522 510 498 489 477 465 456 444 432 423 411 399 390 378 369 357 348 339 327 318 309 297 288 279 267 258 249 240 231 222 213 204 195 186 177 171 162 153 147 138 132 123 117 111 105 99 93 87 81 78 72 66 63 60 54 51 48 45 42 39 36 33 30 30 27 ]
+  set discount-rate 0.03
+  set factor 0.5
+  set freq-HET 5
+  set freq-MSM 1
+  set freq-at-least-once 2
+  set freq-no-test 10
+  set inCareNoART-CD4-lower 0.72
+  set inCareNoART-CD4-prob 0.18
+  set inCareNoART-CD4-upper 0.1
+  set initial-drop-out 0.5
+  set main-ptnrs-female [ 1.75 1.75 1.68 1.47 1.26 1.19 1.09 1.1 1.1 1.1 1.1 1.1 1.1 ]
+  set main-ptnrs-male [ 1.74 1.74 1.86 1.69 1.45 1.29 1.3 1.21 1.21 1.21 1.21 1.21 1.21 ]
+  set max-ptnr 10
+  set no-ptnrs-female [ 0.131 0.131 0.1 0.054 0.058 0.047 0.068 0.092 0.092 0.092 0.092 0.092 0.092 ]
+  set no-ptnrs-male [ 0.175 0.175 0.121 0.07 0.059 0.05 0.058 0.093 0.093 0.093 0.093 0.093 0.093 ]
+  set non-HIV-med-cost [ 194 189 174 177 198 ]
+  set num-casual-main-1Q [ 0 0 1 0 0 1 ]
+  set num-casual-main-3Q [ 3 3 6 3 3 6 ]
+  set num-casual-main-max [ 5 5 10 5 5 10 ]
+  set num-casual-main-median [ 1 1 2 1 1 2 ]
+  set num-casual-main-min [ 0 0 0 0 0 0 ]
+  set num-casual-only-1Q [ 1 1 2 1 1 2 ]
+  set num-casual-only-3Q [ 12 12 15 12 12 15 ]
+  set num-casual-only-max [ 20 20 25 20 20 25 ]
+  set num-casual-only-median [ 4 4 5 4 4 5 ]
+  set num-casual-only-min [ 1 1 1 1 1 1 ]
+  set num-casual-sex-max 4
+  set num-casual-sex-min 1
+  set num-needles-max 500
+  set num-needles-min 100
+  set num-regimen 4
+  set num-sex-acts-lower-female [ 20 20 73 73 62 51 51 48 48 40 32 35 35 ]
+  set num-sex-acts-lower-male [ 30 30 68 68 63 59 59 52 39 36 36 24 24 ]
+  set num-sex-acts-upper-female [ 41 41 127 127 108 93 93 86 86 73 73 62 60 ]
+  set num-sex-acts-upper-male [ 60 60 119 119 110 104 104 95 95 73 73 67 67 ]
+  set overall-prevalence 0.004478
+  set perc-IDU-FEM 0.012
+  set perc-IDU-MEN 0.018
+  set perc-IDU-MSM 0.00175
+  set perc-MSM 0.02325
+  set percent-IDU-sharing 0.25
+  set percent-needles-shared 0.085
+  set percent-sharing-decline 0.9
+  set pop-by-age [ 0.018 0.018 0.0192 0.0192 0.0192 0.0192 0.0192 0.0188 0.0188 0.0188 0.0188 0.0188 0.0184 0.0184 0.0184 0.0184 0.0184 0.0174 0.0174 0.0174 0.0174 0.0174 0.0176 0.0176 0.0176 0.0176 0.0176 0.0182 0.0182 0.0182 0.0182 0.0182 0.0198 0.0198 0.0198 0.0198 0.0198 0.0194 0.0194 0.0194 0.0194 0.0194 0.0171 0.0171 0.0171 0.0171 0.0171 0.0146 0.0146 0.0146 0.0146 0.0146 0.0108 0.0108 0.0108 0.0108 0.0108 0.0081 ]
+  set prob-CD4-at-care-200 0.9
+  set prob-CD4-diagnosis-200 0.24
+  set prob-CD4-diagnosis-50 0.43
+  set prob-bisexual 0.21
+  set prob-casual [ 0.579 0.579 0.652 0.579 0.579 0.652 ]
+  set prob-casual-only [ 0.144 0.144 0.307 0.144 0.144 0.307 ]
+  set prob-compliance 0.4
+  set prob-no-test 0.1
+  set prob-ptnr-sharing 0.25
+  set prob-reEnter 0.45
+  set prob-serosorting 0.15
+  set probability-initial-suppression [ 0.774 0.79 0.84 ]
+  set prop-CD4-diagnosis-500 [ 0.9 0.9 0.75 0.9 0.9 0.75 ]
+  set prop-MSM-stage3-new 0.0212
+  set prop-MSM-stage4-new 0.0529
+  set prop-anal-acts-female [ 0.066 0.066 0.066 0.066 0.075 0.059 0.059 0.039 0.039 0.025 0.025 0.042 0.042 ]
+  set prop-anal-acts-male [ 0.048 0.048 0.048 0.048 0.084 0.042 0.042 0.061 0.061 0.028 0.028 0.037 0.037 ]
+  set prop-bisexual-anal 0.6
+  set prop-concurrency [ 0.083 0.09 0.52 ]
+  set prop-insertive 0.5
+  set prop-unaware-new [ 0.7129 0.4792 0.6098 0.6617 0.4933 0.7362 ]
+  set rebound-duration 3
+  set reduction-ART-needles 0.08
+  set reduction-VLS-needle-trans-rate 0.76
+  set reduction-VLS-trans-rate 0.99
+  set reduction-aware-needles -0.0675
+  set reduction-noART-needles 0.12
+  set reduction-unprotected-aware 0.53
+  set regimen-cost [ 0 1163 1619 1559 0 2468 0 ]
+  set retention-care-cost 0
+  set sex-dist-target [ 0.1838 0.0948 0.4849 0.0666 0.12 0.05 ]
+  set std-in-care-cost [ 161 59 32 19 14 ]
+  set std-not-in-care-cost [ 17 10 8 7 7 ]
+  set trans-rate-needle-after-dry-run 0.0015
+  set trans-rate-needle-dry-run 0.0035
+  set trans-rate-prob [ 0.0004 0.0011 0.0008 0.0138 0.0138 0.0011 ]
+  set unaware-CD4-lower 0.304
+  set unaware-CD4-prob 0.456
+  set unaware-CD4-upper 0.24
+  set viral-load-by-stage-lb [ 4.4 4 4 4 3.1 1 ]
+  set viral-load-by-stage-mean [ 5.3 4.5 4.5 4.5 3.7 1.3 ]
+  set viral-load-by-stage-std [ 0.459 0.255 0.255 0.255 0.357 0.434 ]
+  set viral-load-by-stage-ub [ 6.2 5 5 5 4.5 2.7 ]
+  set viral-load-salvage-AIDS-add-lb 0
+  set viral-load-salvage-AIDS-add-mean 1
+  set viral-load-salvage-AIDS-add-ub 2
+  set viral-load-salvage-add-lb 0
+  set viral-load-salvage-add-mean 0.8
+  set viral-load-salvage-add-std [ 0.383 100 200 300 400 1000 ]
+  set viral-load-salvage-add-ub 1.5
+  set viral-rebound-CD4-lower [ 0 100 200 300 400 ]
+  set viral-rebound-increase 0.18
+  set viral-rebound-rate [ 0.05 0.025 0.018 0.015 0.014 ]
+end

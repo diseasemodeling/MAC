@@ -1,0 +1,3 @@
+undirected-link-breed [Ttree-links Ttree-link]
+;Ttree-links-own[  infection_distance]
+undirected-link-breed [Ptree-links Ptree-link]
